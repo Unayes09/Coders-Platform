@@ -1,6 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&family=Merriweather&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-family: "Merriweather", serif;
+}
 
 body {
   background-color: black;
