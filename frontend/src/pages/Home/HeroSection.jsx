@@ -42,7 +42,7 @@ const HeroSection = () => {
         <img
           src={javaIcon}
           alt="Icon 2"
-          className="float-animation-center anim-delay-4 absolute bottom-[80vh] left-[50vw] -translate-x-[50%] hidden md:block md:h-[60px] md:w-[60px] lg:h-[90px] lg:w-[90px]"
+          className="float-animation anim-delay-4 absolute bottom-[80vh] hidden md:block md:h-[60px] md:w-[60px] lg:h-[90px] lg:w-[90px]"
         />
 
         <img
