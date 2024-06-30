@@ -13,27 +13,8 @@
   }
 }
 
-@keyframes float-center {
-  0% {
-    transform: translateY(0) translateX(-50%);
-    scale: 1;
-  }
-  50% {
-    transform: translateY(-10px) translateX(-50%);
-    scale: 1.05;
-  }
-  100% {
-    transform: translateY(0) translateX(-50%);
-    scale: 1;
-  }
-}
-
 .float-animation {
   animation: float 4s ease-in-out infinite;
-}
-
-.float-animation-center {
-  animation: float-center 4s ease-in-out infinite;
 }
 
 .anim-delay-1,
