@@ -1,6 +1,7 @@
 package com.javafest.DiffDeptStormers.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,4 +46,21 @@ public class UserController {
             return ResponseEntity.status(401).body("{\"message\": \"Invalid email or password\"}");
         }
     }
+    
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserProfile(@RequestParam(name = "token") String token) {
+        String email = jwtUtil.getEmailFromToken(token);
+        if (email != null) {
+            User user = userService.findByEmail(email);
+            if (user != null) {
+                user.setPassword(null); // Remove password from response
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+        }
+    }
+
 }
