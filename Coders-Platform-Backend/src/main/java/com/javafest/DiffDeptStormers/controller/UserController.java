@@ -49,18 +49,22 @@ public class UserController {
     
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestParam(name = "token") String token) {
-        String email = jwtUtil.getEmailFromToken(token);
-        if (email != null) {
-            User user = userService.findByEmail(email);
-            if (user != null) {
-                user.setPassword(null); // Remove password from response
-                return ResponseEntity.ok(user);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
-        }
+        try {
+			String email = jwtUtil.getEmailFromToken(token);
+			if (email != null) {
+			    User user = userService.findByEmail(email);
+			    if (user != null) {
+			        user.setPassword(null); // Remove password from response
+			        return ResponseEntity.ok(user);
+			    } else {
+			        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
+			    }
+			} else {
+			    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
+		}
     }
 
 }
