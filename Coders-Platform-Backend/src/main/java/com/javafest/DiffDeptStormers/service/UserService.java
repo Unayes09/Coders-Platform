@@ -10,6 +10,7 @@ import com.javafest.DiffDeptStormers.repository.UserRepository;
 import javax.mail.MessagingException;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -60,6 +61,10 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+    
+    public Optional<User> findUserById(String userId) {
+        return userRepository.findById(userId);
     }
 
     private String generateConfirmationToken() {
