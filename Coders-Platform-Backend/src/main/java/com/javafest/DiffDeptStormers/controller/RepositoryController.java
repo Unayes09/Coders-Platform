@@ -1,13 +1,15 @@
 package com.javafest.DiffDeptStormers.controller;
 
+import com.javafest.DiffDeptStormers.model.File;
 import com.javafest.DiffDeptStormers.model.Repository;
 import com.javafest.DiffDeptStormers.model.User;
-import com.javafest.DiffDeptStormers.service.RepositoryService;
-import com.javafest.DiffDeptStormers.service.UserService;
+import com.javafest.DiffDeptStormers.service.MongoRepoService;
+import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +19,10 @@ import java.util.Optional;
 public class RepositoryController {
 
     @Autowired
-    private RepositoryService repositoryService;
+    private MongoRepoService repositoryService;
 
     @Autowired
-    private UserService userService;
+    private MongoUserService userService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -34,13 +36,13 @@ public class RepositoryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createRepository(@RequestBody Repository repository, @RequestParam String userId, @RequestParam String token) {
-    	System.out.println("Incoming repository: " + repository.toString());
         ResponseEntity<?> validationResponse = validateToken(token);
-        if (validationResponse != null) return validationResponse;
+        if (validationResponse != null) {
+            return validationResponse;
+        }
 
-        Optional<User> userOptional = userService.findUserById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+        User user = userService.findById(userId);
+        if (user != null) {
             repository = repositoryService.saveRepository(repository);
             user.getRepos().add(repository);
             userService.saveUser(user);
@@ -50,15 +52,18 @@ public class RepositoryController {
         }
     }
 
+
     @PostMapping("/{repoId}/files")
-    public ResponseEntity<?> uploadFiles(@PathVariable String repoId, @RequestBody List<Repository.File> files, @RequestParam String token) {
+    public ResponseEntity<?> uploadFiles(@PathVariable String repoId, @RequestBody List<File> files, @RequestParam String token) {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
         Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
         if (repositoryOptional.isPresent()) {
             Repository repository = repositoryOptional.get();
-            repository.getFiles().addAll(files);
+            for (File file : files) {
+                repository.getFiles().add(file);
+            }
             repositoryService.saveRepository(repository);
             return ResponseEntity.ok(repository);
         } else {
@@ -67,7 +72,7 @@ public class RepositoryController {
     }
 
     @DeleteMapping("/{repoId}/files")
-    public ResponseEntity<?> deleteFiles(@PathVariable String repoId, @RequestBody List<Repository.File> files, @RequestParam String token) {
+    public ResponseEntity<?> deleteFiles(@PathVariable String repoId, @RequestBody List<File> files, @RequestParam String token) {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
@@ -87,16 +92,10 @@ public class RepositoryController {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
-        Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
-        if (repositoryOptional.isPresent()) {
-            Repository repository = repositoryOptional.get();
-            repository.setRepoName(updatedRepository.getRepoName());
-            repository.setRepoDescription(updatedRepository.getRepoDescription());
-            repository.setRepoTopicTags(updatedRepository.getRepoTopicTags());
-            repository.setPublic(updatedRepository.isPublic());
-            repositoryService.saveRepository(repository);
+        try {
+            Repository repository = repositoryService.updateRepository(repoId, updatedRepository);
             return ResponseEntity.ok(repository);
-        } else {
+        } catch (ResponseStatusException e) {
             return ResponseEntity.notFound().build();
         }
     }

@@ -14,37 +14,9 @@ public class Repository {
     private String repoDescription;
     private List<String> repoTopicTags;
     private boolean isPublic;
-    private List<File> files;
+    private List<File> files; // Use File as a separate class
 
-    public static class File {
-        private String fileName;
-        private String fileContent;
-
-        public String getFileName() {
-            return fileName;
-        }
-
-        public void setFileName(String fileName) {
-            this.fileName = fileName;
-        }
-
-        public String getFileContent() {
-            return fileContent;
-        }
-
-        public void setFileContent(String fileContent) {
-            this.fileContent = fileContent;
-        }
-
-        @Override
-        public String toString() {
-            return "File{" +
-                    "fileName='" + fileName + '\'' +
-                    ", fileContent='" + fileContent + '\'' +
-                    '}';
-        }
-    }
-
+    // Getters and setters
     public String getId() {
         return id;
     }
@@ -78,12 +50,10 @@ public class Repository {
     }
 
     public boolean isPublic() {
-    	System.out.println("get "+this.isPublic);
         return this.isPublic;
     }
 
     public void setPublic(boolean aPublic) {
-    	System.out.println("in "+aPublic);
         this.isPublic = aPublic;
     }
 
