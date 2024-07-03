@@ -49,17 +49,6 @@ public class MongoUserService {
         return userCollection.find(eq("email", email)).first() != null;
     }
     
-    private Document convertRepositoryToDocument(Repository repository) {
-        List<Document> fileDocuments = new ArrayList<>();
-        
-        return new Document()
-                .append("id", repository.getId())
-                .append("repoName", repository.getRepoName())
-                .append("repoDescription", repository.getRepoDescription())
-                .append("repoTopicTags", repository.getRepoTopicTags())
-                .append("isPublic", repository.isPublic());
-    }
-
     public User saveUser(User user) {
         // Hash the password before saving
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

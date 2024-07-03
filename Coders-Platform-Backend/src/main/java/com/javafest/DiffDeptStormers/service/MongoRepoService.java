@@ -152,6 +152,34 @@ public class MongoRepoService {
             throw new RuntimeException("Repository not found");
         }
     }
+    
+    public List<File> getAllFilesOfRepository(String repoId) {
+        MongoCollection<Document> fileCollection = getFileCollection();
+        List<File> files = new ArrayList<>();
+        for (Document doc : fileCollection.find(eq("repoId", repoId))) {
+            files.add(convertDocumentToFile(doc));
+        }
+        return files;
+    }
+
+    public List<Repository> getAllRepositoriesOfUser(String userId) {
+        MongoCollection<Document> repoCollection = getRepoCollection();
+        List<Repository> repositories = new ArrayList<>();
+        for (Document doc : repoCollection.find(eq("userId", userId))) {
+            repositories.add(convertDocumentToRepository(doc));
+        }
+        return repositories;
+    }
+    
+    private File convertDocumentToFile(Document doc) {
+        File file = new File();
+        file.setId(doc.getObjectId("_id").toString());
+        file.setFileName(doc.getString("fileName"));
+        file.setFileContent(doc.getString("fileContent"));
+        file.setRepoId(doc.getString("repoId"));
+        file.setEmail(doc.getString("email"));
+        return file;
+    }
 
 
     private Repository convertDocumentToRepository(Document doc) {

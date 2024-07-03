@@ -120,4 +120,16 @@ public class RepositoryController {
         List<Repository> repositories = repositoryService.searchPublicRepositories(query);
         return ResponseEntity.ok(repositories);
     }
+    
+    @GetMapping("/{repoId}/files")
+    public ResponseEntity<?> getAllFilesOfRepository(@PathVariable String repoId) {
+        List<File> files = repositoryService.getAllFilesOfRepository(repoId);
+        return ResponseEntity.ok(files);
+    }
+
+    @GetMapping("/{userId}/repos")
+    public ResponseEntity<?> getAllRepositoriesOfUser(@PathVariable String userId) {
+        List<Repository> repositories = repositoryService.getAllRepositoriesOfUser(userId);
+        return ResponseEntity.ok(repositories);
+    }
 }
