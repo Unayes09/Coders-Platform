@@ -8,7 +8,8 @@ public class File {
 
     @Id
     private String id;
-    private String fileName;
+    private String repoId;
+	private String fileName;
     private String fileContent;
 
     // Constructors, getters, and setters
@@ -27,6 +28,15 @@ public class File {
     public void setId(String id) {
         this.id = id;
     }
+    
+    public String getRepoId() {
+		return repoId;
+	}
+
+	public void setRepoId(String repoId) {
+		this.repoId = repoId;
+	}
+
 
     public String getFileName() {
         return fileName;

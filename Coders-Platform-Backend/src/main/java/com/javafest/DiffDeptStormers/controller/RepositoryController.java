@@ -2,14 +2,12 @@ package com.javafest.DiffDeptStormers.controller;
 
 import com.javafest.DiffDeptStormers.model.File;
 import com.javafest.DiffDeptStormers.model.Repository;
-import com.javafest.DiffDeptStormers.model.User;
 import com.javafest.DiffDeptStormers.service.MongoRepoService;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,17 +39,10 @@ public class RepositoryController {
             return validationResponse;
         }
 
-        User user = userService.findById(userId);
-        if (user != null) {
-            repository = repositoryService.saveRepository(repository);
-            user.getRepos().add(repository);
-            userService.saveUser(user);
-            return ResponseEntity.ok(repository);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        repository.setUserId(userId); // Set the userId
+        Repository savedRepository = repositoryService.saveRepository(repository);
+        return ResponseEntity.ok(savedRepository);
     }
-
 
     @PostMapping("/{repoId}/files")
     public ResponseEntity<?> uploadFiles(@PathVariable String repoId, @RequestBody List<File> files, @RequestParam String token) {
@@ -60,30 +51,26 @@ public class RepositoryController {
 
         Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
         if (repositoryOptional.isPresent()) {
-            Repository repository = repositoryOptional.get();
             for (File file : files) {
-                repository.getFiles().add(file);
+                file.setRepoId(repoId); // Set the repoId for each file
+                repositoryService.saveFile(file);
             }
-            repositoryService.saveRepository(repository);
-            return ResponseEntity.ok(repository);
+            return ResponseEntity.ok(files);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/{repoId}/files")
-    public ResponseEntity<?> deleteFiles(@PathVariable String repoId, @RequestBody List<File> files, @RequestParam String token) {
+    @DeleteMapping("/files/{fileId}")
+    public ResponseEntity<?> deleteFile(@PathVariable String fileId, @RequestParam String token) {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
-        Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
-        if (repositoryOptional.isPresent()) {
-            Repository repository = repositoryOptional.get();
-            repository.getFiles().removeAll(files);
-            repositoryService.saveRepository(repository);
-            return ResponseEntity.ok(repository);
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            repositoryService.deleteFile(fileId);
+            return ResponseEntity.ok("deleted file id: "+fileId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error deleting file: " + e.getMessage());
         }
     }
 
@@ -95,7 +82,7 @@ public class RepositoryController {
         try {
             Repository repository = repositoryService.updateRepository(repoId, updatedRepository);
             return ResponseEntity.ok(repository);
-        } catch (ResponseStatusException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -106,7 +93,7 @@ public class RepositoryController {
         if (validationResponse != null) return validationResponse;
 
         repositoryService.deleteRepositoryById(repoId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("deleted file id: "+repoId);
     }
 
     @GetMapping("/public")

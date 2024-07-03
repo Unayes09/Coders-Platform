@@ -8,9 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,46 +27,65 @@ public class MongoRepoService {
         return database.getCollection("Repositories");
     }
 
-    public Repository saveRepository(Repository repository) {
-        List<Document> fileDocuments = new ArrayList<>();
-        for (File file : repository.getFiles()) {
-            Document fileDoc = new Document()
-                    .append("fileName", file.getFileName())
-                    .append("fileContent", file.getFileContent());
-            fileDocuments.add(fileDoc);
-        }
+    private MongoCollection<Document> getFileCollection() {
+        MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
+        return database.getCollection("Files");
+    }
 
-        Document doc = new Document()
+    private Document convertRepositoryToDocument(Repository repository) {
+        return new Document()
+                .append("userId", repository.getUserId())
                 .append("repoName", repository.getRepoName())
                 .append("repoDescription", repository.getRepoDescription())
                 .append("repoTopicTags", repository.getRepoTopicTags())
-                .append("isPublic", repository.isPublic())
-                .append("files", fileDocuments);
+                .append("isPublic", repository.isPublic());
+    }
 
+    private Document convertFileToDocument(File file) {
+        return new Document()
+                .append("repoId", file.getRepoId())
+                .append("fileName", file.getFileName())
+                .append("fileContent", file.getFileContent());
+    }
+
+    public Repository saveRepository(Repository repository) {
+        Document repoDoc = convertRepositoryToDocument(repository);
         MongoCollection<Document> repoCollection = getRepoCollection();
-        repoCollection.insertOne(doc);
-        repository.setId(doc.getObjectId("_id").toString());
+        repoCollection.insertOne(repoDoc);
+        repository.setId(repoDoc.getObjectId("_id").toString());
+
+        for (File file : repository.getFiles()) {
+            file.setRepoId(repository.getId());
+            saveFile(file);
+        }
+
         return repository;
     }
 
-    public Repository updateRepository(String repoId, Repository updatedRepository) {
-        List<Document> fileDocuments = new ArrayList<>();
-        for (File file : updatedRepository.getFiles()) {
-            Document fileDoc = new Document()
-                    .append("fileName", file.getFileName())
-                    .append("fileContent", file.getFileContent());
-            fileDocuments.add(fileDoc);
-        }
+    public File saveFile(File file) {
+        Document fileDoc = convertFileToDocument(file);
+        MongoCollection<Document> fileCollection = getFileCollection();
+        fileCollection.insertOne(fileDoc);
+        file.setId(fileDoc.getObjectId("_id").toString());
+        return file;
+    }
 
+    public void deleteFile(String fileId) {
+        MongoCollection<Document> fileCollection = getFileCollection();
+        fileCollection.deleteOne(eq("_id", new ObjectId(fileId)));
+    }
+
+    public Repository updateRepository(String repoId, Repository updatedRepository) {
+        
         Document updateDoc = new Document()
                 .append("repoName", updatedRepository.getRepoName())
                 .append("repoDescription", updatedRepository.getRepoDescription())
                 .append("repoTopicTags", updatedRepository.getRepoTopicTags())
-                .append("isPublic", updatedRepository.isPublic())
-                .append("files", fileDocuments);
+                .append("isPublic", updatedRepository.isPublic());
 
         MongoCollection<Document> repoCollection = getRepoCollection();
         repoCollection.updateOne(eq("_id", new ObjectId(repoId)), new Document("$set", updateDoc));
+        updatedRepository.setId(repoId);
         return updatedRepository;
     }
 
@@ -102,7 +119,7 @@ public class MongoRepoService {
         Document doc = repoCollection.find(eq("_id", new ObjectId(repoId))).first();
 
         if (doc != null) {
-            return Optional.of(convertDocumentToRepository(doc));
+            return Optional.ofNullable(convertDocumentToRepository(doc));
         } else {
             return Optional.empty();
         }
@@ -116,18 +133,22 @@ public class MongoRepoService {
     private Repository convertDocumentToRepository(Document doc) {
         Repository repository = new Repository();
         repository.setId(doc.getObjectId("_id").toString());
+        repository.setUserId(doc.getString("userId")); // Set the userId
         repository.setRepoName(doc.getString("repoName"));
         repository.setRepoDescription(doc.getString("repoDescription"));
         repository.setRepoTopicTags(doc.getList("repoTopicTags", String.class));
         repository.setPublic(doc.getBoolean("isPublic"));
 
         List<File> files = new ArrayList<>();
-        for (Document fileDoc : (List<Document>) doc.get("files")) {
-            File file = new File();
-            file.setId(fileDoc.getObjectId("_id").toString());
-            file.setFileName(fileDoc.getString("fileName"));
-            file.setFileContent(fileDoc.getString("fileContent"));
-            files.add(file);
+        if (doc.get("files") != null) {
+            for (Document fileDoc : (List<Document>) doc.get("files")) {
+                File file = new File();
+                file.setId(fileDoc.getObjectId("_id").toString());
+                file.setRepoId(fileDoc.getString("repoId")); // Set the repoId
+                file.setFileName(fileDoc.getString("fileName"));
+                file.setFileContent(fileDoc.getString("fileContent"));
+                files.add(file);
+            }
         }
         repository.setFiles(files);
 

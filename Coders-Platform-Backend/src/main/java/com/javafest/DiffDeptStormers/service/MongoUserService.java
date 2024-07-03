@@ -113,6 +113,26 @@ public class MongoUserService {
 
         return user;
     }
+    
+    
+    public User updateUser(User user) {
+        // Convert repos to documents
+        List<Document> repoDocuments = new ArrayList<>();
+        for (Repository repository : user.getRepos()) {
+            repoDocuments.add(convertRepositoryToDocument(repository));
+        }
+
+        // Update only the repos field
+        Document updateDoc = new Document()
+                .append("repos", repoDocuments)
+                .append("updatedAt", new Date());  // Update the updatedAt field as well
+
+        MongoCollection<Document> userCollection = getUserCollection();
+        userCollection.updateOne(eq("_id", new ObjectId(user.getId())), new Document("$set", updateDoc));
+        return user;
+    }
+
+    
     public User findByEmail(String email) {
         MongoCollection<Document> userCollection = getUserCollection();
         Document doc = userCollection.find(eq("email", email)).first();

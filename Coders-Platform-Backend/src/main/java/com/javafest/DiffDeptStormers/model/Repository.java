@@ -10,6 +10,7 @@ public class Repository {
 
     @Id
     private String id;
+    private String userId;
     private String repoName;
     private String repoDescription;
     private List<String> repoTopicTags;
@@ -17,11 +18,20 @@ public class Repository {
     private List<File> files; // Use File as a separate class
 
     // Getters and setters
+    
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public void setId(String id) {
         this.id = id;
     }
 
