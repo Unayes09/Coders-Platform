@@ -11,6 +11,7 @@ public class File {
     private String repoId;
 	private String fileName;
     private String fileContent;
+    private String email;
 
     // Constructors, getters, and setters
     public File() {
@@ -19,6 +20,14 @@ public class File {
     public File(String fileName, String fileContent) {
         this.fileName = fileName;
         this.fileContent = fileContent;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getId() {

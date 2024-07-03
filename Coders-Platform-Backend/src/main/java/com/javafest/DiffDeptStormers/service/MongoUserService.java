@@ -51,20 +51,13 @@ public class MongoUserService {
     
     private Document convertRepositoryToDocument(Repository repository) {
         List<Document> fileDocuments = new ArrayList<>();
-        for (File file : repository.getFiles()) {
-            Document fileDoc = new Document()
-                    .append("fileName", file.getFileName())
-                    .append("fileContent", file.getFileContent());
-            fileDocuments.add(fileDoc);
-        }
-
+        
         return new Document()
                 .append("id", repository.getId())
                 .append("repoName", repository.getRepoName())
                 .append("repoDescription", repository.getRepoDescription())
                 .append("repoTopicTags", repository.getRepoTopicTags())
-                .append("isPublic", repository.isPublic())
-                .append("files", fileDocuments);
+                .append("isPublic", repository.isPublic());
     }
 
     public User saveUser(User user) {
@@ -75,12 +68,6 @@ public class MongoUserService {
         String confirmationToken = UUID.randomUUID().toString();
         user.setConfirmationToken(confirmationToken);
         user.setCreatedAt(new Date());
-
-        // Convert repos to documents
-        List<Document> repoDocuments = new ArrayList<>();
-        for (Repository repository : user.getRepos()) {
-            repoDocuments.add(convertRepositoryToDocument(repository));
-        }
 
         Document doc = new Document()
                 .append("username", user.getUsername())
@@ -94,7 +81,6 @@ public class MongoUserService {
                 .append("premiumPackBuyDate", user.getPremiumPackBuyDate())
                 .append("interests", user.getInterests())
                 .append("skills", user.getSkills())
-                .append("repos", repoDocuments)
                 .append("createdAt", user.getCreatedAt())
                 .append("updatedAt", user.getUpdatedAt())
                 .append("confirmationToken", user.getConfirmationToken());
@@ -116,15 +102,9 @@ public class MongoUserService {
     
     
     public User updateUser(User user) {
-        // Convert repos to documents
-        List<Document> repoDocuments = new ArrayList<>();
-        for (Repository repository : user.getRepos()) {
-            repoDocuments.add(convertRepositoryToDocument(repository));
-        }
-
+        
         // Update only the repos field
         Document updateDoc = new Document()
-                .append("repos", repoDocuments)
                 .append("updatedAt", new Date());  // Update the updatedAt field as well
 
         MongoCollection<Document> userCollection = getUserCollection();
@@ -165,7 +145,6 @@ public class MongoUserService {
         user.setPremiumPackBuyDate(doc.getDate("premiumPackBuyDate"));
         user.setInterests(doc.getList("interests", String.class));
         user.setSkills(doc.getList("skills", String.class));
-        user.setRepos(doc.getList("repos", Repository.class)); // Assuming Repository class is defined
         user.setCreatedAt(doc.getDate("createdAt"));
         user.setUpdatedAt(doc.getDate("updatedAt"));
         user.setConfirmationToken(doc.getString("confirmationToken"));

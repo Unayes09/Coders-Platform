@@ -32,6 +32,10 @@ public class RepositoryController {
         return null;
     }
 
+    private String getEmailFromToken(String token) {
+        return jwtUtil.getEmailFromToken(token); // assuming email is the username in the token
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createRepository(@RequestBody Repository repository, @RequestParam String userId, @RequestParam String token) {
         ResponseEntity<?> validationResponse = validateToken(token);
@@ -39,8 +43,9 @@ public class RepositoryController {
             return validationResponse;
         }
 
-        repository.setUserId(userId); // Set the userId
-        Repository savedRepository = repositoryService.saveRepository(repository);
+        String email = getEmailFromToken(token);
+        repository.setUserId(userId);
+        Repository savedRepository = repositoryService.saveRepository(repository,email);
         return ResponseEntity.ok(savedRepository);
     }
 
@@ -49,11 +54,12 @@ public class RepositoryController {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
+        String email = getEmailFromToken(token);
         Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
         if (repositoryOptional.isPresent()) {
             for (File file : files) {
-                file.setRepoId(repoId); // Set the repoId for each file
-                repositoryService.saveFile(file);
+                file.setRepoId(repoId);
+                repositoryService.saveFile(file,email);
             }
             return ResponseEntity.ok(files);
         } else {
@@ -66,9 +72,10 @@ public class RepositoryController {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
+        String email = getEmailFromToken(token);
         try {
-            repositoryService.deleteFile(fileId);
-            return ResponseEntity.ok("deleted file id: "+fileId);
+            repositoryService.deleteFile(fileId, email);
+            return ResponseEntity.ok("Deleted file with ID: " + fileId);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error deleting file: " + e.getMessage());
         }
@@ -79,11 +86,12 @@ public class RepositoryController {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
+        String email = getEmailFromToken(token);
         try {
-            Repository repository = repositoryService.updateRepository(repoId, updatedRepository);
+            Repository repository = repositoryService.updateRepository(repoId, updatedRepository, email);
             return ResponseEntity.ok(repository);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body("Error updating repository: " + e.getMessage());
         }
     }
 
@@ -92,8 +100,13 @@ public class RepositoryController {
         ResponseEntity<?> validationResponse = validateToken(token);
         if (validationResponse != null) return validationResponse;
 
-        repositoryService.deleteRepositoryById(repoId);
-        return ResponseEntity.ok("deleted file id: "+repoId);
+        String email = getEmailFromToken(token);
+        try {
+            repositoryService.deleteRepositoryById(repoId, email);
+            return ResponseEntity.ok("Deleted repository with ID: " + repoId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error deleting repository: " + e.getMessage());
+        }
     }
 
     @GetMapping("/public")

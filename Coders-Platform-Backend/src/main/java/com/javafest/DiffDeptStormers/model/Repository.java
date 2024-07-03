@@ -15,7 +15,7 @@ public class Repository {
     private String repoDescription;
     private List<String> repoTopicTags;
     private boolean isPublic;
-    private List<File> files; // Use File as a separate class
+    private String email;
 
     // Getters and setters
     
@@ -23,7 +23,15 @@ public class Repository {
         return id;
     }
 
-    public String getUserId() {
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getUserId() {
 		return userId;
 	}
 
@@ -67,14 +75,6 @@ public class Repository {
         this.isPublic = aPublic;
     }
 
-    public List<File> getFiles() {
-        return files;
-    }
-
-    public void setFiles(List<File> files) {
-        this.files = files;
-    }
-
     @Override
     public String toString() {
         return "Repository{" +
@@ -83,7 +83,6 @@ public class Repository {
                 ", repoDescription='" + repoDescription + '\'' +
                 ", repoTopicTags=" + repoTopicTags +
                 ", isPublic=" + isPublic +
-                ", files=" + files +
                 '}';
     }
 }
