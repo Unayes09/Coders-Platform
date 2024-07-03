@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Confirm Your Registration</title>
+    <style>
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, [[${user.fullName}]]!</h2>
+        <p>Thank you for registering. Please click the button below to confirm your registration:</p>
+        <a th:href="@{${url}}" class="button">Confirm Your Registration</a>
+    </div>
+</body>
+</html>
