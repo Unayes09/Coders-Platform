@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const SignUpForm = () => {
+  // TODO: as individual or company
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
