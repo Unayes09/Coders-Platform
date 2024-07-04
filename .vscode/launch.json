@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-CodersPlatformBackendApplication<Coders-Platform-Backend>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.javafest.DiffDeptStormers.CodersPlatformBackendApplication",
+      "projectName": "Coders-Platform-Backend",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

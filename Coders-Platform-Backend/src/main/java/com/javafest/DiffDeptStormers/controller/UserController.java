@@ -1,21 +1,22 @@
 package com.javafest.DiffDeptStormers.controller;
 
+import com.javafest.DiffDeptStormers.model.User;
+import com.javafest.DiffDeptStormers.service.MongoUserService;
+import com.javafest.DiffDeptStormers.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.javafest.DiffDeptStormers.model.User;
-import com.javafest.DiffDeptStormers.repository.UserRepository;
-import com.javafest.DiffDeptStormers.service.UserService;
-import com.javafest.DiffDeptStormers.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private MongoUserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -31,9 +32,6 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
-    
-    @Autowired
-    private JwtUtil jwtUtil;
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
         User user = userService.findByEmail(loginRequest.getEmail());
@@ -46,25 +44,24 @@ public class UserController {
             return ResponseEntity.status(401).body("{\"message\": \"Invalid email or password\"}");
         }
     }
-    
+
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestParam(name = "token") String token) {
         try {
-			String email = jwtUtil.getEmailFromToken(token);
-			if (email != null) {
-			    User user = userService.findByEmail(email);
-			    if (user != null) {
-			        user.setPassword(null); // Remove password from response
-			        return ResponseEntity.ok(user);
-			    } else {
-			        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
-			    }
-			} else {
-			    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
-			}
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
-		}
+            String email = jwtUtil.getEmailFromToken(token);
+            if (email != null) {
+                User user = userService.findByEmail(email);
+                if (user != null) {
+                    user.setPassword(null); // Remove password from response
+                    return ResponseEntity.ok(user);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
+        }
     }
-
 }

@@ -47,10 +47,10 @@ const CustomNavbar = () => {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden sm:flex">
-          <Link to="/login">Login</Link>
+          <Link to="/auth/login">Login</Link>
         </NavbarItem>
         <NavbarItem>
-          <Link to="/register">
+          <Link to="/auth/register">
             <Button color="primary" variant="flat">
               Sign Up
             </Button>
@@ -67,12 +67,12 @@ const CustomNavbar = () => {
           </NavbarMenuItem>
         ))}
         <NavbarMenuItem>
-          <Link className="text-white" to="/login">
+          <Link className="text-white" to="/auth/login">
             Login
           </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <Link className="text-white" to="/register">
+          <Link className="text-white" to="/auth/register">
             Sign Up
           </Link>
         </NavbarMenuItem>
