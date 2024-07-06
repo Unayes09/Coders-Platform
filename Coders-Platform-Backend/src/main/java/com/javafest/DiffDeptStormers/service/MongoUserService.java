@@ -1,6 +1,7 @@
 package com.javafest.DiffDeptStormers.service;
 
 import com.javafest.DiffDeptStormers.model.File;
+import static com.mongodb.client.model.Updates.set;
 import com.javafest.DiffDeptStormers.model.Repository;
 import com.javafest.DiffDeptStormers.model.User;
 import com.mongodb.client.MongoClient;
@@ -47,6 +48,15 @@ public class MongoUserService {
     public boolean existsByEmail(String email) {
         MongoCollection<Document> userCollection = getUserCollection();
         return userCollection.find(eq("email", email)).first() != null;
+    }
+    
+    public Optional<User> findByConfirmationToken(String confirmationToken) {
+        Document document = getUserCollection().find(eq("confirmationToken", confirmationToken)).first();
+        return Optional.ofNullable(document).map(this::convertDocumentToUser);
+    }
+
+    public void confirmUser(String confirmationToken) {
+        getUserCollection().updateOne(eq("confirmationToken", confirmationToken), set("confirmationToken", "confirmed"));
     }
     
     public User saveUser(User user) {
