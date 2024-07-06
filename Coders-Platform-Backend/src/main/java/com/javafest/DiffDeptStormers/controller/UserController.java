@@ -3,6 +3,9 @@ package com.javafest.DiffDeptStormers.controller;
 import com.javafest.DiffDeptStormers.model.User;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +62,36 @@ public class UserController {
                 }
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
+        }
+    }
+    
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<?> getUserProfileById(@PathVariable String userId) {
+        try {
+            User user = userService.findById(userId);
+            if (user != null) {
+                user.setPassword(null); // Remove password from response
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
+        }
+    }
+    
+    @GetMapping("/confirm/{token}")
+    public ResponseEntity<?> confirmUser(@PathVariable String token) {
+        try {
+            Optional<User> userOptional = userService.findByConfirmationToken(token);
+            if (userOptional.isPresent()) {
+                userService.confirmUser(token);
+                return ResponseEntity.ok("{\"message\": \"User confirmed successfully\"}");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Invalid token\"}");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
