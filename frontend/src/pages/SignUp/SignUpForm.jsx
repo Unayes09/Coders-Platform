@@ -1,17 +1,46 @@
 import { Button, Input } from "@nextui-org/react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import axios from "axios";
 
-const SignUpForm = () => {
-  const handleFormSubmit = (event) => {
+const SignUpForm = (props) => {
+  const {
+    fullName,
+    setFullName,
+    username,
+    setUsername,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    setIsCredentials,
+    setIsExtraInfo,
+  } = props;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^.{6,}$/;
+
+  const handleNext = (event) => {
     event.preventDefault();
 
-    // Fetch form data
-    const formData = new FormData(event.target);
-    const fullName = formData.get("fullName");
-    const username = formData.get("userName");
-    const email = formData.get("email");
-    const password = formData.get("password");
+    // check if fields are empty or not
+    if (fullName === "" || username === "" || email === "" || password === "") {
+      toast.error("Please fill-up all the fields");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      toast.error("Password must be 6 characters long");
+      return;
+    }
+
+    setIsCredentials(false);
+    setIsExtraInfo(true);
 
     // Log data to console
     console.log({ fullName, username, email, password });
@@ -19,13 +48,15 @@ const SignUpForm = () => {
 
   return (
     <div className="w-full flex flex-col gap-4 min-w-[250px]">
-      <form onSubmit={handleFormSubmit} className="flex flex-col gap-2">
+      <form onSubmit={handleNext} className="flex flex-col gap-2">
         <Input
           name="fullName"
           isRequired
           type="text"
           variant={"underlined"}
           label="Full Name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
         />
         <Input
           name="userName"
@@ -33,6 +64,8 @@ const SignUpForm = () => {
           type="text"
           variant={"underlined"}
           label="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <Input
           name="email"
@@ -40,6 +73,8 @@ const SignUpForm = () => {
           type="email"
           variant={"underlined"}
           label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <Input
           name="password"
@@ -47,13 +82,15 @@ const SignUpForm = () => {
           type="password"
           variant={"underlined"}
           label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button
           type="submit"
           radius="full"
           className="mt-4 bg-gradient-to-r from-[#39393F] via-[#47474e] to-[#39393F] text-white shadow-lg"
         >
-          Sign Up
+          Next
         </Button>
         <h5 className="text-[13px] text-center mt-4 flex gap-2 justify-center">
           <span>Already have an account?</span>

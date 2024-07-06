@@ -1,16 +1,43 @@
+import { useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
+
+    axios
+      .post("http://localhost:8080/api/users/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        alert(res.data.message);
+      });
   };
 
   return (
     <div className="w-full flex flex-col gap-4 min-w-[250px]">
       <form onSubmit={handleFormSubmit} className="flex flex-col gap-2">
-        <Input type="email" variant={"underlined"} label="Email" />
-        <Input type="password" variant={"underlined"} label="Password" />
+        <Input
+          type="email"
+          variant={"underlined"}
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          variant={"underlined"}
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <Button
           type="submit"
           radius="full"
