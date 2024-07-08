@@ -10,7 +10,6 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import com.javafest.DiffDeptStormers.model.User;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
