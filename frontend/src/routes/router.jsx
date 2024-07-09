@@ -4,6 +4,7 @@ import Home from "../pages/Home/Home";
 import AuthenticationLayout from "../layouts/AuthenticationLayout";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
+import Playground from "../pages/Playground/Playground";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "playground",
+        element: <Playground />,
       },
     ],
   },
