@@ -1,18 +1,37 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CodeEditor from "./CodeEditor";
 import LanguageSelector from "./LanguageSelector";
 import IO from "./IO";
 import "./Playground.css";
 import RunButton from "./RunButton";
+import axios from "axios";
+import { LANGUAGE_VERSIONS } from "./LanguageVersions";
 
 const Playground = () => {
   const [value, setValue] = useState("");
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [isError, setIsError] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("");
 
-  useEffect(() => {
-    console.log(selectedLanguage);
-    console.log(value);
-  }, [selectedLanguage, value]);
+  const API = axios.create({
+    baseURL: "https://emkc.org/api/v2/piston",
+  });
+
+  const executeCode = async (lang, code, inp) => {
+    const response = await API.post("/execute", {
+      language: lang,
+      version: LANGUAGE_VERSIONS[lang],
+      files: [
+        {
+          content: code,
+        },
+      ],
+      stdin: inp,
+    });
+
+    return response.data;
+  };
 
   return (
     <div className="mx-6 mt-2 pb-4">
@@ -25,7 +44,14 @@ const Playground = () => {
             setValue={setValue}
           />
           <div className="flex justify-end">
-            <RunButton />
+            <RunButton
+              executeCode={executeCode}
+              sourceCode={value}
+              input={input}
+              setOutput={setOutput}
+              selectedLanguage={selectedLanguage}
+              setIsError={setIsError}
+            />
           </div>
         </div>
         <div className="grid grid-cols-6 gap-6">
@@ -37,7 +63,12 @@ const Playground = () => {
             />
           </div>
           <div className="col-span-2">
-            <IO />
+            <IO
+              input={input}
+              setInput={setInput}
+              output={output}
+              isError={isError}
+            />
           </div>
         </div>
       </div>
