@@ -106,6 +106,16 @@ public class MongoUserService {
         userCollection.updateOne(eq("_id", new ObjectId(user.getId())), new Document("$set", updateDoc));
         return user;
     }
+    
+    public User updatePremiumUser(User user) {
+        Document updateDoc = new Document()
+                .append("premiumPackBuyDate", new Date())
+                .append("updatedAt", new Date());
+
+        MongoCollection<Document> userCollection = getUserCollection();
+        userCollection.updateOne(eq("email", user.getEmail()), new Document("$set", updateDoc));
+        return user;
+    }
 
     
     public User findByEmail(String email) {
