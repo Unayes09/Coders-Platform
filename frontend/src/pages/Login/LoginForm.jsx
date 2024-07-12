@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -10,8 +10,8 @@ const LoginForm = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
-    axios
-      .post("http://localhost:8080/api/users/login", {
+    axiosInstance
+      .post("/api/users/login", {
         email,
         password,
       })

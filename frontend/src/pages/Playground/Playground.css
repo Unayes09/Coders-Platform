@@ -1,3 +1,4 @@
+/* Code run button styling */
 .glow-run-on-hover {
   width: 150px;
   height: 50px;
@@ -73,4 +74,45 @@
   100% {
     background-position: 0 0;
   }
+}
+
+/* Feedback container component styling */
+.feedback-container {
+  line-height: 1.5;
+  margin: 20px;
+}
+
+.feedback-container h2 {
+  font-size: 1.5em;
+  margin-top: 20px;
+  color: white;
+  font-weight: 600;
+}
+
+.feedback-container p {
+  margin: 10px 0;
+}
+
+.feedback-container li {
+  margin-left: 20px;
+  list-style-type: disc;
+}
+
+.feedback-container code {
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.feedback-container pre {
+  padding: 10px;
+  border-radius: 5px;
+  font-family: "Courier New", Courier, monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.feedback-container strong {
+  display: block;
+  margin-top: 20px;
 }
