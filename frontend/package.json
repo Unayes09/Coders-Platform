@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.6.0",
     "@nextui-org/react": "^2.4.2",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.12",
@@ -19,7 +20,10 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1",
+    "react-markdown": "^9.0.1",
     "react-router-dom": "^6.24.0",
+    "react-syntax-highlighter": "^15.5.0",
+    "remark-gfm": "^4.0.0",
     "sort-by": "^1.2.0",
     "three": "^0.166.1",
     "vanta": "^0.5.24"

@@ -1,8 +1,6 @@
 package com.javafest.DiffDeptStormers.service;
 
-import com.javafest.DiffDeptStormers.model.File;
 import static com.mongodb.client.model.Updates.set;
-import com.javafest.DiffDeptStormers.model.Repository;
 import com.javafest.DiffDeptStormers.model.User;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -15,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -108,6 +104,16 @@ public class MongoUserService {
 
         MongoCollection<Document> userCollection = getUserCollection();
         userCollection.updateOne(eq("_id", new ObjectId(user.getId())), new Document("$set", updateDoc));
+        return user;
+    }
+    
+    public User updatePremiumUser(User user) {
+        Document updateDoc = new Document()
+                .append("premiumPackBuyDate", new Date())
+                .append("updatedAt", new Date());
+
+        MongoCollection<Document> userCollection = getUserCollection();
+        userCollection.updateOne(eq("email", user.getEmail()), new Document("$set", updateDoc));
         return user;
     }
 

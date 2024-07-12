@@ -97,4 +97,44 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
         }
     }
+
+    @GetMapping("/confirm-payment")
+    public ResponseEntity<?> confirmPayment(@RequestParam String token) {
+        try {
+            String email = jwtUtil.getEmailFromToken(token);
+            if (email != null) {
+                User user = userService.findByEmail(email);
+                if (user != null) {
+                    userService.updatePremiumUser(user);
+                    return ResponseEntity.ok("{\"message\": \"Payment confirmed and premium pack activated\"}");
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
+        }
+    }
+
+    @GetMapping("/isPremium")
+    public ResponseEntity<?> isPremium(@RequestParam String token) {
+        try {
+            String email = jwtUtil.getEmailFromToken(token);
+            if (email != null) {
+                User user = userService.findByEmail(email);
+                if (user != null) {
+                    boolean isPremium = user.getPremiumPackBuyDate() != null;
+                    return ResponseEntity.ok("{\"isPremium\": " + isPremium + "}");
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
+        }
+    }
 }
