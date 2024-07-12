@@ -5,6 +5,7 @@ import AuthenticationLayout from "../layouts/AuthenticationLayout";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import Playground from "../pages/Playground/Playground";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
     ],
+  },
+  {
+    path: "*", // This will catch all undefined routes
+    element: <ErrorPage />,
   },
 ]);
 
