@@ -30,7 +30,7 @@ export const getAiFeedbackPrompt = (
         `;
   }
 
-  prompt += `Give me feedback on my code and if there are any improvements that i can make then mention the improvements. and if you suggest any improvement then try to mention the complexity of my code and also mention the improved time and space complexity 
+  prompt += `Give me feedback on my code and if there are any improvements that i can make then mention the improvements. and if you suggest any improvement then try to mention the complexity of my code and also mention the improved time and space complexity and don't put comma after writing the complexity 
         -------------------------------
         Not that the user is not directly writing this prompt. I am a programmer who is writing this in general prompt for my software. so write the response accordingly.
         `;
