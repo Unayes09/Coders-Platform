@@ -6,6 +6,7 @@ import { useState } from "react";
 import FinishSignUp from "./FinishSignUp";
 import axios from "axios";
 import toast from "react-hot-toast";
+import axiosInstance from "../../utils/axiosInstance";
 
 const SignUp = () => {
   // states to show different forms
@@ -35,8 +36,8 @@ const SignUp = () => {
       skills,
     });
 
-    axios
-      .post("http://localhost:8080/api/users/register", {
+    axiosInstance
+      .post("/api/users/register", {
         fullName,
         username,
         email,

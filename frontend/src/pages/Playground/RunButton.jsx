@@ -15,7 +15,12 @@ const RunButton = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRunCode = async () => {
+    if (!selectedLanguage) {
+      toast.error("Please select a language first");
+      return;
+    }
     if (!sourceCode) {
+      toast.error("Please write some code to run");
       return;
     }
 
@@ -30,7 +35,6 @@ const RunButton = (props) => {
       setOutput(result.output);
       result.stderr ? setIsError(true) : setIsError(false);
     } catch (error) {
-      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
