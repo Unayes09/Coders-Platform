@@ -22,6 +22,8 @@ const PreviousFeedbackModal = ({ text }) => {
     <>
       <div className="flex flex-wrap gap-3">
         <Button
+          color="primary"
+          variant="ghost"
           isDisabled={text === ""}
           onPress={() => handleOpen()}
           className="w-full"

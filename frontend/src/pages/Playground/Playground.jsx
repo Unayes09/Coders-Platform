@@ -7,7 +7,6 @@ import RunButton from "./RunButton";
 import axios from "axios";
 import { LANGUAGE_VERSIONS } from "./LanguageVersions";
 import AiFeedback from "./AiFeedback";
-import FeedbackModal from "./FeedbackContainer";
 import PreviousFeedbackModal from "./PreviousFeedbackModal";
 
 const Playground = () => {
@@ -16,7 +15,6 @@ const Playground = () => {
   const [output, setOutput] = useState("");
   const [isError, setIsError] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
-  const [previousFeedbackText, setPreviousFeedbackText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
 
   const API = axios.create({
@@ -41,14 +39,14 @@ const Playground = () => {
   return (
     <div className="mx-6 mt-2 pb-4">
       <div className="mt-2">
-        <div className="grid grid-cols-2 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 items-center my-4 gap-3">
           <LanguageSelector
             className="w-full"
             selectedLanguage={selectedLanguage}
             setSelectedLanguage={setSelectedLanguage}
             setValue={setValue}
           />
-          <div className="flex justify-end">
+          <div className="flex sm:justify-end">
             <RunButton
               executeCode={executeCode}
               sourceCode={value}
@@ -59,15 +57,15 @@ const Playground = () => {
             />
           </div>
         </div>
-        <div className="grid grid-cols-6 gap-6">
-          <div className="col-span-4">
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+          <div className="lg:col-span-4">
             <CodeEditor
               value={value}
               setValue={setValue}
               selectedLanguage={selectedLanguage}
             />
           </div>
-          <div className="col-span-2">
+          <div className="lg:col-span-2">
             <div className="flex flex-col gap-4">
               <IO
                 input={input}
@@ -82,9 +80,8 @@ const Playground = () => {
                 output={output}
                 isError={isError}
                 setFeedbackText={setFeedbackText}
-                setPreviousFeedbackText={setPreviousFeedbackText}
               />
-              <PreviousFeedbackModal text={previousFeedbackText} />
+              <PreviousFeedbackModal text={feedbackText} />
             </div>
           </div>
         </div>
