@@ -7,7 +7,6 @@ import RunButton from "./RunButton";
 import axios from "axios";
 import { LANGUAGE_VERSIONS } from "./LanguageVersions";
 import AiFeedback from "./AiFeedback";
-import FeedbackModal from "./FeedbackContainer";
 import PreviousFeedbackModal from "./PreviousFeedbackModal";
 
 const Playground = () => {
@@ -16,7 +15,6 @@ const Playground = () => {
   const [output, setOutput] = useState("");
   const [isError, setIsError] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
-  const [previousFeedbackText, setPreviousFeedbackText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
 
   const API = axios.create({
@@ -82,9 +80,8 @@ const Playground = () => {
                 output={output}
                 isError={isError}
                 setFeedbackText={setFeedbackText}
-                setPreviousFeedbackText={setPreviousFeedbackText}
               />
-              <PreviousFeedbackModal text={previousFeedbackText} />
+              <PreviousFeedbackModal text={feedbackText} />
             </div>
           </div>
         </div>

@@ -22,15 +22,8 @@ const AiFeedback = (props) => {
   const size = "5xl";
   const scrollBehavior = "outside";
 
-  const {
-    language,
-    sourceCode,
-    input,
-    output,
-    isError,
-    setFeedbackText,
-    setPreviousFeedbackText,
-  } = props;
+  const { language, sourceCode, input, output, isError, setFeedbackText } =
+    props;
 
   const handleAiFeedback = () => {
     setIsLoading(true);
@@ -61,7 +54,6 @@ const AiFeedback = (props) => {
           const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
           if (text) {
             setFeedbackText(text);
-            setPreviousFeedbackText(text);
             setAiResponseText(text);
             // show the modal
             onOpen();
