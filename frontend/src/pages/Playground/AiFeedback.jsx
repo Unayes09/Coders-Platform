@@ -42,33 +42,31 @@ const AiFeedback = (props) => {
       isError
     );
 
-    try {
-      axiosInstance
-        .get("/prompt", {
-          params: {
-            prompt: prompt,
-            geminiKey: import.meta.env.VITE_GEMINI_API_KEY,
-          },
-        })
-        .then((res) => {
-          const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            setFeedbackText(text);
-            setAiResponseText(text);
-            // show the modal
-            onOpen();
-            // disable loading
-            setIsLoading(false);
-          } else {
-            toast.error("An error occurred!");
-            // disable loading
-            setIsLoading(false);
-          }
-        });
-    } catch (error) {
-      toast.error("An error occurred!");
-      setIsLoading(false);
-    }
+    axiosInstance
+      .get("/prompt", {
+        params: {
+          prompt: prompt,
+          geminiKey: import.meta.env.VITE_GEMINI_API_KEY,
+        },
+      })
+      .then((res) => {
+        const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          setFeedbackText(text);
+          setAiResponseText(text);
+          // show the modal
+          onOpen();
+        } else {
+          toast.error("An error occurred!");
+        }
+
+        // disable loading
+        setIsLoading(false);
+      })
+      .catch(() => {
+        toast.error("An error occurred!");
+        setIsLoading(false);
+      });
   };
 
   return (
