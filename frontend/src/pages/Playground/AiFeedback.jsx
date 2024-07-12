@@ -37,7 +37,7 @@ const AiFeedback = (props) => {
 
     if (!language) {
       toast.error("Please select a language first");
-      // setIsLoading(false);
+      setIsLoading(false);
       return;
     }
 
@@ -85,12 +85,13 @@ const AiFeedback = (props) => {
         <div className="wrap-warning">
           <div className="flex flex-wrap gap-3">
             <Button
+              color="secondary"
               isDisabled={isLoading}
               className="w-full"
               onPress={() => handleAiFeedback()}
             >
               {!isLoading && <span>Show AI Feedback</span>}
-              {isLoading && <Spinner />}
+              {isLoading && <Spinner color="success" />}
             </Button>
           </div>
         </div>

@@ -15,11 +15,7 @@ const LanguageSelector = ({
 
   return (
     <div>
-      <Select
-        classNames="color"
-        label="Select a language"
-        className="max-w-xs my-6"
-      >
+      <Select classNames="color" label="Select a language" className="max-w-xs">
         {languages &&
           languages.map(([language, version]) => (
             <SelectItem
