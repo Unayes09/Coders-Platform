@@ -43,11 +43,9 @@ const AiFeedback = (props) => {
     );
 
     axiosInstance
-      .get("/prompt", {
-        params: {
-          prompt: prompt,
-          geminiKey: import.meta.env.VITE_GEMINI_API_KEY,
-        },
+      .post("/prompt", {
+        prompt: prompt,
+        geminiKey: import.meta.env.VITE_GEMINI_API_KEY,
       })
       .then((res) => {
         const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
