@@ -16,13 +16,15 @@ const LoginForm = () => {
         password,
       })
       .then((res) => {
+        const authorizationHeader = res.headers["Authorization"];
+        console.log(authorizationHeader);
         console.log(res.data);
         alert(res.data.message);
       });
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 min-w-[250px]">
+    <div className="w-[230px] sm:w-[300px] md:w-[350px] flex flex-col gap-4">
       <form onSubmit={handleFormSubmit} className="flex flex-col gap-2">
         <Input
           type="email"
