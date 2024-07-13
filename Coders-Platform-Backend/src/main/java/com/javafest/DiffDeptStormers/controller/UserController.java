@@ -41,8 +41,7 @@ public class UserController {
         if (user != null && userService.checkPassword(loginRequest.getPassword(), user.getPassword())) {
             String token = jwtUtil.generateToken(user.getEmail());
             return ResponseEntity.ok()
-                    .header("Authorization", "Bearer " + token)
-                    .body("{\"message\": \"Login successful\"}");
+            		.body("{\"message\": \"Login successful\", \"token\": \"" + token + "\"}");
         } else {
             return ResponseEntity.status(401).body("{\"message\": \"Invalid email or password\"}");
         }
