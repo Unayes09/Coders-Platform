@@ -16,8 +16,6 @@ const LoginForm = () => {
         password,
       })
       .then((res) => {
-        const authorizationHeader = res.headers["Authorization"];
-        console.log(authorizationHeader);
         console.log(res.data);
         alert(res.data.message);
       });
