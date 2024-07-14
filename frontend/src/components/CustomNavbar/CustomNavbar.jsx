@@ -9,15 +9,16 @@ import {
   Button,
 } from "@nextui-org/react";
 import Logo from "../Logo/Logo";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import navLinks from "./NavLinks";
-import { getUser } from "../../utils/getUser";
 import UserDropdown from "./UserDropdown";
 import { logoutUser } from "../../utils/logoutUser";
+import { UserContext } from "../../providers/UserProvider";
 
 const CustomNavbar = () => {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
+  const { user, setUser, refreshUser } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = navLinks;
@@ -26,16 +27,16 @@ const CustomNavbar = () => {
   // TODO: Give hover and active nav link effect
   // TODO: Active nav link styles
 
-  useEffect(() => {
-    const user = getUser();
+  // useEffect(() => {
+  //   const user = getUser();
 
-    if (user) {
-      setUser(user);
-      console.log(user);
-    } else {
-      console.log("user not found");
-    }
-  }, []);
+  //   if (user) {
+  //     setUser(user);
+  //     console.log(user);
+  //   } else {
+  //     console.log("user not found");
+  //   }
+  // }, []);
 
   const logoutHandler = () => {
     logoutUser();
@@ -83,7 +84,12 @@ const CustomNavbar = () => {
             </Link>
           </NavbarItem>
         )}
-        {user && <UserDropdown logoutHandler={logoutHandler} />}
+        {user && (
+          <UserDropdown
+            refreshUser={refreshUser}
+            logoutHandler={logoutHandler}
+          />
+        )}
       </NavbarContent>
 
       {/* Mobile Sidebar */}

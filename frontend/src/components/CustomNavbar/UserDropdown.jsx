@@ -6,7 +6,7 @@ import {
   User,
 } from "@nextui-org/react";
 
-const UserDropdown = ({ logoutHandler }) => {
+const UserDropdown = ({ logoutHandler, refreshUser }) => {
   return (
     <div>
       <Dropdown
@@ -47,7 +47,14 @@ const UserDropdown = ({ logoutHandler }) => {
           <DropdownItem color="primary" key="help_and_feedback">
             Help & Feedback
           </DropdownItem>
-          <DropdownItem onClick={logoutHandler} key="logout" color="danger">
+          <DropdownItem
+            onClick={() => {
+              logoutHandler();
+              refreshUser();
+            }}
+            key="logout"
+            color="danger"
+          >
             Log Out
           </DropdownItem>
         </DropdownMenu>
