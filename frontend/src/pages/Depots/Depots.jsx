@@ -33,7 +33,6 @@ const Depots = () => {
       axiosInstance
         .get(`/api/repos/${user.id}/repos`)
         .then((res) => {
-          console.log(res.data);
           setPrivateDepots(res.data);
           setSearchedPrivateDepots(res.data);
           setIsLoading(false);
@@ -84,8 +83,6 @@ const Depots = () => {
       setSearchedPrivateDepots(privateDepots);
       return;
     }
-
-    console.log(searchText);
 
     const searchQuery = searchText.toLowerCase().trim();
 
