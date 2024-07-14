@@ -47,7 +47,7 @@ const SignUpForm = (props) => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 min-w-[250px]">
+    <div className="w-[230px] sm:w-[300px] md:w-[350px] flex flex-col gap-4 min-w-[250px]">
       <form onSubmit={handleNext} className="flex flex-col gap-2">
         <Input
           name="fullName"

@@ -38,11 +38,8 @@ const FinishSignUp = (props) => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 min-w-[250px]">
-      <form
-        onSubmit={handleSignUp}
-        className="flex flex-col gap-2 mt-4 max-w-[250px]"
-      >
+    <div className="w-[230px] sm:w-[300px] md:w-[350px] flex flex-col gap-4 min-w-[250px]">
+      <form onSubmit={handleSignUp} className="flex flex-col gap-2 mt-4">
         <Select
           isRequired
           label="Join As"
