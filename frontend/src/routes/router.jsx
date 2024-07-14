@@ -7,6 +7,7 @@ import SignUp from "../pages/SignUp/SignUp";
 import Playground from "../pages/Playground/Playground";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Depots from "../pages/Depots/Depots";
+import SingleDepot from "../pages/SingleDepot/SingleDepot";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "depots",
         element: <Depots />,
+      },
+      {
+        path: "depots/:id",
+        element: <SingleDepot />,
       },
     ],
   },

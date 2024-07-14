@@ -51,7 +51,7 @@ public class MongoRepoService {
     }
 
     public Repository saveRepository(Repository repository, String email) {
-    	repository.setEmail(email);
+        repository.setEmail(email);
         Document repoDoc = convertRepositoryToDocument(repository);
         MongoCollection<Document> repoCollection = getRepoCollection();
         repoCollection.insertOne(repoDoc);
@@ -61,7 +61,7 @@ public class MongoRepoService {
     }
 
     public File saveFile(File file, String email) {
-    	file.setEmail(email);
+        file.setEmail(email);
         Document fileDoc = convertFileToDocument(file);
         MongoCollection<Document> fileCollection = getFileCollection();
         fileCollection.insertOne(fileDoc);
@@ -140,6 +140,17 @@ public class MongoRepoService {
         }
     }
 
+    public Optional<File> findFileById(String fileId) {
+        MongoCollection<Document> fileCollection = getFileCollection();
+        Document doc = fileCollection.find(eq("_id", new ObjectId(fileId))).first();
+
+        if (doc != null) {
+            return Optional.ofNullable(convertDocumentToFile(doc));
+        } else {
+            return Optional.empty();
+        }
+    }
+
     public void deleteRepositoryById(String repoId, String email) {
         MongoCollection<Document> repoCollection = getRepoCollection();
         Document repoDoc = repoCollection.find(eq("_id", new ObjectId(repoId))).first();
@@ -152,7 +163,7 @@ public class MongoRepoService {
             throw new RuntimeException("Repository not found");
         }
     }
-    
+
     public List<File> getAllFilesOfRepository(String repoId) {
         MongoCollection<Document> fileCollection = getFileCollection();
         List<File> files = new ArrayList<>();
@@ -170,7 +181,7 @@ public class MongoRepoService {
         }
         return repositories;
     }
-    
+
     private File convertDocumentToFile(Document doc) {
         File file = new File();
         file.setId(doc.getObjectId("_id").toString());
@@ -180,7 +191,6 @@ public class MongoRepoService {
         file.setEmail(doc.getString("email"));
         return file;
     }
-
 
     private Repository convertDocumentToRepository(Document doc) {
         Repository repository = new Repository();
