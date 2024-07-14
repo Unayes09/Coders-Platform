@@ -9,16 +9,39 @@ import {
   Button,
 } from "@nextui-org/react";
 import Logo from "../Logo/Logo";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import navLinks from "./NavLinks";
+import UserDropdown from "./UserDropdown";
+import { logoutUser } from "../../utils/logoutUser";
+import { UserContext } from "../../providers/UserProvider";
 
 const CustomNavbar = () => {
+  // const [user, setUser] = useState(null);
+  const { user, setUser, refreshUser } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const menuItems = navLinks;
 
   // TODO: Add icons to the nav links
   // TODO: Give hover and active nav link effect
-  const menuItems = navLinks;
+  // TODO: Active nav link styles
+
+  // useEffect(() => {
+  //   const user = getUser();
+
+  //   if (user) {
+  //     setUser(user);
+  //     console.log(user);
+  //   } else {
+  //     console.log("user not found");
+  //   }
+  // }, []);
+
+  const logoutHandler = () => {
+    logoutUser();
+    setUser(null);
+  };
 
   return (
     <Navbar isBordered onMenuOpenChange={setIsMenuOpen}>
@@ -38,6 +61,7 @@ const CustomNavbar = () => {
         </NavbarBrand>
       </NavbarContent>
 
+      {/* Desktop Navbar */}
       <NavbarContent className="hidden md:flex gap-4" justify="center">
         {menuItems.map((item, index) => (
           <NavbarItem key={`${item.text}-${index}`}>
@@ -46,18 +70,29 @@ const CustomNavbar = () => {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden sm:flex">
-          <Link to="/auth/login">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link to="/auth/register">
-            <Button color="primary" variant="flat">
-              Sign Up
-            </Button>
-          </Link>
-        </NavbarItem>
+        {!user && (
+          <NavbarItem className="hidden sm:flex">
+            <Link to="/auth/login">Login</Link>
+          </NavbarItem>
+        )}
+        {!user && (
+          <NavbarItem>
+            <Link to="/auth/register">
+              <Button color="primary" variant="flat">
+                Sign Up
+              </Button>
+            </Link>
+          </NavbarItem>
+        )}
+        {user && (
+          <UserDropdown
+            refreshUser={refreshUser}
+            logoutHandler={logoutHandler}
+          />
+        )}
       </NavbarContent>
 
+      {/* Mobile Sidebar */}
       <NavbarMenu className="bg-[rgba(255, 255, 255, 0.3)]">
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.text}-${index}`}>
@@ -66,16 +101,20 @@ const CustomNavbar = () => {
             </Link>
           </NavbarMenuItem>
         ))}
-        <NavbarMenuItem>
-          <Link className="text-white" to="/auth/login">
-            Login
-          </Link>
-        </NavbarMenuItem>
-        <NavbarMenuItem>
-          <Link className="text-white" to="/auth/register">
-            Sign Up
-          </Link>
-        </NavbarMenuItem>
+        {!user && (
+          <NavbarMenuItem>
+            <Link className="text-white" to="/auth/login">
+              Login
+            </Link>
+          </NavbarMenuItem>
+        )}
+        {!user && (
+          <NavbarMenuItem>
+            <Link className="text-white" to="/auth/register">
+              Sign Up
+            </Link>
+          </NavbarMenuItem>
+        )}
       </NavbarMenu>
     </Navbar>
   );
