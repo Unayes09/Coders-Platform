@@ -9,15 +9,31 @@ import {
   Button,
 } from "@nextui-org/react";
 import Logo from "../Logo/Logo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import navLinks from "./NavLinks";
+import { getUser } from "../../utils/getUser";
+import UserDropdown from "./UserDropdown";
 
 const CustomNavbar = () => {
+  const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // TODO: Add icons to the nav links
   // TODO: Give hover and active nav link effect
+  // TODO: Active nav link styles
+
+  useEffect(() => {
+    const user = getUser();
+
+    if (user) {
+      setUser(user);
+      console.log(user);
+    } else {
+      console.log("user not found");
+    }
+  }, []);
+
   const menuItems = navLinks;
 
   return (
@@ -38,6 +54,7 @@ const CustomNavbar = () => {
         </NavbarBrand>
       </NavbarContent>
 
+      {/* Desktop Navbar */}
       <NavbarContent className="hidden md:flex gap-4" justify="center">
         {menuItems.map((item, index) => (
           <NavbarItem key={`${item.text}-${index}`}>
@@ -46,18 +63,24 @@ const CustomNavbar = () => {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden sm:flex">
-          <Link to="/auth/login">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link to="/auth/register">
-            <Button color="primary" variant="flat">
-              Sign Up
-            </Button>
-          </Link>
-        </NavbarItem>
+        {!user && (
+          <NavbarItem className="hidden sm:flex">
+            <Link to="/auth/login">Login</Link>
+          </NavbarItem>
+        )}
+        {!user && (
+          <NavbarItem>
+            <Link to="/auth/register">
+              <Button color="primary" variant="flat">
+                Sign Up
+              </Button>
+            </Link>
+          </NavbarItem>
+        )}
+        {user && <UserDropdown />}
       </NavbarContent>
 
+      {/* Mobile Sidebar */}
       <NavbarMenu className="bg-[rgba(255, 255, 255, 0.3)]">
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.text}-${index}`}>
@@ -66,16 +89,20 @@ const CustomNavbar = () => {
             </Link>
           </NavbarMenuItem>
         ))}
-        <NavbarMenuItem>
-          <Link className="text-white" to="/auth/login">
-            Login
-          </Link>
-        </NavbarMenuItem>
-        <NavbarMenuItem>
-          <Link className="text-white" to="/auth/register">
-            Sign Up
-          </Link>
-        </NavbarMenuItem>
+        {!user && (
+          <NavbarMenuItem>
+            <Link className="text-white" to="/auth/login">
+              Login
+            </Link>
+          </NavbarMenuItem>
+        )}
+        {!user && (
+          <NavbarMenuItem>
+            <Link className="text-white" to="/auth/register">
+              Sign Up
+            </Link>
+          </NavbarMenuItem>
+        )}
       </NavbarMenu>
     </Navbar>
   );
