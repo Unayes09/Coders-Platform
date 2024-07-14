@@ -18,7 +18,7 @@ const DepotSearch = (props) => {
   }, [searchText]);
 
   return (
-    <form onSubmit={handleSearch}>
+    <form className="mt-2 mb-2" onSubmit={handleSearch}>
       <Input
         radius="lg"
         classNames={{
