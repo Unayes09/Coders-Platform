@@ -6,6 +6,8 @@ import {
   User,
 } from "@nextui-org/react";
 
+import userAvatar from "../../assets/images/avatar.png";
+
 const UserDropdown = ({ logoutHandler, refreshUser }) => {
   return (
     <div>
@@ -18,7 +20,7 @@ const UserDropdown = ({ logoutHandler, refreshUser }) => {
             as="button"
             avatarProps={{
               isBordered: true,
-              src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+              src: userAvatar,
             }}
             className="transition-transform"
             description="@tonyreichert"
