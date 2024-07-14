@@ -1,6 +1,6 @@
 const navLinks = [
   { text: "Playground", to: "/playground" },
-  { text: "Repository", to: "/repository" },
+  { text: "Depots", to: "/depots" },
   { text: "Skill Test", to: "/skill-test" },
 ];
 
