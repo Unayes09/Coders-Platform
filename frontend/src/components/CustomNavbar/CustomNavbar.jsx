@@ -14,10 +14,13 @@ import { Link } from "react-router-dom";
 import navLinks from "./NavLinks";
 import { getUser } from "../../utils/getUser";
 import UserDropdown from "./UserDropdown";
+import { logoutUser } from "../../utils/logoutUser";
 
 const CustomNavbar = () => {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const menuItems = navLinks;
 
   // TODO: Add icons to the nav links
   // TODO: Give hover and active nav link effect
@@ -34,7 +37,10 @@ const CustomNavbar = () => {
     }
   }, []);
 
-  const menuItems = navLinks;
+  const logoutHandler = () => {
+    logoutUser();
+    setUser(null);
+  };
 
   return (
     <Navbar isBordered onMenuOpenChange={setIsMenuOpen}>
@@ -77,7 +83,7 @@ const CustomNavbar = () => {
             </Link>
           </NavbarItem>
         )}
-        {user && <UserDropdown />}
+        {user && <UserDropdown logoutHandler={logoutHandler} />}
       </NavbarContent>
 
       {/* Mobile Sidebar */}

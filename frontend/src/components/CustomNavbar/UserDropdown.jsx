@@ -6,7 +6,7 @@ import {
   User,
 } from "@nextui-org/react";
 
-const UserDropdown = () => {
+const UserDropdown = ({ logoutHandler }) => {
   return (
     <div>
       <Dropdown
@@ -25,57 +25,58 @@ const UserDropdown = () => {
             name="Tony Reichert"
           />
         </DropdownTrigger>
-        <DropdownMenu className="" aria-label="User Actions" variant="flat">
+        <DropdownMenu aria-label="User Actions" variant="flat">
           <DropdownItem
             color="primary"
-            className="hover:bg-[#27272A] "
-            key="settings"
+            className="hover:bg-[#27272A]"
+            key="profile"
           >
             Profile
           </DropdownItem>
           <DropdownItem
             color="primary"
-            className="hover:bg-[#27272A] "
-            key="settings"
+            className="hover:bg-[#27272A]"
+            key="my_settings"
           >
             My Settings
           </DropdownItem>
           <DropdownItem
             color="primary"
-            className="hover:bg-[#27272A] "
+            className="hover:bg-[#27272A]"
             key="team_settings"
           >
             Team Settings
           </DropdownItem>
           <DropdownItem
             color="primary"
-            className="hover:bg-[#27272A] "
+            className="hover:bg-[#27272A]"
             key="analytics"
           >
             Analytics
           </DropdownItem>
           <DropdownItem
             color="primary"
-            className="hover:bg-[#27272A] "
+            className="hover:bg-[#27272A]"
             key="system"
           >
             System
           </DropdownItem>
           <DropdownItem
             color="primary"
-            className="hover:bg-[#27272A] "
+            className="hover:bg-[#27272A]"
             key="configurations"
           >
             Configurations
           </DropdownItem>
           <DropdownItem
             color="primary"
-            className="hover:bg-[#27272A] "
+            className="hover:bg-[#27272A]"
             key="help_and_feedback"
           >
             Help & Feedback
           </DropdownItem>
           <DropdownItem
+            onClick={logoutHandler}
             className="hover:bg-[#27272A]"
             key="logout"
             color="danger"
