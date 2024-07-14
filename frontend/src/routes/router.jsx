@@ -6,7 +6,7 @@ import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import Playground from "../pages/Playground/Playground";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
-import Repository from "../pages/Repository/Repository";
+import Depots from "../pages/Depots/Depots";
 
 const router = createBrowserRouter([
   {
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
         element: <Playground />,
       },
       {
-        path: "repository",
-        element: <Repository />,
+        path: "depots",
+        element: <Depots />,
       },
     ],
   },
