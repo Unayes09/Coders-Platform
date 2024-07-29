@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { Button } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
-import DepotTextEditor from "./DepotTextEditor";
+import DepotCodeEditor from "./DepotCodeEditor";
 
 const DepotFile = () => {
   const { depotId, fileId } = useParams();
@@ -12,6 +12,7 @@ const DepotFile = () => {
   const [depot, setDepot] = useState(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     axiosInstance
@@ -24,6 +25,7 @@ const DepotFile = () => {
         const repoFile = res.data.files.find((file) => file.id === fileId);
         setFile(repoFile);
         setDepot(res.data);
+        setValue(repoFile.fileContent);
         setIsLoading(false);
       })
       .catch(() => {
@@ -66,7 +68,13 @@ const DepotFile = () => {
             </Button>
           </div>
 
-          <DepotTextEditor />
+          <div className="mt-6">
+            <DepotCodeEditor
+              value={value}
+              setValue={setValue}
+              selectedLanguage="javascript"
+            />
+          </div>
         </div>
       )}
 
