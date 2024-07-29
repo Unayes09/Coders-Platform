@@ -7,10 +7,13 @@ import com.javafest.DiffDeptStormers.service.MongoRepoService;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -192,26 +195,35 @@ public class RepositoryController {
             Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
             if (repositoryOptional.isPresent()) {
                 Repository repository = repositoryOptional.get();
+                List<File> files = repositoryService.getAllFilesOfRepository(repoId);
+
+                // Combine repository and files into a single JSON response
+                Map<String, Object> response = new HashMap<>();
+                response.put("repository", repository);
+                response.put("files", files);
+
                 if (repository.isPublic()) {
-                    List<File> files = repositoryService.getAllFilesOfRepository(repoId);
-                    return ResponseEntity.ok(files);
+                    return ResponseEntity.ok(response);
                 } else {
-                    ResponseEntity<?> validationResponse = validateToken(token);
-                    if (validationResponse != null) return validationResponse;
+                    String email = jwtUtil.getEmailFromToken(token);
+                    if (email == null) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+                    }
 
                     if (!isAuthorized(token, repository.getUserId())) {
-                        return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Unauthorized\"}");
                     }
-                    List<File> files = repositoryService.getAllFilesOfRepository(repoId);
-                    return ResponseEntity.ok(files);
+
+                    return ResponseEntity.ok(response);
                 }
             } else {
-                return ResponseEntity.status(404).body("{\"message\": \"Repository not found\"}");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Repository not found\"}");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
         }
     }
+
 
     @GetMapping("/{userId}/repos")
     public ResponseEntity<?> getAllRepositoriesOfUser(@PathVariable String userId, @RequestParam String token) {

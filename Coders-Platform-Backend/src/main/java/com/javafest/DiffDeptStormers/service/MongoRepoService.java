@@ -131,6 +131,7 @@ public class MongoRepoService {
 
     public Optional<Repository> findRepositoryById(String repoId) {
         MongoCollection<Document> repoCollection = getRepoCollection();
+        
         Document doc = repoCollection.find(eq("_id", new ObjectId(repoId))).first();
 
         if (doc != null) {
