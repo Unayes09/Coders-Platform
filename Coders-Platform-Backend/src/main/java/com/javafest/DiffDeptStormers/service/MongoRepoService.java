@@ -49,8 +49,10 @@ public class MongoRepoService {
                 .append("fileName", file.getFileName())
                 .append("fileContent", file.getFileContent())
                 .append("email", file.getEmail())
-                .append("timestamp", new Date()); // Directly add the current date and time as the timestamp
+                .append("timestamp", new Date()) // Directly add the current date and time as the timestamp
+                .append("language", file.getLanguage()); // Add the new language field
     }
+
 
 
     public Repository saveRepository(Repository repository, String email) {
@@ -193,8 +195,11 @@ public class MongoRepoService {
         file.setFileContent(doc.getString("fileContent"));
         file.setRepoId(doc.getString("repoId"));
         file.setEmail(doc.getString("email"));
+        file.setTimestamp(doc.getDate("timestamp")); // Set the timestamp field
+        file.setLanguage(doc.getString("language")); // Set the language field
         return file;
     }
+
 
     private Repository convertDocumentToRepository(Document doc) {
         Repository repository = new Repository();
