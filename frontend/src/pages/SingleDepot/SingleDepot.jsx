@@ -23,7 +23,7 @@ const SingleDepot = () => {
       .catch(() => {
         setDepot([]);
         setIsLoading(false);
-        navigate("/404");
+        // navigate("/404");
       });
   }, [id, navigate]);
 

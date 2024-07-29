@@ -50,10 +50,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "*", // This will catch all undefined routes
-    element: <ErrorPage />,
-  },
+  // {
+  //   path: "*", // This will catch all undefined routes
+  //   element: <ErrorPage />,
+  // },
 ]);
 
 export default router;

@@ -6,6 +6,7 @@ import { Spinner } from "@nextui-org/react";
 import { Tab, Tabs } from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { UserContext } from "../../providers/UserProvider";
+import NewDepotForm from "./NewDepotForm";
 
 // TODO: implement pagination
 const Depots = () => {
@@ -17,23 +18,28 @@ const Depots = () => {
   const [searchedPrivateDepots, setSearchedPrivateDepots] = useState([]);
   const [searchedDepots, setSearchedDepots] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     axiosInstance.get("/api/repos/public").then((res) => {
-      setPublicDepots(res.data);
+      setPublicDepots(res.data.reverse());
       setSearchedDepots(res.data);
       setIsLoading(false);
     });
-  }, []);
+  }, [refetch]);
 
   useEffect(() => {
     if (user) {
       setIsLoading(true);
 
       axiosInstance
-        .get(`/api/repos/${user.id}/repos`)
+        .get(`/api/repos/${user.id}/repos`, {
+          params: {
+            token: user?.token || null,
+          },
+        })
         .then((res) => {
-          setPrivateDepots(res.data);
+          setPrivateDepots(res.data.reverse());
           setSearchedPrivateDepots(res.data);
           setIsLoading(false);
         })
@@ -46,7 +52,7 @@ const Depots = () => {
       setPrivateDepots([]);
       setSearchedPrivateDepots([]);
     }
-  }, [user]);
+  }, [user, refetch]);
 
   const handleInputChange = (event) => {
     setSearchText(event.target.value);
@@ -128,7 +134,6 @@ const Depots = () => {
             )}
           </div>
         </Tab>
-
         {/* Logged-in user's depots */}
         <Tab key="my" title="My Depots">
           <div>
@@ -176,6 +181,17 @@ const Depots = () => {
               </div>
             )}
           </div>
+        </Tab>
+        <Tab key="new" title="Create Depot">
+          {!isLoading && !isUserLoading && !user && (
+            <div className="h-[20vh] flex justify-center items-center">
+              Please log in first
+            </div>
+          )}
+
+          {!isLoading && !isUserLoading && user && (
+            <NewDepotForm refetch={refetch} setRefetch={setRefetch} />
+          )}
         </Tab>
       </Tabs>
     </div>
