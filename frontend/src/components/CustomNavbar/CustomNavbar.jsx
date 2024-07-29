@@ -10,37 +10,33 @@ import {
 } from "@nextui-org/react";
 import Logo from "../Logo/Logo";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import navLinks from "./NavLinks";
 import UserDropdown from "./UserDropdown";
 import { logoutUser } from "../../utils/logoutUser";
 import { UserContext } from "../../providers/UserProvider";
 
 const CustomNavbar = () => {
-  // const [user, setUser] = useState(null);
   const { user, setUser, refreshUser } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const location = useLocation();
   const menuItems = navLinks;
 
   // TODO: Add icons to the nav links
   // TODO: Give hover and active nav link effect
   // TODO: Active nav link styles
 
-  // useEffect(() => {
-  //   const user = getUser();
-
-  //   if (user) {
-  //     setUser(user);
-  //     console.log(user);
-  //   } else {
-  //     console.log("user not found");
-  //   }
-  // }, []);
-
   const logoutHandler = () => {
     logoutUser();
     setUser(null);
+  };
+
+  const getNavLinkColor = (navLink) => {
+    if (location.pathname.includes(navLink)) {
+      return "text-blue-500 font-bold";
+    } else {
+      return "";
+    }
   };
 
   return (
@@ -65,7 +61,14 @@ const CustomNavbar = () => {
       <NavbarContent className="hidden md:flex gap-4" justify="center">
         {menuItems.map((item, index) => (
           <NavbarItem key={`${item.text}-${index}`}>
-            <Link to={item.to}>{item.text}</Link>
+            <Link
+              className={`${getNavLinkColor(
+                item.to
+              )} hover:text-blue-500 transition-all duration-300`}
+              to={item.to}
+            >
+              {item.text}
+            </Link>
           </NavbarItem>
         ))}
       </NavbarContent>
@@ -96,7 +99,10 @@ const CustomNavbar = () => {
       <NavbarMenu className="bg-[rgba(255, 255, 255, 0.3)]">
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.text}-${index}`}>
-            <Link className="text-white" to={item.to}>
+            <Link
+              className={`text-white ${getNavLinkColor(item.to)}`}
+              to={item.to}
+            >
               {item.text}
             </Link>
           </NavbarMenuItem>

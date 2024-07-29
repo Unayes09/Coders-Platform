@@ -4,6 +4,8 @@ import com.javafest.DiffDeptStormers.model.User;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,7 +126,14 @@ public class UserController {
             if (email != null) {
                 User user = userService.findByEmail(email);
                 if (user != null) {
-                    boolean isPremium = user.getPremiumPackBuyDate() != null;
+                    boolean isPremium = false;
+                    if (user.getPremiumPackBuyDate() != null) {
+                        LocalDate premiumDate = user.getPremiumPackBuyDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        LocalDate currentDate = LocalDate.now();
+                        if (!premiumDate.isBefore(currentDate.minusMonths(3))) {
+                            isPremium = true;
+                        }
+                    }
                     return ResponseEntity.ok("{\"isPremium\": " + isPremium + "}");
                 } else {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
@@ -136,4 +145,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
         }
     }
+
 }

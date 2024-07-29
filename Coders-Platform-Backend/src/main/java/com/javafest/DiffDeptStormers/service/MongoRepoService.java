@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +48,10 @@ public class MongoRepoService {
                 .append("repoId", file.getRepoId())
                 .append("fileName", file.getFileName())
                 .append("fileContent", file.getFileContent())
-                .append("email", file.getEmail());
+                .append("email", file.getEmail())
+                .append("timestamp", new Date()); // Directly add the current date and time as the timestamp
     }
+
 
     public Repository saveRepository(Repository repository, String email) {
         repository.setEmail(email);
@@ -131,6 +134,7 @@ public class MongoRepoService {
 
     public Optional<Repository> findRepositoryById(String repoId) {
         MongoCollection<Document> repoCollection = getRepoCollection();
+        
         Document doc = repoCollection.find(eq("_id", new ObjectId(repoId))).first();
 
         if (doc != null) {
