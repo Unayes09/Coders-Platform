@@ -8,6 +8,7 @@ import Playground from "../pages/Playground/Playground";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Depots from "../pages/Depots/Depots";
 import SingleDepot from "../pages/SingleDepot/SingleDepot";
+import DepotFile from "../pages/SingleDepot/DepotFile";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
         path: "depots/:id",
         element: <SingleDepot />,
       },
+      {
+        path: "depots/:depotId/:fileId",
+        element: <DepotFile />,
+      },
     ],
   },
   {
@@ -50,10 +55,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "*", // This will catch all undefined routes
-  //   element: <ErrorPage />,
-  // },
+  {
+    path: "*", // This will catch all undefined routes
+    element: <ErrorPage />,
+  },
 ]);
 
 export default router;
