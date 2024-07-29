@@ -187,6 +187,31 @@ public class MongoRepoService {
         }
         return repositories;
     }
+    
+    public File updateFile(String fileId, File updatedFile, String email) {
+        MongoCollection<Document> fileCollection = getFileCollection();
+        Document fileDoc = fileCollection.find(eq("_id", new ObjectId(fileId))).first();
+        
+        if (fileDoc != null) {
+            if (!fileDoc.getString("email").equals(email)) {
+                throw new RuntimeException("Unauthorized");
+            }
+
+            Document updateDoc = new Document()
+                    .append("fileName", updatedFile.getFileName())
+                    .append("fileContent", updatedFile.getFileContent())
+                    .append("repoId", updatedFile.getRepoId())
+                    .append("email", email)
+                    .append("timestamp", new Date()) // update the timestamp
+                    .append("language", updatedFile.getLanguage());
+
+            fileCollection.updateOne(eq("_id", new ObjectId(fileId)), new Document("$set", updateDoc));
+            updatedFile.setId(fileId);
+            return updatedFile;
+        } else {
+            throw new RuntimeException("File not found");
+        }
+    }
 
     private File convertDocumentToFile(Document doc) {
         File file = new File();
