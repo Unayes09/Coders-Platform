@@ -18,13 +18,8 @@ import { UserContext } from "../../providers/UserProvider";
 
 const CustomNavbar = () => {
   const { user, setUser, refreshUser } = useContext(UserContext);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const location = useLocation();
-
-  console.log(location.pathname);
-
   const menuItems = navLinks;
 
   // TODO: Add icons to the nav links
