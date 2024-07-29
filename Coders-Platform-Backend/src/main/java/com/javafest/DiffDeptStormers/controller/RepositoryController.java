@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,39 @@ public class RepositoryController {
                 return ResponseEntity.ok(files);
             } else {
                 return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
+        }
+    }
+
+    @PutMapping("/{repoId}/files/{fileId}")
+    public ResponseEntity<?> updateFile(
+            @PathVariable String repoId,
+            @PathVariable String fileId,
+            @RequestBody File updatedFile,
+            @RequestParam String token) {
+        try {
+            ResponseEntity<?> validationResponse = validateToken(token);
+            if (validationResponse != null) return validationResponse;
+
+            String email = getEmailFromToken(token);
+            Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
+            if (repositoryOptional.isPresent()) {
+                Repository repository = repositoryOptional.get();
+                if (!isAuthorized(token, repository.getUserId())) {
+                    return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
+                }
+
+                updatedFile.setId(fileId);
+                updatedFile.setRepoId(repoId); // Ensure the repository ID matches
+                updatedFile.setEmail(email); // Ensure the email is correct
+                updatedFile.setTimestamp(new Date()); // Update timestamp to current date and time
+
+                File updated = repositoryService.updateFile(fileId, updatedFile, email);
+                return ResponseEntity.ok(updated);
+            } else {
+                return ResponseEntity.status(404).body("{\"message\": \"Repository not found\"}");
             }
         } catch (Exception e) {
             return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
@@ -223,7 +257,6 @@ public class RepositoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
         }
     }
-
 
     @GetMapping("/{userId}/repos")
     public ResponseEntity<?> getAllRepositoriesOfUser(@PathVariable String userId, @RequestParam String token) {
