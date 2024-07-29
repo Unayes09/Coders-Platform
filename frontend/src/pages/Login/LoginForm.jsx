@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Input, Spinner } from "@nextui-org/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
+import { UserContext } from "../../providers/UserProvider";
 
 const LoginForm = () => {
+  const { refreshUser } = useContext(UserContext);
+
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,6 +34,8 @@ const LoginForm = () => {
             // save token and profile on local storage
             localStorage.setItem("token", JSON.stringify(token));
             localStorage.setItem("profile", JSON.stringify(res.data));
+            // Reload user
+            refreshUser();
             // After login, redirect back to the page they came from
             navigate(from, { replace: true });
           })

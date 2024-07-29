@@ -6,7 +6,9 @@ import {
   User,
 } from "@nextui-org/react";
 
-const UserDropdown = ({ logoutHandler }) => {
+import userAvatar from "../../assets/images/avatar.png";
+
+const UserDropdown = ({ logoutHandler, refreshUser }) => {
   return (
     <div>
       <Dropdown
@@ -18,7 +20,7 @@ const UserDropdown = ({ logoutHandler }) => {
             as="button"
             avatarProps={{
               isBordered: true,
-              src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+              src: userAvatar,
             }}
             className="transition-transform"
             description="@tonyreichert"
@@ -47,7 +49,14 @@ const UserDropdown = ({ logoutHandler }) => {
           <DropdownItem color="primary" key="help_and_feedback">
             Help & Feedback
           </DropdownItem>
-          <DropdownItem onClick={logoutHandler} key="logout" color="danger">
+          <DropdownItem
+            onClick={() => {
+              logoutHandler();
+              refreshUser();
+            }}
+            key="logout"
+            color="danger"
+          >
             Log Out
           </DropdownItem>
         </DropdownMenu>
