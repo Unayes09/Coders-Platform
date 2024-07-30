@@ -1,13 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import DepotCodeEditor from "./DepotCodeEditor";
+import { UserContext } from "../../providers/UserProvider";
 
 const DepotFile = () => {
   const { depotId, fileId } = useParams();
 
+  const { user } = useContext(UserContext);
+
+  // if the logged-in user owns the current repository then he/she can edit it
+  const [isEditable, setIsEditable] = useState(false);
+  const [editModeTurnedOn, setEditModeTurnedOn] = useState(false);
+  const [isCodeSaving, setIsCodeSaving] = useState(false);
   const [file, setFile] = useState(undefined);
   const [depot, setDepot] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -16,9 +23,9 @@ const DepotFile = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`http://localhost:8080/api/repos/${depotId}/files`, {
+      .get(`/api/repos/${depotId}/files`, {
         params: {
-          token: JSON.parse(localStorage.getItem("token")),
+          token: JSON.parse(localStorage.getItem("token")) || "",
         },
       })
       .then((res) => {
@@ -26,18 +33,72 @@ const DepotFile = () => {
         setFile(repoFile);
         setDepot(res.data);
         setValue(repoFile.fileContent);
-        setIsLoading(false);
+
+        if (!user) {
+          setIsLoading(false);
+          return;
+        }
+
+        axiosInstance
+          .get(`/api/repos/${user.id}/repos`, {
+            params: {
+              token: user?.token || null,
+            },
+          })
+          .then((r) => {
+            // console.log(r.data);
+            const match = r.data.find((d) => d.id === repoFile?.repoId);
+
+            if (match) {
+              // console.log("this is the owner");
+              setIsEditable(true);
+            } else {
+              // console.log("this is not the owner");
+              setIsEditable(false);
+            }
+            setIsLoading(false);
+          })
+          .catch(() => {
+            setIsLoading(false);
+          });
       })
       .catch(() => {
         setIsLoading(false);
         setIsError(true);
       });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     console.log(file);
     console.log(depot);
   }, [file, depot]);
+
+  const handleSaveButton = () => {
+    if (!editModeTurnedOn) {
+      setEditModeTurnedOn(true);
+      return;
+    }
+
+    setIsCodeSaving(true);
+    setEditModeTurnedOn(false);
+
+    // TODO: THIS PART GIVING INTERNAL SERVER ERROR
+    axiosInstance
+      .put(`/api/repos/${file.repoId}/files/${file.id}?token=${user?.token}`, {
+        fileName: file.fileName,
+        fileContent: value,
+        // language: file.language || "javascript",
+      })
+      .then((res) => {
+        console.log(res.data);
+        setIsCodeSaving(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsCodeSaving(false);
+        setEditModeTurnedOn(true);
+      });
+  };
 
   return (
     <div className="mx-6 mt-4 pb-20">
@@ -63,13 +124,23 @@ const DepotFile = () => {
               <h1>Donald Trump</h1>
             </div>
             {/* if the owner is viewing then show the button */}
-            <Button>
-              <CiEdit className="text-[22px] font-bold" />
-            </Button>
+            {isEditable && (
+              <Button
+                color={editModeTurnedOn ? "secondary" : "default"}
+                onClick={handleSaveButton}
+              >
+                {!editModeTurnedOn && !isCodeSaving && (
+                  <CiEdit className="text-[22px] font-bold" />
+                )}
+                {editModeTurnedOn && <span>Save</span>}
+                {isCodeSaving && <Spinner color="white" />}
+              </Button>
+            )}
           </div>
 
           <div className="mt-6">
             <DepotCodeEditor
+              editModeTurnedOn={editModeTurnedOn}
               value={value}
               setValue={setValue}
               selectedLanguage="javascript"

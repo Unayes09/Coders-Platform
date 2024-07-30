@@ -1,7 +1,7 @@
 import { Button, Spinner } from "@nextui-org/react";
-import axios from "axios";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import axiosInstance from "../../utils/axiosInstance";
 
 const SubscribeButton = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,13 +33,10 @@ const SubscribeButton = () => {
   const handleSubscribe = () => {
     setIsLoading(true);
 
-    axios
-      .post(
-        "https://cors-anywhere.herokuapp.com/https://sandbox.aamarpay.com/jsonpost.php",
-        postData
-      )
-      .then((response) => {
-        console.log("Response:", response.data);
+    axiosInstance
+      .post("/api/payment/process", postData)
+      .then((res) => {
+        console.log("Response:", res.data);
         setIsLoading(false);
       })
       .catch((error) => {
