@@ -126,6 +126,14 @@ public class UserController {
         }
         return modelAndView;
     }
+    
+    @PostMapping("/failed-payment")
+    public ModelAndView failedPayment() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("failed");
+        modelAndView.setStatus(HttpStatus.OK);
+        return modelAndView;
+    }
 
     @GetMapping("/isPremium")
     public ResponseEntity<?> isPremium(@RequestParam String token) {
