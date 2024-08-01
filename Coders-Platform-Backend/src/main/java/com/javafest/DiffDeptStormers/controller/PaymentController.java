@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins="*")
 @RequestMapping("/api/payment")
 public class PaymentController {
 

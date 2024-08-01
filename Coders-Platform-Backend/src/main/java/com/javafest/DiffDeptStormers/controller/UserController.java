@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -99,24 +101,30 @@ public class UserController {
         }
     }
 
-    @GetMapping("/confirm-payment")
-    public ResponseEntity<?> confirmPayment(@RequestParam String token) {
+    @PostMapping("/confirm-payment")
+    public ModelAndView confirmPayment(@RequestParam String token) {
+        ModelAndView modelAndView = new ModelAndView();
         try {
             String email = jwtUtil.getEmailFromToken(token);
             if (email != null) {
                 User user = userService.findByEmail(email);
                 if (user != null) {
                     userService.updatePremiumUser(user);
-                    return ResponseEntity.ok("{\"message\": \"Payment confirmed and premium pack activated\"}");
+                    modelAndView.setViewName("success");
+                    modelAndView.setStatus(HttpStatus.OK);
                 } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"User not found\"}");
+                    modelAndView.setViewName("failed");
+                    modelAndView.setStatus(HttpStatus.NOT_FOUND);
                 }
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid token\"}");
+                modelAndView.setViewName("failed");
+                modelAndView.setStatus(HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Internal Server Error\"}");
+            modelAndView.setViewName("failed");
+            modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return modelAndView;
     }
 
     @GetMapping("/isPremium")
