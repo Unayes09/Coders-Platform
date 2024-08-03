@@ -4,6 +4,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { Button, Chip } from "@nextui-org/react";
 import { IoBookOutline } from "react-icons/io5";
 import { FaFileAlt } from "react-icons/fa";
+import { timeAgo } from "../../utils/timeAgo";
 
 const SingleDepot = () => {
   const [depot, setDepot] = useState([]);
@@ -22,6 +23,7 @@ const SingleDepot = () => {
       .then((res) => {
         console.log(res.data);
         setDepot(res.data);
+        console.log(res.data.files);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -80,14 +82,21 @@ const SingleDepot = () => {
           <div className="">
             {depot.files.map((file) => {
               return (
-                <Link
-                  className="hover:bg-[#161B22] flex items-center gap-3 text-[#8D96A0] text-[18px] border-t-1 border-[#30363db3] px-3 py-2"
-                  to={`/depots/${file.repoId}/${file.id}`}
+                <div
                   key={file.id}
+                  className="hover:bg-[#161B22] flex items-center justify-between text-[#8D96A0] text-[16px] border-t-1 border-[#30363db3] px-3 py-2"
                 >
-                  <FaFileAlt />
-                  <span className="hover:underline">{file.fileName}</span>
-                </Link>
+                  <Link
+                    className="flex items-center gap-3 "
+                    to={`/depots/${file.repoId}/${file.id}`}
+                  >
+                    <FaFileAlt />
+                    <span className="hover:underline">{file.fileName}</span>
+                  </Link>
+                  <span className="text-[14px]">
+                    {file.timestamp ? timeAgo(file.timestamp) : ""}
+                  </span>
+                </div>
               );
             })}
           </div>
