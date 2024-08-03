@@ -52,7 +52,13 @@ const PlanCard = ({ plan }) => {
               ))}
         </ul>
       </div>
-      <div className="mt-5">{plan === "premium" && <SubscribeButton />}</div>
+      {plan === "premium" && (
+        <p className="mt-5 -mb-3 text-neutral-300">
+          <span className="text-orange-300 font-bold">1000 BDT</span> for four
+          months
+        </p>
+      )}
+      <div>{plan === "premium" && <SubscribeButton />}</div>
     </BackgroundGradient>
   );
 };
