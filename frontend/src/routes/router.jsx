@@ -9,6 +9,7 @@ import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Depots from "../pages/Depots/Depots";
 import SingleDepot from "../pages/SingleDepot/SingleDepot";
 import DepotFile from "../pages/SingleDepot/DepotFile";
+import Subscribe from "../pages/Subscribe/Subscribe";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "depots/:depotId/:fileId",
         element: <DepotFile />,
+      },
+      {
+        path: "subscribe",
+        element: <Subscribe />,
       },
     ],
   },

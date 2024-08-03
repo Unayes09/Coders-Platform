@@ -49,8 +49,10 @@ public class MongoRepoService {
                 .append("fileName", file.getFileName())
                 .append("fileContent", file.getFileContent())
                 .append("email", file.getEmail())
-                .append("timestamp", new Date()); // Directly add the current date and time as the timestamp
+                .append("timestamp", new Date()) // Directly add the current date and time as the timestamp
+                .append("language", file.getLanguage()); // Add the new language field
     }
+
 
 
     public Repository saveRepository(Repository repository, String email) {
@@ -185,6 +187,31 @@ public class MongoRepoService {
         }
         return repositories;
     }
+    
+    public File updateFile(String fileId, File updatedFile, String email) {
+        MongoCollection<Document> fileCollection = getFileCollection();
+        Document fileDoc = fileCollection.find(eq("_id", new ObjectId(fileId))).first();
+        
+        if (fileDoc != null) {
+            if (!fileDoc.getString("email").equals(email)) {
+                throw new RuntimeException("Unauthorized");
+            }
+
+            Document updateDoc = new Document()
+                    .append("fileName", updatedFile.getFileName())
+                    .append("fileContent", updatedFile.getFileContent())
+                    .append("repoId", updatedFile.getRepoId())
+                    .append("email", email)
+                    .append("timestamp", new Date()) // update the timestamp
+                    .append("language", updatedFile.getLanguage());
+
+            fileCollection.updateOne(eq("_id", new ObjectId(fileId)), new Document("$set", updateDoc));
+            updatedFile.setId(fileId);
+            return updatedFile;
+        } else {
+            throw new RuntimeException("File not found");
+        }
+    }
 
     private File convertDocumentToFile(Document doc) {
         File file = new File();
@@ -193,8 +220,11 @@ public class MongoRepoService {
         file.setFileContent(doc.getString("fileContent"));
         file.setRepoId(doc.getString("repoId"));
         file.setEmail(doc.getString("email"));
+        file.setTimestamp(doc.getDate("timestamp")); // Set the timestamp field
+        file.setLanguage(doc.getString("language")); // Set the language field
         return file;
     }
+
 
     private Repository convertDocumentToRepository(Document doc) {
         Repository repository = new Repository();

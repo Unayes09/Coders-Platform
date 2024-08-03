@@ -15,15 +15,17 @@ public class File {
     private String fileContent;
     private String email;
     private Date timestamp;
+    private String language; // New field for language
 
     // Constructors, getters, and setters
     public File() {
     }
 
-    public File(String fileName, String fileContent) {
+    public File(String fileName, String fileContent, String language) {
         this.fileName = fileName;
         this.fileContent = fileContent;
         this.timestamp = new Date(); // Set the timestamp to the current date and time
+        this.language = language;
     }
 
     public String getId() {
@@ -74,6 +76,14 @@ public class File {
         this.timestamp = timestamp;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     @Override
     public String toString() {
         return "File{" +
@@ -83,6 +93,7 @@ public class File {
                 ", fileContent='" + fileContent + '\'' +
                 ", email='" + email + '\'' +
                 ", timestamp=" + timestamp +
+                ", language='" + language + '\'' +
                 '}';
     }
 }
