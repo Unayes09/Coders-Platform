@@ -10,8 +10,6 @@ import Depots from "../pages/Depots/Depots";
 import SingleDepot from "../pages/SingleDepot/SingleDepot";
 import DepotFile from "../pages/SingleDepot/DepotFile";
 import Subscribe from "../pages/Subscribe/Subscribe";
-import SubscriptionFailed from "../pages/Subscribe/SubscriptionFailed";
-import SubscriptionSuccess from "../pages/Subscribe/SubscriptionSuccess";
 
 const router = createBrowserRouter([
   {
@@ -41,18 +39,6 @@ const router = createBrowserRouter([
       {
         path: "subscribe",
         element: <Subscribe />,
-      },
-      {
-        path: "subscribe/failed",
-        element: <SubscriptionFailed />,
-      },
-      {
-        path: "subscribe/cancelled",
-        element: <SubscriptionFailed />,
-      },
-      {
-        path: "subscribe/success/:id",
-        element: <SubscriptionSuccess />,
       },
     ],
   },
