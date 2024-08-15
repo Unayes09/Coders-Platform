@@ -128,6 +128,7 @@ const DepotFile = () => {
               <Button
                 color={editModeTurnedOn ? "secondary" : "default"}
                 onClick={handleSaveButton}
+                disabled={isCodeSaving}
               >
                 {!editModeTurnedOn && !isCodeSaving && (
                   <CiEdit className="text-[22px] font-bold" />
