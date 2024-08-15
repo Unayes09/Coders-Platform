@@ -10,6 +10,7 @@ import Depots from "../pages/Depots/Depots";
 import SingleDepot from "../pages/SingleDepot/SingleDepot";
 import DepotFile from "../pages/SingleDepot/DepotFile";
 import Subscribe from "../pages/Subscribe/Subscribe";
+import Chatbot from "../pages/Chatbot/Chatbot";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "subscribe",
         element: <Subscribe />,
+      },
+      {
+        path: "chatbot",
+        element: <Chatbot />,
       },
     ],
   },
