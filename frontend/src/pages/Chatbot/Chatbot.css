@@ -1,0 +1,3 @@
+.chatbot-sidebar-list-holder {
+  max-height: calc(100vh - 185px);
+}
