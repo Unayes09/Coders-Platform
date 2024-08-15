@@ -1,17 +1,29 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
-import { Button, Chip } from "@nextui-org/react";
+import { Button, Chip, Spinner, Textarea } from "@nextui-org/react";
 import { IoBookOutline } from "react-icons/io5";
 import { FaFileAlt } from "react-icons/fa";
 import { timeAgo } from "../../utils/timeAgo";
+import { UserContext } from "../../providers/UserProvider";
+import { CiEdit } from "react-icons/ci";
 
 const SingleDepot = () => {
   const [depot, setDepot] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isEditModeTurnedOn, setIsEditModeTurnedOn] = useState(false);
+  const [isDescriptionSaving, setIsDescriptionSaving] = useState(false);
+  const [isUserAllowedToEdit, setIsUserAllowedToEdit] = useState(false);
+
+  const { user } = useContext(UserContext);
 
   const { id } = useParams();
+
+  const inputRef = useRef(null);
+
+  console.log(depot);
+  console.log(user);
 
   useEffect(() => {
     axiosInstance
@@ -21,18 +33,56 @@ const SingleDepot = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setDepot(res.data);
-        console.log(res.data.files);
+        // console.log(res.data.files);
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setDepot([]);
         setIsLoading(false);
         setIsError(true);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (!isError && !isLoading && depot?.repository?.userId === user?.id) {
+      setIsUserAllowedToEdit(true);
+    } else {
+      setIsUserAllowedToEdit(false);
+    }
+  }, [depot, isError, isLoading, user]);
+
+  const handleDescriptionButton = () => {
+    if (!isEditModeTurnedOn) {
+      setIsEditModeTurnedOn(true);
+
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+
+      return;
+    }
+
+    setIsDescriptionSaving(true);
+    setIsEditModeTurnedOn(false);
+
+    // api call to update description and then refetch the data
+    // axiosInstance
+    //   .put(`/api/repos/${depot?.repository?.id}?token=${user?.token}`, {
+    //     repoName: depot?.repository?.repoName,
+    //     repoDescription: "new description",
+    //     repoTopicTags: depot?.repository?.repoTopicTags,
+    //     public: depot?.repository?.public,
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
 
   return (
     <div className="mx-6 mt-4 pb-20">
@@ -48,7 +98,7 @@ const SingleDepot = () => {
                 {depot.repository.public === true ? "Public" : "Private"}
               </Chip>
             </div>
-            <Button color="success">Add File</Button>
+            {isUserAllowedToEdit && <Button color="success">Add File</Button>}
           </div>
           <div className="flex gap-2 items-center mt-1">
             {depot.repository?.repoTopicTags?.map((tag) => {
@@ -109,11 +159,34 @@ const SingleDepot = () => {
         depot?.repository &&
         depot.repository.repoDescription !== "" && (
           <div className="border-1 rounded-md border-[#30363db3] mt-12 overflow-hidden">
-            <div className="flex items-center gap-3 p-3 border-b-1 border-[#30363db3]">
-              <IoBookOutline className="text-[#F78166] text-[20px]" />
-              <h1>Description</h1>
+            <div className="flex justify-between p-3 border-b-1 border-[#30363db3]">
+              <div className="flex items-center gap-3">
+                <IoBookOutline className="text-[#F78166] text-[20px]" />
+                <h1>Description</h1>
+              </div>
+              {isUserAllowedToEdit && (
+                <Button
+                  disabled={isDescriptionSaving}
+                  color={isEditModeTurnedOn ? "secondary" : "default"}
+                  onClick={handleDescriptionButton}
+                >
+                  {!isEditModeTurnedOn && !isDescriptionSaving && (
+                    <CiEdit className="text-[22px] font-bold" />
+                  )}
+                  {isEditModeTurnedOn && <span>Save</span>}
+                  {isDescriptionSaving && <Spinner color="white" />}
+                </Button>
+              )}
             </div>
-            <div className="p-3">{depot.repository.repoDescription}</div>
+
+            <Textarea
+              ref={inputRef}
+              isReadOnly={!isEditModeTurnedOn}
+              radius="none"
+              variant={isEditModeTurnedOn ? "faded" : ""}
+              defaultValue={depot.repository.repoDescription}
+              className=""
+            />
           </div>
         )}
     </div>
