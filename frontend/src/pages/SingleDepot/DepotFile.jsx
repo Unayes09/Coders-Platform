@@ -1,15 +1,27 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
-import { Button, Spinner } from "@nextui-org/react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Spinner,
+  useDisclosure,
+} from "@nextui-org/react";
 import { CiEdit } from "react-icons/ci";
 import DepotCodeEditor from "./DepotCodeEditor";
 import { UserContext } from "../../providers/UserProvider";
+import { toast } from "react-hot-toast";
 
 const DepotFile = () => {
   const { depotId, fileId } = useParams();
 
   const { user } = useContext(UserContext);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   // if the logged-in user owns the current repository then he/she can edit it
   const [isEditable, setIsEditable] = useState(false);
@@ -21,6 +33,10 @@ const DepotFile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [value, setValue] = useState("");
 
+  const [isFileDeleting, setIsFileDeleting] = useState(false);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     axiosInstance
       .get(`/api/repos/${depotId}/files`, {
@@ -29,6 +45,7 @@ const DepotFile = () => {
         },
       })
       .then((res) => {
+        console.log(res);
         const repoFile = res.data.files.find((file) => file.id === fileId);
         setFile(repoFile);
         setDepot(res.data);
@@ -82,7 +99,6 @@ const DepotFile = () => {
     setIsCodeSaving(true);
     setEditModeTurnedOn(false);
 
-    // TODO: THIS PART GIVING INTERNAL SERVER ERROR
     axiosInstance
       .put(`/api/repos/${file.repoId}/files/${file.id}?token=${user?.token}`, {
         fileName: file.fileName,
@@ -91,12 +107,33 @@ const DepotFile = () => {
       })
       .then((res) => {
         console.log(res.data);
+        toast.success("Saved");
         setIsCodeSaving(false);
       })
       .catch((error) => {
         console.log(error);
         setIsCodeSaving(false);
         setEditModeTurnedOn(true);
+        toast.error("Error! Could not save");
+      });
+  };
+
+  const handleDeleteFile = () => {
+    console.log(file);
+    setIsFileDeleting(true);
+
+    axiosInstance
+      .delete(`/api/repos/files/${file.id}?token=${user?.token || null}`)
+      .then((res) => {
+        console.log(res);
+        setIsFileDeleting(false);
+        toast.success("File deleted successfully.");
+        // redirect to the repository
+        navigate(`/depots/${file.repoId}`);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("File was not deleted!");
       });
   };
 
@@ -144,8 +181,59 @@ const DepotFile = () => {
               editModeTurnedOn={editModeTurnedOn}
               value={value}
               setValue={setValue}
-              selectedLanguage="javascript"
+              selectedLanguage={file?.language ? file.language : "javascript"}
             />
+          </div>
+
+          <div className="mt-4 flex justify-end">
+            {isEditable && (
+              <Button
+                disabled={isFileDeleting}
+                radius="full"
+                color="danger"
+                variant="shadow"
+                onPress={() => {
+                  onOpen();
+                }}
+              >
+                {!isFileDeleting && <span>Delete This File</span>}
+                {isFileDeleting && <Spinner color="white" />}
+              </Button>
+            )}
+
+            <Modal
+              className="dark text-foreground bg-[#333]"
+              backdrop="blur"
+              isOpen={isOpen}
+              onClose={onClose}
+            >
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      <span className="text-red-500">Delete this file</span>
+                    </ModalHeader>
+                    <ModalBody>
+                      <p>Are you sure you want to delete this file?</p>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="success" variant="light" onPress={onClose}>
+                        Close
+                      </Button>
+                      <Button
+                        onClick={handleDeleteFile}
+                        disabled={isFileDeleting}
+                        color="danger"
+                        onPress={onClose}
+                      >
+                        {!isFileDeleting && <span>Confirm Delete</span>}
+                        {isFileDeleting && <Spinner color="white" />}
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </div>
         </div>
       )}
