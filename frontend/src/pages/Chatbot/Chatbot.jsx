@@ -9,6 +9,8 @@ import ChatbotTextBox from "./ChatbotTextBox";
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../providers/UserProvider";
 import FeedbackContainer from "../Playground/FeedbackContainer";
+import { BiConversation } from "react-icons/bi";
+import { BsChatLeftText } from "react-icons/bs";
 import toast from "react-hot-toast";
 
 const Chatbot = () => {
@@ -113,7 +115,14 @@ const Chatbot = () => {
               ref={scrollRef}
               className="h-[75%] pb-4 overflow-y-auto flex flex-col gap-6"
             >
-              {!selectedChat && <h1>Create a new conversation</h1>}
+              {!selectedChat && (
+                <h1 className="text-xl flex gap-3 items-center justify-center h-full">
+                  <BiConversation className="text-3xl text-secondary" />
+                  <span className="font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+                    Create a new conversation
+                  </span>
+                </h1>
+              )}
               {selectedChat && conversationLoading && (
                 <div className="h-full flex justify-center items-center">
                   <Spinner color="white" />
@@ -122,7 +131,12 @@ const Chatbot = () => {
               {selectedChat && !conversationLoading && (
                 <>
                   {conversation.length === 0 && (
-                    <h1>Please type something to begin</h1>
+                    <h1 className="text-xl flex gap-3 items-center justify-center h-full">
+                      <BsChatLeftText className="text-3xl text-secondary" />
+                      <span className="font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+                        Write something to begin
+                      </span>
+                    </h1>
                   )}
                   {conversation.map((message) => {
                     return (
