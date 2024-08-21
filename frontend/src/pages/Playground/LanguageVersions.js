@@ -1,4 +1,6 @@
 export const LANGUAGE_VERSIONS = {
+  text: "",
+  json: "",
   python: "3.10.0",
   java: "15.0.2",
   cpp: "10.2.0",
@@ -14,4 +16,17 @@ export const CODE_SNIPPETS = {
   csharp: `using System;\n\nnamespace RandomNumberGenerator\n{\n\tclass Program {\n\t\tstatic void Main(string[] args) {\n\t\t\tRandom random = new Random();\n\t\t\tint randomNumber = random.Next(0, 100);\n\t\t\tConsole.WriteLine("Random Number: " + randomNumber);\n\t\t}\n\t}\n}\n`,
   php: `<?php\n\nfunction generateRandomNumber() {\n\treturn rand(0, 100);\n}\n\necho "Random Number: " . generateRandomNumber();\n`,
   cpp: `#include <iostream>\n#include <cstdlib>\n#include <ctime>\n\nint main() {\n\tsrand(static_cast<unsigned>(time(0)));\n\tint randomNumber = rand() % 100;\n\tstd::cout << "Random Number: " << randomNumber << std::endl;\n\treturn 0;\n}\n`,
+  text: "",
+  json: "",
+};
+
+export const LANGUAGE_EXTENSIONS = {
+  text: "txt",
+  json: "json",
+  python: "py",
+  java: "java",
+  cpp: "cpp",
+  javascript: "js",
+  php: "php",
+  csharp: "cs",
 };
