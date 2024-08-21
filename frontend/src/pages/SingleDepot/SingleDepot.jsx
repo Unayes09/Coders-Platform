@@ -71,7 +71,7 @@ const SingleDepot = () => {
         // console.log(res.data.files);
         setIsLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         // console.log(err);
         setDepot([]);
         setIsLoading(false);
