@@ -40,9 +40,15 @@ const ChatSidebar = ({
   const [refetch, setRefetch] = useState(false);
   const [isNewChatCreating, setIsNewChatCreating] = useState(false);
   const [newChatName, setNewChatName] = useState("");
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [chatToBeDeleted, setChatToBeDeleted] = useState("");
   const [isChatDeleting, setIsChatDeleting] = useState(false);
+
+  const [showRenameModal, setShowRenameModal] = useState(false);
+  const [chatToBeRenamed, setChatToBeRenamed] = useState("");
+  const [isChatRenaming, setIsChatRenaming] = useState(false);
+  const [newRename, setNewRename] = useState("");
 
   const { user } = useContext(UserContext);
 
@@ -62,7 +68,9 @@ const ChatSidebar = ({
 
   const handleRenameChat = (chatId) => {
     console.log(chatId);
-    alert("rename");
+
+    setShowRenameModal(true);
+    setChatToBeRenamed(chatId);
   };
 
   // const handleAddToFavoriteChat = (chatId) => {
@@ -326,6 +334,85 @@ const ChatSidebar = ({
                 color="danger"
               >
                 {isChatDeleting ? <Spinner color="white" /> : "Delete"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rename modal */}
+      {showRenameModal && (
+        <div className="absolute top-0 left-0 h-screen w-screen z-50 backdrop-blur-md">
+          <div className="p-4  rounded-xl relative top-1/2 left-1/2 max-w-sm bg-[#333] -translate-x-1/2 -translate-y-1/2 z-50">
+            <div className="flex items-center justify-between">
+              <h1 className="flex items-center gap-2 font-bold">
+                Enter new name
+              </h1>
+              <span
+                onClick={() => setShowRenameModal(false)}
+                className="hover:bg-[#111] p-1 rounded-full"
+              >
+                <MdOutlineClose
+                  onClick={() => setShowRenameModal(false)}
+                  className="text-xl cursor-pointer"
+                />
+              </span>
+            </div>
+
+            <p className="mt-4">
+              <Input
+                value={newRename}
+                onChange={(e) => setNewRename(e.target.value)}
+                type="text"
+                label="New Name"
+              />
+            </p>
+
+            <div className="flex gap-3 items-center justify-end mt-5">
+              <Button
+                variant="flat"
+                onClick={() => setShowRenameModal(false)}
+                color="danger"
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={isChatRenaming}
+                onClick={() => {
+                  if (!newRename) {
+                    toast.error("Please enter new name");
+                    return;
+                  }
+
+                  setIsChatRenaming(true);
+
+                  if (chatToBeRenamed) {
+                    axiosInstance
+                      .put(
+                        `/api/bot/chats/${chatToBeRenamed}?token=${user?.token}`,
+                        {
+                          chatName: newRename,
+                          isFavourite: false,
+                        }
+                      )
+                      .then(() => {
+                        setChatToBeRenamed("");
+                        toast.success("Chat renamed!");
+                        setNewRename("");
+                        setIsChatRenaming(false);
+                        setShowRenameModal(false);
+                        setRefetch(!refetch);
+                      })
+                      .catch((err) => {
+                        toast.error("Error! Something went wrong");
+                        console.log(err);
+                        setIsChatRenaming(false);
+                      });
+                  }
+                }}
+                color="secondary"
+              >
+                {isChatRenaming ? <Spinner color="white" /> : "Rename"}
               </Button>
             </div>
           </div>
