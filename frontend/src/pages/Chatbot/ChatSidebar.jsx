@@ -24,8 +24,16 @@ import { useContext, useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../providers/UserProvider";
 import toast from "react-hot-toast";
+import { FavouriteIcon } from "./FavouriteIcon";
 
-const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
+const ChatSidebar = ({
+  isSidebarHidden,
+  setIsSidebarHidden,
+  selectedChat,
+  setSelectedChat,
+  setConversation,
+  setConversationLoading,
+}) => {
   const [chatList, setChatList] = useState([]);
   const [refetch, setRefetch] = useState(false);
   const [isNewChatCreating, setIsNewChatCreating] = useState(false);
@@ -50,6 +58,11 @@ const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
   const handleRenameChat = (chatId) => {
     console.log(chatId);
     alert("rename");
+  };
+
+  const handleAddToFavoriteChat = (chatId) => {
+    console.log(chatId);
+    alert("favorite");
   };
 
   const handleDeleteChat = (chatId) => {
@@ -165,6 +178,13 @@ const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
           {chatList.map((chat) => {
             return (
               <li
+                onClick={() => {
+                  if (selectedChat !== chat.id) {
+                    setConversationLoading(true);
+                    setConversation([]);
+                    setSelectedChat(chat.id);
+                  }
+                }}
                 key={chat.id}
                 className="py-2 px-4 bg-[#181a20] hover:bg-[#282c34] rounded-lg cursor-pointer whitespace-nowrap text-ellipsis overflow-hidden relative group"
               >
@@ -183,7 +203,7 @@ const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
                       color="primary"
                       key="edit"
                       showDivider
-                      description="Allows you to edit the file"
+                      description="Rename this chat"
                       startContent={
                         <EditDocumentIcon className={iconClasses} />
                       }
@@ -193,10 +213,34 @@ const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
                     </DropdownItem>
 
                     <DropdownItem
+                      key="favourite"
+                      color={!chat.favourite ? "primary" : "danger"}
+                      description={
+                        chat.favourite
+                          ? "Remove this chat from favourite"
+                          : "Add this chat to favourite"
+                      }
+                      startContent={
+                        <FavouriteIcon
+                          className={
+                            chat.favourite
+                              ? iconClasses + "text-danger"
+                              : iconClasses
+                          }
+                        />
+                      }
+                      onClick={() => handleAddToFavoriteChat(chat.id)}
+                    >
+                      {chat.favourite
+                        ? "Remove from favorite"
+                        : "Add to favorite"}
+                    </DropdownItem>
+
+                    <DropdownItem
                       key="delete"
                       className="text-danger"
                       color="danger"
-                      description="Permanently delete the file"
+                      description="Delete this chat"
                       startContent={
                         <DeleteDocumentIcon
                           className={iconClasses + "text-danger"}

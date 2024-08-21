@@ -37,3 +37,22 @@ export const getAiFeedbackPrompt = (
 
   return prompt;
 };
+
+export const getChatbotPrompt = (userPrompt, conversation) => {
+  let prompt = "";
+
+  if (conversation.length === 2) {
+    const userMessage =
+      conversation.find((msg) => msg.from !== "bot")?.message || "";
+    const botMessage =
+      conversation.find((msg) => msg.from === "bot")?.message || "";
+
+    prompt = `user asked: ${userMessage}\nyou replied: ${botMessage}\n`;
+    prompt += "-------------------------------\n";
+    prompt += "now answer me this question:\n";
+  }
+
+  prompt += userPrompt;
+
+  return prompt;
+};
