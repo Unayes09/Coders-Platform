@@ -24,7 +24,9 @@ import { useContext, useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../providers/UserProvider";
 import toast from "react-hot-toast";
-import { FavouriteIcon } from "./FavouriteIcon";
+import { IoWarningOutline } from "react-icons/io5";
+import { MdOutlineClose } from "react-icons/md";
+// import { FavouriteIcon } from "./FavouriteIcon";
 
 const ChatSidebar = ({
   isSidebarHidden,
@@ -38,6 +40,9 @@ const ChatSidebar = ({
   const [refetch, setRefetch] = useState(false);
   const [isNewChatCreating, setIsNewChatCreating] = useState(false);
   const [newChatName, setNewChatName] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [chatToBeDeleted, setChatToBeDeleted] = useState("");
+  const [isChatDeleting, setIsChatDeleting] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -60,14 +65,15 @@ const ChatSidebar = ({
     alert("rename");
   };
 
-  const handleAddToFavoriteChat = (chatId) => {
-    console.log(chatId);
-    alert("favorite");
-  };
+  // const handleAddToFavoriteChat = (chatId) => {
+  //   console.log(chatId);
+  //   alert("favorite");
+  // };
 
   const handleDeleteChat = (chatId) => {
     console.log(chatId);
-    alert("delete chat");
+    setShowDeleteModal(true);
+    setChatToBeDeleted(chatId);
   };
 
   const handleCreateNewChat = () => {
@@ -212,7 +218,8 @@ const ChatSidebar = ({
                       Rename
                     </DropdownItem>
 
-                    <DropdownItem
+                    {/* Add to favourite button */}
+                    {/* <DropdownItem
                       key="favourite"
                       color={!chat.favourite ? "primary" : "danger"}
                       description={
@@ -234,7 +241,7 @@ const ChatSidebar = ({
                       {chat.favourite
                         ? "Remove from favorite"
                         : "Add to favorite"}
-                    </DropdownItem>
+                    </DropdownItem> */}
 
                     <DropdownItem
                       key="delete"
@@ -257,6 +264,73 @@ const ChatSidebar = ({
           })}
         </ul>
       </div>
+
+      {/* Delete modal */}
+      {showDeleteModal && (
+        <div className="absolute top-0 left-0 h-screen w-screen z-50 backdrop-blur-md">
+          <div className="p-4  rounded-xl relative top-1/2 left-1/2 max-w-sm bg-[#333] -translate-x-1/2 -translate-y-1/2 z-50">
+            <div className="flex items-center justify-between">
+              <h1 className="flex items-center gap-2 font-bold">
+                <IoWarningOutline className="text-amber-500 font-bold text-xl" />
+                Are you sure?
+              </h1>
+              <span
+                onClick={() => setShowDeleteModal(false)}
+                className="hover:bg-[#111] p-1 rounded-full"
+              >
+                <MdOutlineClose
+                  onClick={() => setShowDeleteModal(false)}
+                  className="text-xl cursor-pointer"
+                />
+              </span>
+            </div>
+
+            <p className="mt-4">
+              Deleting this chat will permanently remove all messages and cannot
+              be undone. Please confirm if you wish to proceed.
+            </p>
+
+            <div className="flex gap-3 items-center justify-end mt-5">
+              <Button
+                onClick={() => setShowDeleteModal(false)}
+                color="secondary"
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={isChatDeleting}
+                onClick={() => {
+                  setIsChatDeleting(true);
+
+                  if (chatToBeDeleted) {
+                    axiosInstance
+                      .delete(
+                        `/api/bot/chats/${chatToBeDeleted}?token=${user?.token}`
+                      )
+                      .then(() => {
+                        setChatToBeDeleted("");
+                        toast.success("Chat deleted!");
+                        setSelectedChat(null);
+                        setConversation([]);
+                        setIsChatDeleting(false);
+                        setShowDeleteModal(false);
+                        setRefetch(!refetch);
+                      })
+                      .catch((err) => {
+                        toast.error("Error! Something went wrong");
+                        console.log(err);
+                        setIsChatDeleting(false);
+                      });
+                  }
+                }}
+                color="danger"
+              >
+                {isChatDeleting ? <Spinner color="white" /> : "Delete"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
