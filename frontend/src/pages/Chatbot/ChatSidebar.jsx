@@ -4,7 +4,15 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Spinner,
   Tooltip,
+  useDisclosure,
 } from "@nextui-org/react";
 import Logo from "../../components/Logo/Logo";
 import { CiEdit } from "react-icons/ci";
@@ -15,12 +23,17 @@ import { DeleteDocumentIcon } from "./DeleteDocumentIcon";
 import { useContext, useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../providers/UserProvider";
+import toast from "react-hot-toast";
 
 const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
   const [chatList, setChatList] = useState([]);
   const [refetch, setRefetch] = useState(false);
+  const [isNewChatCreating, setIsNewChatCreating] = useState(false);
+  const [newChatName, setNewChatName] = useState("");
 
   const { user } = useContext(UserContext);
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
     axiosInstance
@@ -44,6 +57,32 @@ const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
     alert("delete chat");
   };
 
+  const handleCreateNewChat = () => {
+    if (!newChatName) {
+      toast.error("Please enter a valid name!");
+      return;
+    }
+
+    setIsNewChatCreating(true);
+    axiosInstance
+      .post(`/api/bot/chats?token=${user?.token}`, {
+        chatName: newChatName,
+        ownerEmail: user?.email,
+        isFavourite: false,
+      })
+      .then((res) => {
+        console.log(res);
+        setIsNewChatCreating(false);
+        setRefetch(!refetch);
+        toast.success("New chat created successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsNewChatCreating(false);
+        toast.error("Error! New chat was not created");
+      });
+  };
+
   return (
     <div className={`flex flex-col gap-4`}>
       <div className="flex flex-col gap-2">
@@ -56,13 +95,69 @@ const ChatSidebar = ({ isSidebarHidden, setIsSidebarHidden }) => {
             <TbLayoutSidebarLeftCollapse className="text-xl" />
           </Button>
         </Tooltip>
-        <Button className="bg-[#282c34] text-white shadow-lg w-full flex gap-2 items-center justify-between group">
-          <div className="flex items-center justify-start gap-2">
-            <Logo />
-            <span>New Chat</span>
-          </div>
-          <CiEdit className="hidden group-hover:block font-bold text-[18px]" />
+        <Button
+          disabled={isNewChatCreating}
+          onPress={() => {
+            if (!user) {
+              toast.error("Please login first");
+              return;
+            }
+            if (!isNewChatCreating) {
+              setNewChatName("");
+              onOpen();
+            }
+          }}
+          className="bg-[#282c34] text-white shadow-lg w-full flex gap-2 items-center justify-between group"
+        >
+          {!isNewChatCreating && (
+            <>
+              <div className="flex items-center justify-start gap-2">
+                <Logo />
+                <span>New Chat</span>
+              </div>
+              <CiEdit className="hidden group-hover:block font-bold text-[18px]" />
+            </>
+          )}
+          {isNewChatCreating && <Spinner className="mx-auto" color="white" />}
         </Button>
+
+        <Modal
+          className="dark text-foreground bg-[#333]"
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          placement="top-center"
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  New Chat
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    value={newChatName}
+                    onChange={(e) => setNewChatName(e.target.value)}
+                    autoFocus
+                    label="Chat Name"
+                    variant="bordered"
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="flat" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    onClick={handleCreateNewChat}
+                    color="secondary"
+                    onPress={onClose}
+                  >
+                    Create Chat
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
 
       <div className="overflow-y-auto chatbot-sidebar-list-holder">
