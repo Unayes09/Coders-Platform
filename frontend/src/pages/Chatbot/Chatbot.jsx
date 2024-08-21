@@ -8,6 +8,8 @@ import "./Chatbot.css";
 import ChatbotTextBox from "./ChatbotTextBox";
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../providers/UserProvider";
+import FeedbackContainer from "../Playground/FeedbackContainer";
+import toast from "react-hot-toast";
 
 const Chatbot = () => {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
@@ -49,6 +51,17 @@ const Chatbot = () => {
 
   const reloadConversation = () => {
     setRefetch(!refetch);
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        toast.success("Text Copied");
+      },
+      (err) => {
+        console.error("Failed to copy text to clipboard:", err);
+      }
+    );
   };
 
   return (
@@ -121,10 +134,13 @@ const Chatbot = () => {
                               : promptClasses
                           }`}
                         >
-                          {message.message}
+                          <FeedbackContainer text={message.message} />
                         </div>
                         {message.from === "bot" && (
-                          <div className="group flex gap-2 items-center h-[20px] ml-3 mt-2 cursor-pointer">
+                          <div
+                            onClick={() => copyToClipboard(message.message)}
+                            className="group flex gap-2 items-center h-[20px] ml-3 mt-2 cursor-pointer"
+                          >
                             <RxCopy className="group-hover:text-secondary transition-all duration-200" />
                             <span className="text-white group-hover:text-secondary opacity-0 group-hover:opacity-100 transition-all duration-200">
                               Copy to clipboard
