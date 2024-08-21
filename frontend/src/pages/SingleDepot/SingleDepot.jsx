@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import {
   Button,
@@ -41,6 +41,9 @@ const SingleDepot = () => {
   const [newFileName, setNewFileName] = useState("");
   const [newFileExtension, setNewFileExtension] = useState("");
   const [refetch, setRefetch] = useState(false);
+  const [isDepotDeleting, setIsDepotDeleting] = useState(false);
+  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
+  const [deletingDepotText, setDeletingDepotText] = useState("");
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -50,12 +53,14 @@ const SingleDepot = () => {
 
   const inputRef = useRef(null);
 
+  const navigate = useNavigate();
+
   console.log(depot);
   console.log(user);
 
   useEffect(() => {
     axiosInstance
-      .get(`http://localhost:8080/api/repos/${id}/files`, {
+      .get(`/api/repos/${id}/files`, {
         params: {
           token: JSON.parse(localStorage.getItem("token")),
         },
@@ -158,6 +163,31 @@ const SingleDepot = () => {
         toast.error("Error! File was not created.");
         setIsAddFileLoading(false);
       });
+  };
+
+  const handleDeleteDepot = () => {
+    console.log(deletingDepotText);
+
+    if (deletingDepotText !== "I want to delete this depot") {
+      toast.error("Please type 'I want to delete this depot'");
+      return;
+    }
+
+    setIsDepotDeleting(true);
+    axiosInstance
+      .delete(`/api/repos/${depot.repository.id}?token=${user?.token}`)
+      .then((res) => {
+        console.log(res);
+        setIsDepotDeleting(false);
+        toast.success("Depot deleted successfully");
+        navigate("/depots");
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+        toast.error("Error! Depot was not deleted");
+      });
+    console.log(depot);
   };
 
   return (
@@ -324,6 +354,51 @@ const SingleDepot = () => {
             />
           </div>
         )}
+
+      <div className="mt-12 flex flex-col gap-5">
+        {isUserAllowedToEdit && (
+          <Button
+            className="self-start"
+            disabled={isDepotDeleting}
+            radius="full"
+            color="danger"
+            variant="bordered"
+            onClick={() => {
+              setDeletingDepotText("");
+              setShowDeleteBtn(true);
+            }}
+          >
+            {!isDepotDeleting && <span>Delete This Depot</span>}
+            {isDepotDeleting && <Spinner color="white" />}
+          </Button>
+        )}
+        {isUserAllowedToEdit && showDeleteBtn && (
+          <div>
+            <Input
+              value={deletingDepotText}
+              onChange={(e) => setDeletingDepotText(e.target.value)}
+              className="max-w-sm"
+              variant="bordered"
+              color="danger"
+              label="Please type: 'I want to delete this depot'"
+              placeholder="Are you sure?"
+            >
+              I am sure
+            </Input>
+            <Button
+              className="self-start mt-4"
+              disabled={isDepotDeleting}
+              radius="full"
+              color="danger"
+              variant="shadow"
+              onClick={handleDeleteDepot}
+            >
+              {!isDepotDeleting && <span>Confirm</span>}
+              {isDepotDeleting && <Spinner color="white" />}
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
