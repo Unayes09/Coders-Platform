@@ -27,6 +27,7 @@ public class MongoQnAService {
         MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
         return database.getCollection("Questions");
     }
+    
 
     private MongoCollection<Document> getAnswerCollection() {
         MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
@@ -78,6 +79,17 @@ public class MongoQnAService {
         List<Questions> questionsList = new ArrayList<>();
 
         for (Document doc : questionCollection.find()) {
+            Questions question = convertDocumentToQuestion(doc);
+            questionsList.add(question);
+        }
+        return questionsList;
+    }
+    
+    public List<Questions> getQuestionById(String id) {
+    	MongoCollection<Document> questionCollection = getQuestionCollection();
+        List<Questions> questionsList = new ArrayList<>();
+
+        for (Document doc : questionCollection.find(eq("_id",new ObjectId(id)))) {
             Questions question = convertDocumentToQuestion(doc);
             questionsList.add(question);
         }
