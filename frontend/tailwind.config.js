@@ -12,4 +12,11 @@ export default {
   },
   darkMode: "class",
   plugins: [nextui()],
+  layers: {
+    "no-tailwindcss": {
+      ".no-tailwindcss": {
+        all: "unset",
+      },
+    },
+  },
 };
