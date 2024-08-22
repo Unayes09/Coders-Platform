@@ -91,6 +91,16 @@ public class QnAController {
         
     }
     
+    @GetMapping("/questions/{id}")
+    public ResponseEntity<?> getQuestionById(@PathVariable String id) {
+        try {
+        	List<Questions> questions = qnaService.getQuestionById(id);
+            return ResponseEntity.ok(questions);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
+        }
+    }
+    
     @GetMapping("/questions-search")
     public ResponseEntity<?> getAllSearchQuestions(@RequestParam String query) {
     	try {
