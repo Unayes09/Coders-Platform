@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import JoditEditor from "jodit-react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { timeAgo } from "../../utils/timeAgo";
 import { v4 as uuidv4 } from "uuid";
@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 
 const AskQuestion = () => {
   const editor = useRef(null);
+
   const [content, setContent] = useState("");
   const [postQuestionLoading, setPostQuestionLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -34,6 +35,13 @@ const AskQuestion = () => {
   console.log(user);
 
   const navigate = useNavigate();
+
+  //   const config = useMemo(
+  //     () => ({
+  //       theme: "dark",
+  //     }),
+  //     []
+  //   );
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -64,7 +72,7 @@ const AskQuestion = () => {
 
     axiosInstance
       .post(`/api/qna/question?token=${user?.token}`, {
-        name: user?.name,
+        name: user?.fullName,
         email: user?.email,
         picture: user?.image,
         topicTags: tags,
@@ -111,6 +119,7 @@ const AskQuestion = () => {
         </div>
         <div className="no-tailwindcss">
           <JoditEditor
+            // config={config}
             ref={editor}
             value={content}
             tabIndex={1} // tabIndex of textarea
