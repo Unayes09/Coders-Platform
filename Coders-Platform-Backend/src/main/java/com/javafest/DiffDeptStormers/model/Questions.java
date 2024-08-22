@@ -18,6 +18,7 @@ public class Questions {
     private String email;
     private String picture;
     private List<String> topicTags;
+    private String title;
     private String question;
 
     @CreatedDate
@@ -63,6 +64,16 @@ public class Questions {
 
 	public void setTopicTags(List<String> topicTags) {
 		this.topicTags = topicTags;
+	}
+	
+	
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getQuestion() {
