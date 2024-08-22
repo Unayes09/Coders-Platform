@@ -11,6 +11,7 @@ import SingleDepot from "../pages/SingleDepot/SingleDepot";
 import DepotFile from "../pages/SingleDepot/DepotFile";
 import Subscribe from "../pages/Subscribe/Subscribe";
 import Chatbot from "../pages/Chatbot/Chatbot";
+import QnA from "../pages/QNA/QnA";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "chatbot",
         element: <Chatbot />,
+      },
+      {
+        path: "qna",
+        element: <QnA />,
       },
     ],
   },
