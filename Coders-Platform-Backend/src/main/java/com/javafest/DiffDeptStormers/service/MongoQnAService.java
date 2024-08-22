@@ -40,6 +40,7 @@ public class MongoQnAService {
         for (Document doc : questionCollection.find(new Document("$or", List.of(
                 new Document("topicTags", new Document("$regex", query).append("$options", "i")),
                 new Document("name", new Document("$regex", query).append("$options", "i")),
+                new Document("title", new Document("$regex", query).append("$options", "i")),
                 new Document("question", new Document("$regex", query).append("$options", "i"))
         )))) {
             questions.add(convertDocumentToQuestion(doc));
@@ -55,6 +56,7 @@ public class MongoQnAService {
                 .append("email", question.getEmail())
                 .append("picture", question.getPicture())
                 .append("topicTags", question.getTopicTags())
+                .append("title", question.getTitle())
                 .append("question", question.getQuestion())
                 .append("createdAt", question.getCreatedAt());
 
@@ -119,11 +121,12 @@ public class MongoQnAService {
  // Convert a MongoDB Document to a Questions object
     private Questions convertDocumentToQuestion(Document doc) {
         Questions question = new Questions();
-        question.setId(doc.getString("id"));
+        question.setId(doc.getObjectId("_id").toString());
         question.setName(doc.getString("name"));
         question.setEmail(doc.getString("email"));
         question.setPicture(doc.getString("picture"));
         question.setTopicTags(doc.getList("topicTags", String.class));
+        question.setTitle(doc.getString("title"));
         question.setQuestion(doc.getString("question"));
         question.setCreatedAt(doc.getDate("createdAt"));
         return question;

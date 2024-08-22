@@ -30,7 +30,10 @@ const QuestionCard = ({ qData }) => {
         </PopoverContent>
       </Popover>
       <div>
-        <Link className="text-primary text-xl hover:text-blue-400 transition-all duration-20">
+        <Link
+          to={qData.id}
+          className="text-primary text-xl hover:text-blue-400 transition-all duration-20"
+        >
           {qData?.name}
         </Link>
         <p className="my-3">
