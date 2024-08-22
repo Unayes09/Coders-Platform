@@ -2,6 +2,7 @@ package com.javafest.DiffDeptStormers.service;
 
 import com.javafest.DiffDeptStormers.model.Answers;
 import com.javafest.DiffDeptStormers.model.Questions;
+import com.javafest.DiffDeptStormers.model.Quotes;
 import com.javafest.DiffDeptStormers.model.Repository;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -143,4 +145,29 @@ public class MongoQnAService {
         question.setCreatedAt(doc.getDate("createdAt"));
         return question;
     }
+    
+    //For Quotes
+    
+    private MongoCollection<Document> getQuoteCollection() {
+        MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
+        return database.getCollection("Quotes");
+    }
+
+    public Quotes getQuoteByRandomQNumber() {
+        MongoCollection<Document> collection = getQuoteCollection();
+        int randomQNumber = new Random().nextInt(100) + 1;  // Generate a random number between 1 and 100
+        
+        Document query = new Document("qNumber", String.valueOf(randomQNumber));
+        Document result = collection.find(query).first();
+        
+        if (result != null) {
+            Quotes quote = new Quotes();
+            quote.setId(result.getString("id"));
+            quote.setqNumber(result.getString("qNumber"));
+            quote.setQuote(result.getString("quote"));
+            return quote;
+        }
+        return null;
+    }
+    
 }

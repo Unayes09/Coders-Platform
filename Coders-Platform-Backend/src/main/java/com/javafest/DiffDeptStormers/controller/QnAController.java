@@ -3,6 +3,7 @@ package com.javafest.DiffDeptStormers.controller;
 import com.javafest.DiffDeptStormers.model.AiChat;
 import com.javafest.DiffDeptStormers.model.Answers;
 import com.javafest.DiffDeptStormers.model.Questions;
+import com.javafest.DiffDeptStormers.model.Quotes;
 import com.javafest.DiffDeptStormers.model.User;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.service.MongoQnAService;
@@ -134,6 +135,20 @@ public class QnAController {
     	try {
             List<Answers> answers = qnaService.getAnswersByQuestionId(questionId);
             return ResponseEntity.ok(answers);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
+        }
+    }
+    
+    @GetMapping("/random")
+    public ResponseEntity<?> getRandomQuote() {
+        try {
+            Quotes randomQuote = qnaService.getQuoteByRandomQNumber();
+            if (randomQuote != null) {
+                return ResponseEntity.ok(randomQuote);
+            } else {
+                return ResponseEntity.status(404).body("{\"message\": \"No quotes found\"}");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
         }
