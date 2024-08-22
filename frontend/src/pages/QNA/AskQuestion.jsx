@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 const AskQuestion = () => {
   const editor = useRef(null);
   const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [postQuestionLoading, setPostQuestionLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
 
@@ -31,10 +31,17 @@ const AskQuestion = () => {
 
   const { user } = useContext(UserContext);
 
+  console.log(user);
+
   const navigate = useNavigate();
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+
+    if (!user) {
+      toast.error("Please login first!");
+      return;
+    }
 
     setTitle("");
     setTags([]);
@@ -45,7 +52,7 @@ const AskQuestion = () => {
     setTitle(title);
     setTags(tags.split(","));
 
-    if (!title || !tags) {
+    if (!title || !tags || !content) {
       toast.error("Please fill-up all the fields!");
     } else {
       onOpen();
@@ -53,13 +60,20 @@ const AskQuestion = () => {
   };
 
   const postQuestion = () => {
-    setLoading(true);
+    setPostQuestionLoading(true);
 
     axiosInstance
-      .post(`/api/qna/question?token=${user?.token}`)
+      .post(`/api/qna/question?token=${user?.token}`, {
+        name: user?.name,
+        email: user?.email,
+        picture: user?.image,
+        topicTags: tags,
+        title: title,
+        question: content,
+      })
       .then((res) => {
         console.log(res.data);
-        setLoading(false);
+        setPostQuestionLoading(false);
         toast.success("Question posted successfully!");
         navigate("/qna");
       })
@@ -105,12 +119,12 @@ const AskQuestion = () => {
           />
         </div>
         <Button
-          disabled={loading}
+          disabled={postQuestionLoading}
           type="submit"
           color="primary"
           className="self-start"
         >
-          {loading ? <Spinner color="white" /> : "Post Question"}
+          {postQuestionLoading ? <Spinner color="white" /> : "Post Question"}
         </Button>
       </form>
 

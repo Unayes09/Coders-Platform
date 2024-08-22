@@ -5,24 +5,31 @@ import axiosInstance from "../../utils/axiosInstance";
 import AnswerCard from "./AnswerCard";
 import AddAnswer from "./AddAnswer";
 import { v4 as uuidv4 } from "uuid";
+import { Link, useParams } from "react-router-dom";
 
 const SingleQuestion = () => {
-  const question = {
-    id: "66c63c48d9951709b744bf58",
-    name: "Unayes Ahmed Khan",
-    email: "unayeskhan.0808@gmail.com",
-    picture: "http://example.com/profile.jpg",
-    topicTags: ["Java", "Spring Boot", "MongoDB"],
-    question: "How can I integrate MongoDB with Spring Boot?",
-    createdAt: "2024-08-21T19:12:36.934+00:00",
-  };
+  // const question = {
+  //   id: "66c63c48d9951709b744bf58",
+  //   name: "Unayes Ahmed Khan",
+  //   email: "unayeskhan.0808@gmail.com",
+  //   picture: "http://example.com/profile.jpg",
+  //   topicTags: ["Java", "Spring Boot", "MongoDB"],
+  //   question: "How can I integrate MongoDB with Spring Boot?",
+  //   createdAt: "2024-08-21T19:12:36.934+00:00",
+  // };
 
+  const { id } = useParams();
+
+  const [question, setQuestion] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [answers, setAnswers] = useState([]);
 
+  axiosInstance.get(``);
+
   useEffect(() => {
     axiosInstance
-      .get(`/api/qna/answers/${question.id}`)
+      .get(`/api/qna/answers/${question?.id}`)
       .then((res) => {
         console.log(res.data);
         setAnswers(res.data);
@@ -45,9 +52,11 @@ const SingleQuestion = () => {
             Asked: {timeAgo(question?.createdAt)}
           </h3>
         </div>
-        <Button size="lg" color="primary">
-          Ask Question
-        </Button>
+        <Link to="/qna/ask">
+          <Button size="lg" color="primary">
+            Ask Question
+          </Button>
+        </Link>
       </div>
 
       <div className="flex gap-2 wrap mb-8">

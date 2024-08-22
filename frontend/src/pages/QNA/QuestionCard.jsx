@@ -12,7 +12,7 @@ import { timeAgo } from "../../utils/timeAgo";
 
 const QuestionCard = ({ qData }) => {
   return (
-    <div className="flex gap-6 items-start border-b pb-6 border-b-[#333]">
+    <div className="flex flex-col gap-6 items-start sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 border-b pb-6 border-b-[#333]">
       <Popover showArrow placement="bottom">
         <PopoverTrigger>
           <User
@@ -29,17 +29,17 @@ const QuestionCard = ({ qData }) => {
           <UserTwitterCard />
         </PopoverContent>
       </Popover>
-      <div>
+      <div className="sm:col-span-2 md:col-span-3 lg:cols-span-4">
         <Link
           to={qData.id}
           className="text-primary text-xl hover:text-blue-400 transition-all duration-20"
         >
-          {qData?.name}
+          {qData?.title}
         </Link>
         <p className="my-3">
-          {qData?.question.substring(0, 100) === qData?.question
+          {/* {qData?.question.substring(0, 100) === qData?.question
             ? qData?.question
-            : qData?.question.substring(0, 100) + "..."}
+            : qData?.question.substring(0, 100) + "..."} */}
         </p>
         <div>
           <div className="flex gap-2 items-center flex-wrap">
