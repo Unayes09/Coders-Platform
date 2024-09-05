@@ -15,7 +15,7 @@ const AllQuestions = () => {
       .get("/api/qna/questions")
       .then((res) => {
         console.log(res.data);
-        setQuestions(res.data);
+        setQuestions(res.data.reverse());
       })
       .catch((err) => {
         console.log(err);

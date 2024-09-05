@@ -36,7 +36,7 @@ const SingleQuestion = () => {
       .get(`/api/qna/answers/${question?.id}`)
       .then((res) => {
         console.log(res.data);
-        setAnswers(res.data);
+        setAnswers(res.data.reverse());
         setLoading(false);
       })
       .catch((err) => {
