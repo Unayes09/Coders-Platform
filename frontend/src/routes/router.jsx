@@ -14,6 +14,7 @@ import Chatbot from "../pages/Chatbot/Chatbot";
 import QnA from "../pages/QNA/QnA";
 import SingleQuestion from "../pages/QNA/SingleQuestion";
 import AskQuestion from "../pages/QNA/AskQuestion";
+import News from "../pages/News/News";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
         path: "qna/ask",
         element: <AskQuestion />,
       },
+      {
+        path: "news",
+        element: <News />
+      }
     ],
   },
   {
