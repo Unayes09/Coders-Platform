@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const News = () => {
   const [news, setNews] = useState([]);
-  const [content, setContent] = useState('');
-  const [sortBy, setSortBy] = useState('publishedAt');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [content, setContent] = useState("");
+  const [sortBy, setSortBy] = useState("publishedAt");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const demoImage = 'https://via.placeholder.com/150'; // Placeholder image
+  const demoImage = "https://via.placeholder.com/150"; // Placeholder image
 
   // Function to get the current month's first and last day
   const getCurrentMonthDates = () => {
     const today = new Date();
-    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+      .toISOString()
+      .split("T")[0];
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+      .toISOString()
+      .split("T")[0];
     setFromDate(firstDay);
     setToDate(lastDay);
     return { firstDay, lastDay };
@@ -24,18 +28,18 @@ const News = () => {
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://newsapi.org/v2/everything', {
+      const response = await axios.get("https://newsapi.org/v2/everything", {
         params: {
-          q: content || 'latest', // Default search term if input is empty
+          q: content || "latest", // Default search term if input is empty
           from: fromDate,
           to: toDate,
           sortBy: sortBy,
-          apiKey: '26654f2fd94c4dbfbf4150de12358221', // Replace with your NewsAPI key
+          apiKey: "26654f2fd94c4dbfbf4150de12358221", // Replace with your NewsAPI key
         },
       });
       setNews(response.data.articles);
     } catch (error) {
-      console.error('Error fetching news:', error);
+      console.error("Error fetching news:", error);
     }
     setLoading(false);
   };
@@ -50,7 +54,7 @@ const News = () => {
 
   const truncateContent = (content, length = 150) => {
     return content && content.length > length
-      ? content.substring(0, length) + '...'
+      ? content.substring(0, length) + "..."
       : content;
   };
 
@@ -104,24 +108,30 @@ const News = () => {
           {/* News Cards */}
           {news.length > 0 ? (
             news.map((article, index) => (
-              <div key={index} className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <div
+                key={index}
+                className="bg-white shadow-lg rounded-lg overflow-hidden"
+              >
                 <img
                   src={article.urlToImage || demoImage}
                   alt={article.title}
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold text-black">{article.title}</h3>
+                  <h3 className="text-lg font-semibold text-black">
+                    {article.title}
+                  </h3>
                   <p className="text-sm text-gray-600 mt-2">
-                    <strong>Author:</strong> {article.author || 'Unknown'}
+                    <strong>Author:</strong> {article.author || "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
-                    <strong>Source:</strong> {article.source.name || 'Unknown'}
+                    <strong>Source:</strong> {article.source.name || "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
-                    <strong>Published:</strong> {new Date(article.publishedAt).toLocaleDateString()}
+                    <strong>Published:</strong>{" "}
+                    {new Date(article.publishedAt).toLocaleDateString()}
                   </p>
-                  
+
                   <a
                     href={article.url}
                     target="_blank"
@@ -134,7 +144,9 @@ const News = () => {
               </div>
             ))
           ) : (
-            <p className="text-center col-span-full">No news found. Try another search.</p>
+            <p className="text-center col-span-full">
+              No news found. Try another search.
+            </p>
           )}
         </div>
       )}

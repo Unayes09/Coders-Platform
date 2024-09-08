@@ -14,6 +14,7 @@ import Chatbot from "../pages/Chatbot/Chatbot";
 import QnA from "../pages/QNA/QnA";
 import SingleQuestion from "../pages/QNA/SingleQuestion";
 import AskQuestion from "../pages/QNA/AskQuestion";
+import EditResume from "../pages/EditResume/EditResume";
 import News from "../pages/News/News";
 
 const router = createBrowserRouter([
@@ -62,9 +63,13 @@ const router = createBrowserRouter([
         element: <AskQuestion />,
       },
       {
+        path: "edit_resume",
+        element: <EditResume />,
+      },
+      {
         path: "news",
-        element: <News />
-      }
+        element: <News />,
+      },
     ],
   },
   {
