@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const News = () => {
   const [news, setNews] = useState([]);
   const [content, setContent] = useState('');
-  const [sortBy, setSortBy] = useState('popularity');
+  const [sortBy, setSortBy] = useState('publishedAt');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [loading, setLoading] = useState(false);
 
   const demoImage = 'https://via.placeholder.com/150'; // Placeholder image
 
+  // Function to get the current month's first and last day
+  const getCurrentMonthDates = () => {
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+    setFromDate(firstDay);
+    setToDate(lastDay);
+    return { firstDay, lastDay };
+  };
+
   const handleSearch = async () => {
     setLoading(true);
     try {
       const response = await axios.get('https://newsapi.org/v2/everything', {
         params: {
-          q: content,
+          q: content || 'latest', // Default search term if input is empty
           from: fromDate,
           to: toDate,
           sortBy: sortBy,
@@ -29,6 +39,14 @@ const News = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    // Fetch news for the current month when the component mounts
+    const { firstDay, lastDay } = getCurrentMonthDates();
+    setFromDate(firstDay);
+    setToDate(lastDay);
+    handleSearch();
+  }, []);
 
   const truncateContent = (content, length = 150) => {
     return content && content.length > length
