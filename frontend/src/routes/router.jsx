@@ -16,6 +16,8 @@ import SingleQuestion from "../pages/QNA/SingleQuestion";
 import AskQuestion from "../pages/QNA/AskQuestion";
 import EditResume from "../pages/EditResume/EditResume";
 import News from "../pages/News/News";
+import AllSkill from "../pages/SkillTest/AllSkill";
+import TestPage from "../pages/SkillTest/TestPage";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
       {
         path: "news",
         element: <News />,
+      },
+      {
+        path: "skill-test",
+        element: <AllSkill />,
+      },
+      {
+        path: "skill-test/:topic",
+        element: <TestPage />,
       },
     ],
   },
