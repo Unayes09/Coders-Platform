@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider"; // Assuming you have UserContext for authentication
 import {
   FaJava,
@@ -15,11 +15,12 @@ import toast from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { Spinner } from "@nextui-org/react";
 import { isPremiumUser } from "../../utils/dateCalculation";
+import axios from 'axios';
 
 // Icons for topics
 const topicIcons = {
   C: <FaCuttlefish size={70} className="text-orange-500" />,
-  "C++": <TbBrandCpp size={70} className="text-orange-500" />,
+  Cpp: <TbBrandCpp size={70} className="text-orange-500" />,
   Java: <FaJava size={70} className="text-orange-500" />,
   Python: <FaPython size={70} className="text-orange-500" />,
   JavaScript: <FaJs size={70} className="text-orange-500" />,
@@ -31,7 +32,7 @@ const topicIcons = {
 const TestPage = () => {
   const { user, isUserLoading } = useContext(UserContext); // Check if user is logged in
   const { topic } = useParams(); // Get topic from URL params
-
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([{}]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -123,17 +124,42 @@ const TestPage = () => {
               let isPremium = false;
 
               if (user) {
-                isPremium = isPremiumUser(user.premiumPackBuyDate, 30);
+                isPremium = isPremiumUser(user.premiumPackBuyDate, 90);
               }
 
               if (isPremium) {
+
+                const userData = {
+                  dont_send_email: "false",
+                  FIRST_NAME: user.fullName,
+                  LAST_NAME: '*',
+                  EMAIL_ADDRESS: user.email
+                };
+                
+                const headers = {
+                  'accept': 'application/json',
+                  'api-key': 'y0w0HJGM3BI1q3PrVVOljs9AVrpjyE7KK9LUsrKlZAa8FtezA83PkDQ6yad8',
+                  'content-type': 'application/json'
+                };
+                
+                axios.post('https://app.simplecert.net/api/projects/209621/recipient/add', userData, { headers })
+                  .then(response => {
+                    console.log(response.data);
+                  })
+                  .catch(error => {
+                    console.error(error);
+                  });
+
                 toast.success(
                   "Congratulations! Please check email to get the certificate"
                 );
+                navigate('/skill-test'); 
+
               } else {
                 toast.success(
                   "Congratulations! You have passed. Please upgrade to premium to get certificate!"
                 );
+                navigate('/skill-test'); 
               }
 
               setLoading(false);
@@ -141,17 +167,20 @@ const TestPage = () => {
             .catch(() => {
               toast.error("Sorry! Something went wrong");
               setLoading(false);
+              navigate('/skill-test'); 
             });
         }
-        if (text == "false \n" || text == "false") {
+        if (text == "false \n" || text == "false" || text == "false\n") {
           console.log("failed hurray");
           toast.error("Sorry! You have failed. Please try again.");
           setLoading(false);
+          navigate('/skill-test'); 
         }
       })
       .catch(() => {
         toast.error("Sorry! Something went wrong");
         setLoading(false);
+        navigate('/skill-test'); 
       });
   };
 
@@ -227,6 +256,9 @@ const TestPage = () => {
         <>
           <p className="text-lg mb-4">
             Note: You will have 30 minutes to complete this exam.
+          </p>
+          <p className="text-lg mb-4 text-red-500">
+            Warning: Don't use AI or copied solution. It will results fail for you.
           </p>
           <button
             onClick={handleStartTest}

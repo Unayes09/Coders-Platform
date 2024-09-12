@@ -24,7 +24,7 @@ public class SkillQuestionService {
     
     private MongoCollection<Document> getCertificateCollection() {
         MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
-        return database.getCollection("SkillQuestions");
+        return database.getCollection("Certificates");
     }
 
     public void insertSkillQuestions(List<SkillQuestions> skillQuestions) {
