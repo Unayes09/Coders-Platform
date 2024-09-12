@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
-import { FaJava, FaPython, FaJs, FaNodeJs, FaReact, FaCuttlefish } from 'react-icons/fa'; // Import icons from react-icons
+import React, { useContext, useState, useEffect } from 'react';
+import { UserContext } from "../../providers/UserProvider"; 
+import { FaJava, FaPython, FaJs, FaNodeJs, FaReact, FaCuttlefish } from 'react-icons/fa';
 import { TbBrandCpp } from "react-icons/tb";
 import { BiLogoGoLang } from "react-icons/bi";
+import { GiTrophy } from 'react-icons/gi'; // Import trophy icon
+import axiosInstance from "../../utils/axiosInstance";
 
 const topics = [
   { name: 'C', icon: <FaCuttlefish size={150} className='text-black'/>, url: '/skill-test/C' },
-  { name: 'C++', icon: <TbBrandCpp size={150} className='text-blue-800'/>, url: '/skill-test/C++' },
+  { name: 'C++', icon: <TbBrandCpp size={150} className='text-blue-800'/>, url: '/skill-test/Cpp' },
   { name: 'Java', icon: <FaJava size={150} className='text-red-500'/>, url: '/skill-test/Java' },
   { name: 'Python', icon: <FaPython size={150} className='text-blue-800'/>, url: '/skill-test/Python' },
   { name: 'JavaScript', icon: <FaJs size={150} className='text-yellow-500'/>, url: '/skill-test/JavaScript' },
   { name: 'Node.js', icon: <FaNodeJs size={150} className='text-black'/>, url: '/skill-test/Node.js' },
   { name: 'React', icon: <FaReact size={150} className='text-blue-400'/>, url: '/skill-test/React' },
   { name: 'Go', icon: <BiLogoGoLang size={150} className='text-black'/>, url: '/skill-test/Go' },
-  // More topics will come later
 ];
 
 const SkillTest = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [passedTopics, setPassedTopics] = useState([]);
+  const { user, isUserLoading } = useContext(UserContext); // Check if user is logged in
+
+  // Fetch the list of topics the user has passed
+  useEffect(() => {
+    const fetchPassedTopics = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/skill/certificate/${user.email}`);
+        setPassedTopics(response.data); // Assuming response.data is an array of passed topics
+      } catch (error) {
+        console.error("Error fetching passed topics:", error);
+      }
+    };
+
+    fetchPassedTopics();
+  }, []);
 
   // Filter topics based on search term
   const filteredTopics = topics.filter((topic) =>
@@ -43,8 +61,11 @@ const SkillTest = () => {
             <a
               href={topic.url}
               key={index}
-              className="flex flex-col items-center p-4 bg-white shadow-lg rounded-lg hover:shadow-xl hover:bg-blue-100 transition duration-300 transform hover:scale-105"
+              className="relative flex flex-col items-center p-4 bg-white shadow-lg rounded-lg hover:shadow-xl hover:bg-blue-100 transition duration-300 transform hover:scale-105"
             >
+              {passedTopics.includes(topic.name) && (
+                <GiTrophy size={30} className="absolute top-2 left-2 text-yellow-500" />
+              )}
               <div className="text-blue-500 mb-4">{topic.icon}</div> {/* Big Icon */}
               <h3 className="text-lg font-semibold text-black">{topic.name}</h3> {/* Topic Name */}
             </a>
