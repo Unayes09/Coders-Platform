@@ -15,7 +15,8 @@ import toast from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { Spinner } from "@nextui-org/react";
 import { isPremiumUser } from "../../utils/dateCalculation";
-import axios from 'axios';
+import axios from "axios";
+import FeedbackContainer from "../Playground/FeedbackContainer";
 
 // Icons for topics
 const topicIcons = {
@@ -128,38 +129,42 @@ const TestPage = () => {
               }
 
               if (isPremium) {
-
                 const userData = {
                   dont_send_email: "false",
                   FIRST_NAME: user.fullName,
-                  LAST_NAME: '*',
-                  EMAIL_ADDRESS: user.email
+                  LAST_NAME: "*",
+                  EMAIL_ADDRESS: user.email,
                 };
-                
+
                 const headers = {
-                  'accept': 'application/json',
-                  'api-key': 'y0w0HJGM3BI1q3PrVVOljs9AVrpjyE7KK9LUsrKlZAa8FtezA83PkDQ6yad8',
-                  'content-type': 'application/json'
+                  accept: "application/json",
+                  "api-key":
+                    "y0w0HJGM3BI1q3PrVVOljs9AVrpjyE7KK9LUsrKlZAa8FtezA83PkDQ6yad8",
+                  "content-type": "application/json",
                 };
-                
-                axios.post('https://app.simplecert.net/api/projects/209621/recipient/add', userData, { headers })
-                  .then(response => {
+
+                axios
+                  .post(
+                    "https://app.simplecert.net/api/projects/209621/recipient/add",
+                    userData,
+                    { headers }
+                  )
+                  .then((response) => {
                     console.log(response.data);
                   })
-                  .catch(error => {
+                  .catch((error) => {
                     console.error(error);
                   });
 
                 toast.success(
                   "Congratulations! Please check email to get the certificate"
                 );
-                navigate('/skill-test'); 
-
+                navigate("/skill-test");
               } else {
                 toast.success(
                   "Congratulations! You have passed. Please upgrade to premium to get certificate!"
                 );
-                navigate('/skill-test'); 
+                navigate("/skill-test");
               }
 
               setLoading(false);
@@ -167,20 +172,20 @@ const TestPage = () => {
             .catch(() => {
               toast.error("Sorry! Something went wrong");
               setLoading(false);
-              navigate('/skill-test'); 
+              navigate("/skill-test");
             });
         }
         if (text == "false \n" || text == "false" || text == "false\n") {
           console.log("failed hurray");
           toast.error("Sorry! You have failed. Please try again.");
           setLoading(false);
-          navigate('/skill-test'); 
+          navigate("/skill-test");
         }
       })
       .catch(() => {
         toast.error("Sorry! Something went wrong");
         setLoading(false);
-        navigate('/skill-test'); 
+        navigate("/skill-test");
       });
   };
 
@@ -196,7 +201,7 @@ const TestPage = () => {
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold">{question.type}</h2>{" "}
         {/* Question Type */}
-        <p className="text-xl mt-4">{question.question}</p>{" "}
+        <FeedbackContainer text={question.question} />
         {/* Question Text */}
         <textarea
           className="mt-4 p-2 border border-gray-300 rounded w-full max-w-md"
@@ -258,7 +263,8 @@ const TestPage = () => {
             Note: You will have 30 minutes to complete this exam.
           </p>
           <p className="text-lg mb-4 text-red-500">
-            Warning: Don't use AI or copied solution. It will results fail for you.
+            Warning: Don't use AI or copied solution. It will results fail for
+            you.
           </p>
           <button
             onClick={handleStartTest}
