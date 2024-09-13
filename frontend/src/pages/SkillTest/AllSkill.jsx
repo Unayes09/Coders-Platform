@@ -1,15 +1,11 @@
-import React from 'react'
-import SkillTest from '../../components/SkillTest/SkillTest'
+import SkillTest from "../../components/SkillTest/SkillTest";
 
 const AllSkill = () => {
-    console.log("aise");
   return (
     <div>
-        
-        <SkillTest />
+      <SkillTest />
     </div>
-    
-  )
-}
+  );
+};
 
-export default AllSkill
+export default AllSkill;
