@@ -58,5 +58,16 @@ public class SkillQuestionController {
             return new ResponseEntity<>(certificateTypes, HttpStatus.OK); // 200 for successful retrieval
         }
     }
+    
+    @GetMapping("/data")
+    public ResponseEntity<Map<String, Object>> getUserData(@RequestParam String email) {
+        Map<String, Object> userData = skillQuestionService.getUserDataByEmail(email);
+        
+        if (userData.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(userData);
+    }
 
 }
