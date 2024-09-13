@@ -8,21 +8,23 @@ const EditResume = () => {
   const { user, isUserLoading } = useContext(UserContext);
 
   const [personalInfo, setPersonalInfo] = useState(null);
+  const [editedPersonalInfo, setEditedPersonalInfo] = useState(null);
   const [personalEmail, setPersonalEmail] = useState("");
 
   useEffect(() => {
-    axiosInstance
-      .get(`/api/cv/getByEmail?email=unayeskhan.0808@gmail.com`)
-      .then((res) => {
-        const personal = res.data[0];
-        if (personal) {
-          setPersonalInfo(...personal);
+    axiosInstance.get(`/api/cv/getByEmail?email=${user?.email}`).then((res) => {
+      const personal = res.data[0];
+      if (personal) {
+        setPersonalInfo(...personal);
+        setEditedPersonalInfo(...personal);
+        console.log(...personal);
+      }
+    });
+  }, [user]);
 
-          console.log(...personal);
-        }
-        // setPersonalEmail(res.data[0]["0"]?.email ? res.data[0].email : "");
-      });
-  }, []);
+  useEffect(() => {
+    console.log(editedPersonalInfo);
+  }, [editedPersonalInfo]);
 
   if (isUserLoading) {
     return (
@@ -52,8 +54,15 @@ const EditResume = () => {
       </div>
       <div className="border border-[#30363db3] rounded-b-lg px-8 py-8">
         <h1 className="text-2xl font-semibold tracking-wide flex gap-4 items-center">
-          <span>{personalInfo.name ? personalInfo.name : "Add Name"}</span>
-          <GoPencil className="text-primary font-bold cursor-pointer" />
+          <Input
+            value={editedPersonalInfo?.name}
+            onChange={(e) => {
+              const newInfo = editedPersonalInfo;
+              console.log(newInfo);
+              // newInfo.name = e.target.value;
+              // setEditedPersonalInfo(newInfo);
+            }}
+          />
         </h1>
         <div className="text-gray-400 flex flex-col gap-1 mt-2">
           <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">

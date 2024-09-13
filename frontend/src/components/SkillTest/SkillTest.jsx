@@ -62,7 +62,7 @@ const topics = [
 const SkillTest = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [passedTopics, setPassedTopics] = useState([]);
-  const { user, isUserLoading } = useContext(UserContext); // Check if user is logged in
+  const { user } = useContext(UserContext); // Check if user is logged in
 
   // Fetch the list of topics the user has passed
   useEffect(() => {
