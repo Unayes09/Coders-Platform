@@ -18,6 +18,7 @@ import EditResume from "../pages/EditResume/EditResume";
 import News from "../pages/News/News";
 import AllSkill from "../pages/SkillTest/AllSkill";
 import TestPage from "../pages/SkillTest/TestPage";
+import GapAnalysis from "../pages/GapAnalysis/GapAnalysis";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: "skill-test/:topic",
         element: <TestPage />,
+      },
+      {
+        path: "gap",
+        element: <GapAnalysis />,
       },
     ],
   },

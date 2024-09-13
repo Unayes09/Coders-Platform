@@ -17,6 +17,18 @@ public class SkillQuestionService {
     @Autowired
     private MongoClient mongoClient;
     
+    // Get Users Collection
+    private MongoCollection<Document> getUserCollection() {
+        MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
+        return database.getCollection("Users");
+    }
+
+    // Get Repositories Collection
+    private MongoCollection<Document> getRepositoryCollection() {
+        MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
+        return database.getCollection("Repositories");
+    }
+    
     private MongoCollection<Document> getQuesCollection() {
         MongoDatabase database = mongoClient.getDatabase("CodersPlatformDatabase");
         return database.getCollection("SkillQuestions");
@@ -123,5 +135,58 @@ public class SkillQuestionService {
                 .map(cert -> cert.getString("type"))
                 .collect(Collectors.toList());
     }
+    
+ // Method to get user's interests, skills, public repo topic tags, and certificate types
+    public Map<String, Object> getUserDataByEmail(String email) {
+        // Fetch the user by email
+        MongoCollection<Document> userCollection = getUserCollection();
+        Document userDoc = userCollection.find(new Document("email", email)).first();
+
+        Map<String, Object> responseData = new HashMap<>();
+
+        if (userDoc != null) {
+            // Fetch interests and skills
+            List<String> interests = userDoc.getList("interests", String.class, new ArrayList<>());
+            List<String> skills = userDoc.getList("skills", String.class, new ArrayList<>());
+
+            // Combine interests and skills into one array
+            List<String> interestAndSkills = new ArrayList<>();
+            interestAndSkills.addAll(interests);
+            interestAndSkills.addAll(skills);
+
+            // Put the combined interests and skills into the response
+            responseData.put("interestAndSkills", interestAndSkills);
+
+            // Fetch public repository topic tags
+            MongoCollection<Document> repoCollection = getRepositoryCollection();
+            List<Document> publicRepos = repoCollection.find(new Document("email", email).append("isPublic", true)).into(new ArrayList<>());
+
+            List<String> publicRepoTags = publicRepos.stream()
+                    .flatMap(repo -> repo.getList("repoTopicTags", String.class, new ArrayList<>()).stream())
+                    .collect(Collectors.toList());
+
+            // Fetch certificate types
+            MongoCollection<Document> certificateCollection = getCertificateCollection();
+            List<Document> certificates = certificateCollection.find(new Document("userEmail", email)).into(new ArrayList<>());
+
+            List<String> certificateTypes = certificates.stream()
+                    .map(cert -> cert.getString("type"))
+                    .collect(Collectors.toList());
+
+            // Combine public repo tags and certificate types into one array
+            List<String> repoAndCerts = new ArrayList<>();
+            repoAndCerts.addAll(publicRepoTags);
+            repoAndCerts.addAll(certificateTypes);
+
+            // Put the combined repo topic tags and certificate types into the response
+            responseData.put("repoAndCerts", repoAndCerts);
+
+            return responseData;
+        }
+
+        // Return empty map if no user found
+        return responseData;
+    }
+
 
 }
