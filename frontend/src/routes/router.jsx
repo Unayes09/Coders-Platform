@@ -20,6 +20,7 @@ import AllSkill from "../pages/SkillTest/AllSkill";
 import TestPage from "../pages/SkillTest/TestPage";
 import GapAnalysis from "../pages/GapAnalysis/GapAnalysis";
 import SchedulePage from "../pages/Schedule/SchedulePage";
+import EventPage from "../pages/Events/EventPage"
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
       {
         path: "schedule",
         element: <SchedulePage />,
+      },
+      {
+        path: "event",
+        element: <EventPage />,
       },
     ],
   },
