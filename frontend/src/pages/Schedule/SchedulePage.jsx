@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Dialog } from '@headlessui/react';
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../providers/UserProvider";
 import FeedbackContainer from "../Playground/FeedbackContainer";
