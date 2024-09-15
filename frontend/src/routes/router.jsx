@@ -21,6 +21,7 @@ import TestPage from "../pages/SkillTest/TestPage";
 import GapAnalysis from "../pages/GapAnalysis/GapAnalysis";
 import SchedulePage from "../pages/Schedule/SchedulePage";
 import EventPage from "../pages/Events/EventPage"
+import Story from "../pages/Story/Story";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
       {
         path: "event",
         element: <EventPage />,
+      },
+      {
+        path: "story",
+        element: <Story />,
       },
     ],
   },

@@ -21,7 +21,7 @@ const EventPage = () => {
         : '/api/events/all';              // Fetch all events
       axiosInstance.get(apiUrl)
         .then((response) => {
-          setEvents(response.data);
+          setEvents(response.data.reverse());
         })
         .catch((error) => console.error('Error fetching events:', error));
     };
