@@ -22,6 +22,8 @@ import GapAnalysis from "../pages/GapAnalysis/GapAnalysis";
 import SchedulePage from "../pages/Schedule/SchedulePage";
 import EventPage from "../pages/Events/EventPage"
 import Story from "../pages/Story/Story";
+import JobSearchPage from "../pages/Jobs/JobSearchPage";
+import CreateJobPage from "../pages/Jobs/CreateJobPage";
 
 const router = createBrowserRouter([
   {
@@ -99,6 +101,14 @@ const router = createBrowserRouter([
       {
         path: "story",
         element: <Story />,
+      },
+      {
+        path: "jobs",
+        element: <JobSearchPage />,
+      },
+      {
+        path: "create-job",
+        element: <CreateJobPage />,
       },
     ],
   },
