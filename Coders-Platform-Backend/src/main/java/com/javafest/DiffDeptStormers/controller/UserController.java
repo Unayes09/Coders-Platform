@@ -101,6 +101,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
+        //System.out.println(loginRequest);
         User user = userService.findByEmail(loginRequest.getEmail());
         if (user != null && userService.checkPassword(loginRequest.getPassword(), user.getPassword())) {
             String token = jwtUtil.generateToken(user.getEmail());
@@ -114,7 +115,7 @@ public class UserController {
                 con.setRequestProperty("Content-Type", "application/json");
                 con.setRequestProperty("Accept", "application/json");
                 con.setRequestProperty("Project-ID", "0e16047b-9510-4874-89dd-1cbce8ada1d7");
-                con.setRequestProperty("User-Name", loginRequest.getUsername());
+                con.setRequestProperty("User-Name", user.getUsername());
                 con.setRequestProperty("User-Secret", "secret");
                 // Generate response String
                 StringBuilder responseStr = new StringBuilder();
