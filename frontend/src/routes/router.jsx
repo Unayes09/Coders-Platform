@@ -24,6 +24,7 @@ import EventPage from "../pages/Events/EventPage"
 import Story from "../pages/Story/Story";
 import JobSearchPage from "../pages/Jobs/JobSearchPage";
 import CreateJobPage from "../pages/Jobs/CreateJobPage";
+import Chat from "../pages/Chat/Chat";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
       {
         path: "create-job",
         element: <CreateJobPage />,
+      },
+      {
+        path: "chat",
+        element: <Chat />,
       },
     ],
   },
