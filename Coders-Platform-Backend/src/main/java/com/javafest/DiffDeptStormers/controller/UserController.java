@@ -49,7 +49,7 @@ public class UserController {
         }
 
         User savedUser = userService.saveUser(user);
-
+        System.out.println(user);
         HttpURLConnection con = null;
         try {
             // Create POST request
@@ -59,15 +59,15 @@ public class UserController {
             // Set headers
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestProperty("Accept", "application/json");
-            con.setRequestProperty("Private-Key", '5d633895-77af-4e14-8888-e3611aba8cea');
+            con.setRequestProperty("Private-Key", "5d633895-77af-4e14-8888-e3611aba8cea");
             // Add request body
             con.setDoOutput(true);
             Map<String, String> body = new HashMap<String, String>();
-            body.put("username", user.username);
-            body.put("secret", user.username);
-            body.put("email", user.email);
-            body.put("first_name", user.fullName);
-            body.put("last_name", ' ');
+            body.put("username", user.getUsername());
+            body.put("secret", "secret");
+            body.put("email", user.getEmail());
+            body.put("first_name", user.getFullName());
+            body.put("last_name", "*");
             String jsonInputString = new JSONObject(body).toString();
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");
@@ -113,9 +113,9 @@ public class UserController {
                 // Set headers
                 con.setRequestProperty("Content-Type", "application/json");
                 con.setRequestProperty("Accept", "application/json");
-                con.setRequestProperty("Project-ID", '0e16047b-9510-4874-89dd-1cbce8ada1d7');
-                con.setRequestProperty("User-Name", loginRequest.username);
-                con.setRequestProperty("User-Secret", loginRequest.username);
+                con.setRequestProperty("Project-ID", "0e16047b-9510-4874-89dd-1cbce8ada1d7");
+                con.setRequestProperty("User-Name", loginRequest.getUsername());
+                con.setRequestProperty("User-Secret", "secret");
                 // Generate response String
                 StringBuilder responseStr = new StringBuilder();
                 try (BufferedReader br = new BufferedReader(

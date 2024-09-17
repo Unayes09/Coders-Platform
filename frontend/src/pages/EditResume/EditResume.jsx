@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../providers/UserProvider";
 import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
+import { PiCertificateDuotone } from "react-icons/pi";
+import { Link } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 
@@ -11,10 +13,12 @@ const EditResume = () => {
   const [personalInfo, setPersonalInfo] = useState(null);
   const [projectsInfo, setProjectsInfo] = useState([]);
   const [skillsInfo, setSkillsInfo] = useState([]);
+  const [certificates, setCertificates] = useState([]);
 
   const [personalInfoLoading, setPersonalInfoLoading] = useState(false);
   const [projectsInfoLoading, setProjectsInfoLoading] = useState(false);
   const [skillsInfoLoading, setSkillsInfoLoading] = useState(false);
+  const [certificatesLoading, setCertificatesLoading] = useState(false);
 
   const [newProjectForm, setNewProjectForm] = useState(false);
   const [newProjectTitle, setNewProjectTitle] = useState("");
@@ -44,6 +48,11 @@ const EditResume = () => {
       const skills = res.data[2];
       if (skills) {
         setSkillsInfo(skills);
+      }
+
+      const certificates = res.data[3];
+      if (skills) {
+        setCertificates(certificates);
       }
     });
   }, [user, refetch]);
@@ -625,6 +634,26 @@ const EditResume = () => {
                   {skillsInfoLoading && <Spinner color="white" />}
                 </Button>
               </div>
+            </div>
+          );
+        })}
+
+        <div className="border-t border-[#30363db3] my-8"></div>
+
+        {/* Certifications */}
+        <h1 className="text-gray-400 text-center text-xl mb-4">
+          Certifications
+        </h1>
+
+        {certificates.map((c) => {
+          return (
+            <div className="flex items-center gap-3" key={c.id}>
+              <PiCertificateDuotone className="text-amber-500 text-2xl" />
+              <Link to={c.credential}>
+                <h3 className="font-bold text-xl cursor-pointer text-lime-500">
+                  <span>{c.title}</span> By {c.org}
+                </h3>
+              </Link>
             </div>
           );
         })}
