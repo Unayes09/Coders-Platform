@@ -40,7 +40,42 @@ const UserDropdown = ({ logoutHandler, refreshUser }) => {
               <div>Edit Resume</div>
             </Link>
           </DropdownItem>
-          <DropdownItem color="primary" key="my_settings">
+          <DropdownItem color="primary" key="subscribe">
+            <Link to="/subscribe">
+              <div>Subscribe</div>
+            </Link>
+          </DropdownItem>
+          <DropdownItem color="primary" key="news">
+            <Link to="/news">
+              <div>News</div>
+            </Link>
+          </DropdownItem>
+          <DropdownItem color="primary" key="schedule">
+            <Link to="/schedule">
+              <div>Personalized Learning Schedule</div>
+            </Link>
+          </DropdownItem>
+          <DropdownItem color="primary" key="event">
+            <Link to="/event">
+              <div>Events</div>
+            </Link>
+          </DropdownItem>
+          <DropdownItem color="primary" key="story">
+            <Link to="/story">
+              <div>Social Story</div>
+            </Link>
+          </DropdownItem>
+          <DropdownItem color="primary" key="jobs">
+            <Link to="/jobs">
+              <div>Jobs and Works</div>
+            </Link>
+          </DropdownItem>
+          <DropdownItem color="primary" key="chat">
+            <Link to="/chat">
+              <div>Connect with Coders</div>
+            </Link>
+          </DropdownItem>
+          {/* <DropdownItem color="primary" key="my_settings">
             My Settings
           </DropdownItem>
           <DropdownItem color="primary" key="team_settings">
@@ -57,7 +92,7 @@ const UserDropdown = ({ logoutHandler, refreshUser }) => {
           </DropdownItem>
           <DropdownItem color="primary" key="help_and_feedback">
             Help & Feedback
-          </DropdownItem>
+          </DropdownItem> */}
           <DropdownItem
             onClick={() => {
               logoutHandler();

@@ -15,10 +15,10 @@ const AnswerCard = ({ answer }) => {
           <User
             as="button"
             name={answer?.name}
-            description="Product Designer"
+            description={answer?.email}
             className="transition-transform"
             avatarProps={{
-              src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+              src: answer?.picture,
             }}
           />
         </PopoverTrigger>

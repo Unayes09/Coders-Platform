@@ -11,17 +11,18 @@ import { v4 as uuidv4 } from "uuid";
 import { timeAgo } from "../../utils/timeAgo";
 
 const QuestionCard = ({ qData }) => {
+  console.log(qData)
   return (
     <div className="flex flex-col gap-6 items-start sm:grid sm:grid-cols-3 md:grid-cols-4 border-b pb-6 border-b-[#333]">
       <Popover showArrow placement="bottom">
         <PopoverTrigger>
           <User
             as="button"
-            name="Zoe Lang"
-            description="Product Designer"
+            name={qData.name}
+            description={qData.email}
             className="transition-transform"
             avatarProps={{
-              src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+              src: qData.picture,
             }}
           />
         </PopoverTrigger>
