@@ -1,4 +1,4 @@
-import { PrettyChatWindow } from "react-chat-engine-pretty";
+//import { PrettyChatWindow } from "react-chat-engine-pretty";
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from "../../providers/UserProvider";
 
@@ -13,12 +13,7 @@ const ChatPage = () => {
         <div>Please login to chat with coders!!</div>
       ) : (
         <>
-          <PrettyChatWindow
-            projectId="0e16047b-9510-4874-89dd-1cbce8ada1d7"
-            username={user.username}
-            secret="secret"
-            style={{ height: "100vh" }}
-          />
+          
         </>
       )}
     </div>
