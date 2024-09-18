@@ -19,6 +19,12 @@ import News from "../pages/News/News";
 import AllSkill from "../pages/SkillTest/AllSkill";
 import TestPage from "../pages/SkillTest/TestPage";
 import GapAnalysis from "../pages/GapAnalysis/GapAnalysis";
+import SchedulePage from "../pages/Schedule/SchedulePage";
+import EventPage from "../pages/Events/EventPage"
+import Story from "../pages/Story/Story";
+import JobSearchPage from "../pages/Jobs/JobSearchPage";
+import CreateJobPage from "../pages/Jobs/CreateJobPage";
+import Chat from "../pages/Chat/Chat";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +90,30 @@ const router = createBrowserRouter([
       {
         path: "gap",
         element: <GapAnalysis />,
+      },
+      {
+        path: "schedule",
+        element: <SchedulePage />,
+      },
+      {
+        path: "event",
+        element: <EventPage />,
+      },
+      {
+        path: "story",
+        element: <Story />,
+      },
+      {
+        path: "jobs",
+        element: <JobSearchPage />,
+      },
+      {
+        path: "create-job",
+        element: <CreateJobPage />,
+      },
+      {
+        path: "chat",
+        element: <Chat />,
       },
     ],
   },

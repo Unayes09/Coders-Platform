@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -135,6 +137,22 @@ public class MongoUserService {
         }
         return null;
     }
+    
+    public List<User> searchUsersBySkills(String skill) {
+        MongoCollection<Document> userCollection = getUserCollection();
+        List<User> users = new ArrayList<>();
+
+        // Search for users by skills (case insensitive)
+        Document regexFilter = new Document("$regex", skill).append("$options", "i");
+        Document query = new Document("skills", regexFilter);
+
+        for (Document doc : userCollection.find(query)) {
+            users.add(convertDocumentToUser(doc));
+        }
+
+        return users;
+    }
+
 
     private User convertDocumentToUser(Document doc) {
         User user = new User();
