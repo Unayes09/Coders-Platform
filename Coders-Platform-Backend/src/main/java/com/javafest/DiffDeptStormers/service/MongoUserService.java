@@ -56,6 +56,22 @@ public class MongoUserService {
     public void confirmUser(String confirmationToken) {
         getUserCollection().updateOne(eq("confirmationToken", confirmationToken), set("confirmationToken", "confirmed"));
     }
+
+    public boolean isUserConfirmed(String email) {
+        MongoCollection<Document> userCollection = getUserCollection();
+        
+        // Find the user with the given confirmation token
+        Document userDoc = userCollection.find(eq("email", email)).first();
+    
+        // If no user found or confirmationToken is not "confirmed", return false
+        if (userDoc == null || !"confirmed".equals(userDoc.getString("confirmationToken"))) {
+            return false;
+        }
+        
+        // If confirmationToken is "confirmed", return true
+        return true;
+    }
+    
     
     public User saveUser(User user) {
         // Hash the password before saving
@@ -87,7 +103,7 @@ public class MongoUserService {
         user.setId(doc.getObjectId("_id").toString());
 
         // Send confirmation email
-        String confirmationUrl = "http://your-frontend-app.com/confirm?token=" + confirmationToken;
+        String confirmationUrl = "http://localhost:5173/auth/confirm?token=" + confirmationToken;
         try {
             emailService.sendConfirmationEmail(user, confirmationUrl);
         } catch (MessagingException e) {

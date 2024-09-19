@@ -1,6 +1,5 @@
 export const rolesData = [
-  { key: "NORMAL_USER", label: "Individual" },
-  { key: "RECRUITER", label: "Company" },
+  { key: "NORMAL_USER", label: "Individual" }
 ];
 
 export const interestsData = [
