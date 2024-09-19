@@ -51,7 +51,7 @@ const SignUp = () => {
       })
       .then((res) => {
         console.log(res.data);
-        toast.success("Registered successfully!");
+        toast.success("Registered successfully! Please cofirm your email!");
       })
       .catch((error) => {
         console.log(error);

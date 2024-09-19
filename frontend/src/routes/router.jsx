@@ -25,6 +25,7 @@ import Story from "../pages/Story/Story";
 import JobSearchPage from "../pages/Jobs/JobSearchPage";
 import CreateJobPage from "../pages/Jobs/CreateJobPage";
 import Chat from "../pages/Chat/Chat";
+import UserConfirmation from "../pages/SignUp/UserConfirmation";
 
 const router = createBrowserRouter([
   {
@@ -132,6 +133,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <SignUp />,
+      },
+      {
+        path: "confirm",
+        element: <UserConfirmation />,
       },
     ],
   },
