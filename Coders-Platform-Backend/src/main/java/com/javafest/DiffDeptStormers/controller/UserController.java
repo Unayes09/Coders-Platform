@@ -1,11 +1,13 @@
 package com.javafest.DiffDeptStormers.controller;
 
+import com.javafest.DiffDeptStormers.model.Questions;
 import com.javafest.DiffDeptStormers.model.User;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import java.io.BufferedReader;
@@ -37,6 +39,18 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllQuestions() {
+    	try {
+            
+            List<User> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
+        }
+        
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
