@@ -11,6 +11,8 @@ import { UserContext } from "../../providers/UserProvider";
 import FeedbackContainer from "../Playground/FeedbackContainer";
 import { BiConversation } from "react-icons/bi";
 import { BsChatLeftText } from "react-icons/bs";
+import { TiPinOutline, TiPin } from "react-icons/ti";
+
 import toast from "react-hot-toast";
 
 const Chatbot = () => {
@@ -19,6 +21,8 @@ const Chatbot = () => {
   const [conversation, setConversation] = useState([]);
   const [conversationLoading, setConversationLoading] = useState(false);
   const [refetch, setRefetch] = useState(false);
+
+  const [showPinnedMessagesModal, setShowPinnedMessagesModal] = useState(false);
 
   const scrollRef = useRef(null);
 
@@ -66,8 +70,56 @@ const Chatbot = () => {
     );
   };
 
+  const pinMessage = (message) => {
+    console.log(message);
+    // toast.success("Message Pinned");
+    // not premium user alert
+    toast.error("Only premium users can pin messages");
+    // error alert
+    // toast.error("Error! Please try again!");
+  };
+
+  const handleCloseModal = () => {
+    setShowPinnedMessagesModal(false);
+  };
+
   return (
-    <div className="mx-6 mt-2 pb-4">
+    <div className="mx-6 mt-2 pb-4 relative">
+      {/* Pined Message Modal */}
+      {showPinnedMessagesModal && (
+        <div className="bg-black bg-opacity-70 w-full h-full absolute top-0 left-0 z-50">
+          <div className="bg-[#333] rounded-lg shadow-lg p-6 w-[80vw] h-[80vh] mx-auto overflow-auto">
+            <h2 className="text-lg font-bold mb-4">Pinned Messages</h2>
+            {/* Add your pinned message content here */}
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            <h1>Message</h1>
+            {/* Close button */}
+            <Button variant="flat" color="danger" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col md:grid grid-cols-5">
         {!isSidebarHidden && (
           <div className="col-span-1 px-2">
@@ -110,7 +162,19 @@ const Chatbot = () => {
           </div>
 
           {/* main content */}
-          <div className="mt-2 chatbot-chat-holder rounded-lg p-3 bg-gray-900 h-full">
+          <div className="mt-2 chatbot-chat-holder rounded-lg p-3 bg-gray-900 h-full relative">
+            {/* if pinned messages exist then render */}
+            {/* pinnedMessages && (rest ) --- render conditionally like this */}
+            {true && (
+              <div className="absolute bg-white/10 backdrop-blur-lg top-0 left-0 right-0 p-3 rounded-t-lg">
+                <span
+                  onClick={() => setShowPinnedMessagesModal(true)}
+                  className="cursor-pointer hover:text-primary tracking-wide"
+                >
+                  Pinned messages
+                </span>
+              </div>
+            )}
             <div
               ref={scrollRef}
               className="h-[75%] pb-4 overflow-y-auto flex flex-col gap-6"
@@ -151,15 +215,27 @@ const Chatbot = () => {
                           <FeedbackContainer text={message.message} />
                         </div>
                         {message.from === "bot" && (
-                          <div
-                            onClick={() => copyToClipboard(message.message)}
-                            className="group flex gap-2 items-center h-[20px] ml-3 mt-2 cursor-pointer"
-                          >
-                            <RxCopy className="group-hover:text-secondary transition-all duration-200" />
-                            <span className="text-white group-hover:text-secondary opacity-0 group-hover:opacity-100 transition-all duration-200">
-                              Copy to clipboard
-                            </span>
-                          </div>
+                          <>
+                            <div
+                              onClick={() => copyToClipboard(message.message)}
+                              className="group flex gap-2 items-center h-[20px] ml-3 mt-2 cursor-pointer"
+                            >
+                              <RxCopy className="group-hover:text-secondary transition-all duration-200" />
+                              <span className="text-white group-hover:text-secondary opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                Copy to clipboard
+                              </span>
+                            </div>
+                            <div
+                              onClick={() => pinMessage(message)}
+                              className="group flex gap-2 items-center h-[20px] ml-3 mt-2 cursor-pointer"
+                            >
+                              {/* IF message is not pinned */}
+                              <TiPinOutline className="group-hover:text-secondary transition-all duration-200" />
+                              <span className="text-white group-hover:text-secondary opacity-0 group-hover:opacity-100 transition-all duration-200">
+                                Pin Message
+                              </span>
+                            </div>
+                          </>
                         )}
                       </div>
                     );

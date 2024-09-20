@@ -26,6 +26,7 @@ import { UserContext } from "../../providers/UserProvider";
 import toast from "react-hot-toast";
 import { IoWarningOutline } from "react-icons/io5";
 import { MdOutlineClose } from "react-icons/md";
+import { FavouriteIcon } from "./FavouriteIcon";
 // import { FavouriteIcon } from "./FavouriteIcon";
 
 const ChatSidebar = ({
@@ -73,10 +74,10 @@ const ChatSidebar = ({
     setChatToBeRenamed(chatId);
   };
 
-  // const handleAddToFavoriteChat = (chatId) => {
-  //   console.log(chatId);
-  //   alert("favorite");
-  // };
+  const handleAddToFavoriteChat = (chatId) => {
+    console.log(chatId);
+    alert(`favorite ${chatId}`);
+  };
 
   const handleDeleteChat = (chatId) => {
     console.log(chatId);
@@ -227,7 +228,7 @@ const ChatSidebar = ({
                     </DropdownItem>
 
                     {/* Add to favourite button */}
-                    {/* <DropdownItem
+                    <DropdownItem
                       key="favourite"
                       color={!chat.favourite ? "primary" : "danger"}
                       description={
@@ -249,7 +250,7 @@ const ChatSidebar = ({
                       {chat.favourite
                         ? "Remove from favorite"
                         : "Add to favorite"}
-                    </DropdownItem> */}
+                    </DropdownItem>
 
                     <DropdownItem
                       key="delete"
