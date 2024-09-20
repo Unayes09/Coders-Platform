@@ -7,13 +7,11 @@ import router from "./routes/router.jsx";
 import { UserProvider } from "./providers/UserProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <main className="dark text-foreground bg-background">
-      <UserProvider>
-        <RouterProvider router={router}>
-          <NextUIProvider></NextUIProvider>
-        </RouterProvider>
-      </UserProvider>
-    </main>
-  </React.StrictMode>
+  <main className="dark text-foreground bg-background">
+    <UserProvider>
+      <RouterProvider router={router}>
+        <NextUIProvider></NextUIProvider>
+      </RouterProvider>
+    </UserProvider>
+  </main>
 );

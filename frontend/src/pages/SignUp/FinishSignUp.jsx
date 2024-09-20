@@ -1,4 +1,4 @@
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Button, Select, SelectItem, Spinner } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import { rolesData, interestsData, skillsData } from "./constants";
 
@@ -11,6 +11,7 @@ const FinishSignUp = (props) => {
     skills,
     setSkills,
     handleRegistration,
+    loading,
   } = props;
 
   const handleSignUp = (event) => {
@@ -76,11 +77,13 @@ const FinishSignUp = (props) => {
         </Select>
 
         <Button
+          disabled={loading}
           type="submit"
           radius="full"
           className="mt-4 bg-gradient-to-r from-[#39393F] via-[#47474e] to-[#39393F] text-white shadow-lg"
         >
-          Sign Up
+          {!loading && <span>Sign Up</span>}
+          {loading && <Spinner color="white" />}
         </Button>
         <h5 className="text-[13px] text-center mt-4 flex gap-2 justify-center">
           <span>Already have an account?</span>

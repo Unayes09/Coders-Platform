@@ -9,6 +9,9 @@ import toast from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
 
 const SignUp = () => {
+  // loading state
+  const [loading, setLoading] = useState(false);
+
   // states to show different forms
   const [isCredentials, setIsCredentials] = useState(true);
   const [isExtraInfo, setIsExtraInfo] = useState(false);
@@ -25,7 +28,8 @@ const SignUp = () => {
   const [skills, setSkills] = useState([]);
 
   const handleRegistration = () => {
-    console.log("registering...");
+    setLoading(true);
+
     console.log({
       fullName,
       username,
@@ -51,11 +55,40 @@ const SignUp = () => {
       })
       .then((res) => {
         console.log(res.data);
-        toast.success("Registered successfully!");
+
+        const headers = {
+          "Content-Type": "application/json; charset=utf8",
+          "Api-Token": "426499d7daa83c388d482869d6419d07a159bdf8",
+        };
+
+        axios
+          .post(
+            `https://api-8FD3EBE6-0A49-4DD7-85D6-3E43A993D8C0.sendbird.com/v3/users`,
+            {
+              user_id: username,
+              nickname: username,
+              profile_url: "",
+            },
+            { headers }
+          )
+          .then(() => {
+            console.log("chat user created");
+            toast.success(
+              "Registered successfully! Please confirm your email!"
+            );
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log("chat user error");
+            toast.error("Error. Please try again.");
+            console.log(err);
+            setLoading(false);
+          });
       })
       .catch((error) => {
         console.log(error);
         toast.error("Something went wrong!");
+        setLoading(false);
       });
   };
 
@@ -102,6 +135,7 @@ const SignUp = () => {
                 skills={skills}
                 setSkills={setSkills}
                 handleRegistration={handleRegistration}
+                loading={loading}
               />
             )}
           </div>

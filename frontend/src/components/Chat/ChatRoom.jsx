@@ -9,13 +9,13 @@ const ChatPage = () => {
   console.log(user);
 
   return (
-    <div className="mx-6 mt-2 pt-2 pb-6 h-[90vh]">
+    <div className="mx-6 overflow-auto">
       {isUserLoading ? (
         <div>Loading...</div>
       ) : !user ? (
         <div>Please login to chat with coders!!</div>
       ) : (
-        <>{user && <ChatComponent username={user.username} />}</>
+        <>{user && <ChatComponent username={user.username} />} </>
       )}
     </div>
   );

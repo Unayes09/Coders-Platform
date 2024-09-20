@@ -43,8 +43,6 @@ public class User {
 
     private List<String> skills;
 
-    private List<Repository> repos; // New attribute
-
     @CreatedDate
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date createdAt;
@@ -55,10 +53,6 @@ public class User {
 
     private String confirmationToken;
     
-    public User() {
-        this.repos = new ArrayList<>(); // Initialize the repos list in the constructor
-    }
-
     @Override
     public String toString() {
         return "User {" +
@@ -74,7 +68,6 @@ public class User {
                 ", premiumPackBuyDate=" + premiumPackBuyDate +
                 ", interests=" + interests +
                 ", skills=" + skills +
-                ", repos=" + repos + // Add this line
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", confirmationToken='" + confirmationToken + '\'' +
@@ -181,14 +174,6 @@ public class User {
         this.skills = skills;
     }
 
-    public List<Repository> getRepos() {
-        return repos;
-    }
-
-    public void setRepos(List<Repository> repos) {
-        this.repos = repos;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -230,7 +215,6 @@ public class User {
                 Objects.equals(premiumPackBuyDate, user.premiumPackBuyDate) &&
                 Objects.equals(interests, user.interests) &&
                 Objects.equals(skills, user.skills) &&
-                Objects.equals(repos, user.repos) &&
                 Objects.equals(createdAt, user.createdAt) &&
                 Objects.equals(updatedAt, user.updatedAt) &&
                 Objects.equals(confirmationToken, user.confirmationToken);
@@ -238,7 +222,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, fullName, email, password, image, address, phone, role, premiumPackBuyDate, interests, skills, repos, createdAt, updatedAt, confirmationToken);
+        return Objects.hash(id, username, fullName, email, password, image, address, phone, role, premiumPackBuyDate, interests, skills, createdAt, updatedAt, confirmationToken);
     }
 
     public enum Role {
