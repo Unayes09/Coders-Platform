@@ -1,6 +1,8 @@
 package com.javafest.DiffDeptStormers.service;
 
 import static com.mongodb.client.model.Updates.set;
+
+import com.javafest.DiffDeptStormers.model.Questions;
 import com.javafest.DiffDeptStormers.model.User;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -72,7 +74,30 @@ public class MongoUserService {
         return true;
     }
     
+    public List<User> getAllUsers() {
+        MongoCollection<Document> userCollection = getUserCollection();
+        List<User> usersList = new ArrayList<>();
     
+        // Specify the projection to include only _id, fullName, username, and email
+        for (Document doc : userCollection.find().projection(new Document("_id", 1)
+                .append("fullName", 1)
+                .append("username", 1)
+                .append("email", 1)
+                .append("image", 1))) {
+            
+            User user = new User();
+            user.setId(doc.getObjectId("_id").toString());
+            user.setFullName(doc.getString("fullName"));
+            user.setUsername(doc.getString("username"));
+            user.setEmail(doc.getString("email"));
+            user.setImage(doc.getString("image"));
+    
+            usersList.add(user);
+        }
+        return usersList;
+    }
+    
+
     public User saveUser(User user) {
         // Hash the password before saving
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
