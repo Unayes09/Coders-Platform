@@ -13,11 +13,13 @@ const HeroSection = () => {
       {/* Container for decorative shapes */}
       <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none z-0">
         {/* Shape 1: */}
-        <div className="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-pink-500 to-purple-500 w-40 h-40 rounded-full mix-blend-multiply opacity-20 animate-bounce-slow"></div>
+        {/* <div className="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-pink-500 to-purple-500 w-40 h-40 rounded-full mix-blend-multiply opacity-20 animate-bounce-slow"></div> */}
+        <div className="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-pink-500 to-purple-500 w-40 h-40 rounded-full mix-blend-multiply opacity-20"></div>
         {/* Shape 2: */}
         <div className="absolute top-1/2 right-1/2 transform translate-x-1/2 -translate-y-1/2 bg-gradient-to-tl from-purple-500 to-pink-500 w-24 h-24 rounded-full mix-blend-multiply opacity-20 animate-pulse"></div>
         {/* Shape 3: */}
-        <div className="absolute bottom-1/4 right-1/4 transform translate-x-1/2 translate-y-1/2 bg-gradient-to-tr from-[#9796f0] to-[#fbc7d4] w-32 h-32 rounded-full mix-blend-multiply opacity-20 animate-bounce"></div>
+        {/* <div className="absolute bottom-1/4 right-1/4 transform translate-x-1/2 translate-y-1/2 bg-gradient-to-tr from-[#9796f0] to-[#fbc7d4] w-32 h-32 rounded-full mix-blend-multiply opacity-20 animate-bounce"></div> */}
+        <div className="absolute bottom-1/4 right-1/4 transform translate-x-1/2 translate-y-1/2 bg-gradient-to-tr from-[#9796f0] to-[#fbc7d4] w-32 h-32 rounded-full mix-blend-multiply opacity-20"></div>
       </div>
 
       {/* Container for floating icons */}

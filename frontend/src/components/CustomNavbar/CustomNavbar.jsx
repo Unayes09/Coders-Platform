@@ -40,7 +40,11 @@ const CustomNavbar = () => {
   };
 
   return (
-    <Navbar isBordered onMenuOpenChange={setIsMenuOpen}>
+    <Navbar
+      isBordered
+      onMenuOpenChange={setIsMenuOpen}
+      style={location.pathname === "/chat" ? { display: "none" } : null} // Hide on "/chat"
+    >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}

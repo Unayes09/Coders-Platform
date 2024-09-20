@@ -8,11 +8,10 @@ const MainLayout = () => {
     <div>
       <FacialExpressionRecognition />
       <div className="max-w-[2000px] mx-auto">
-      
         <CustomNavbar />
         <Outlet />
         <Toaster />
-    </div>
+      </div>
     </div>
   );
 };
