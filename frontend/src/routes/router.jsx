@@ -26,6 +26,7 @@ import JobSearchPage from "../pages/Jobs/JobSearchPage";
 import CreateJobPage from "../pages/Jobs/CreateJobPage";
 import Chat from "../pages/Chat/Chat";
 import UserConfirmation from "../pages/SignUp/UserConfirmation";
+import ProfilePage from "../pages/Profile/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
       {
         path: "chat",
         element: <Chat />,
+      },
+      {
+        path: "profile/:userId",
+        element: <ProfilePage />,
       },
     ],
   },
