@@ -19,7 +19,9 @@ const Chatbot = () => {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const [conversation, setConversation] = useState([]);
+  const [pinConversation, setPinConversation] = useState([]);
   const [conversationLoading, setConversationLoading] = useState(false);
+  const [pinConversationLoading, setPinConversationLoading] = useState(false);
   const [refetch, setRefetch] = useState(false);
 
   const [showPinnedMessagesModal, setShowPinnedMessagesModal] = useState(false);
@@ -71,13 +73,32 @@ const Chatbot = () => {
   };
 
   const pinMessage = (message) => {
-    console.log(message);
-    // toast.success("Message Pinned");
-    // not premium user alert
-    toast.error("Only premium users can pin messages");
-    // error alert
-    // toast.error("Error! Please try again!");
+
+    axiosInstance
+      .put(`/api/bot/responses/${message.id}/pin?isPinned=true&token=${user?.token}`)
+      .then((res) => {
+        console.log(res);
+        toast.success("Message Pinned");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("something went wrong");
+      });
   };
+
+  const allPinMessages = () => {
+    axiosInstance
+      .get(`/api/bot/responses/pinned?token=${user?.token}&chatId=${selectedChat}`)
+      .then((res) => {
+        console.log(res);
+        setPinConversation(res.data);
+        setPinConversationLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setPinConversationLoading(false);
+      });
+  }
 
   const handleCloseModal = () => {
     setShowPinnedMessagesModal(false);
@@ -90,28 +111,12 @@ const Chatbot = () => {
         <div className="bg-black bg-opacity-70 w-full h-full absolute top-0 left-0 z-50">
           <div className="bg-[#333] rounded-lg shadow-lg p-6 w-[80vw] h-[80vh] mx-auto overflow-auto">
             <h2 className="text-lg font-bold mb-4">Pinned Messages</h2>
+            
             {/* Add your pinned message content here */}
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
-            <h1>Message</h1>
+            {pinConversation.map((message) => (
+              <h1 key={message.id}>{message.message}</h1>
+            ))}
+
             {/* Close button */}
             <Button variant="flat" color="danger" onClick={handleCloseModal}>
               Close
@@ -119,6 +124,7 @@ const Chatbot = () => {
           </div>
         </div>
       )}
+
 
       <div className="flex flex-col md:grid grid-cols-5">
         {!isSidebarHidden && (
@@ -168,7 +174,7 @@ const Chatbot = () => {
             {true && (
               <div className="absolute bg-white/10 backdrop-blur-lg top-0 left-0 right-0 p-3 rounded-t-lg">
                 <span
-                  onClick={() => setShowPinnedMessagesModal(true)}
+                  onClick={() => {setShowPinnedMessagesModal(true);allPinMessages();}}
                   className="cursor-pointer hover:text-primary tracking-wide"
                 >
                   Pinned messages

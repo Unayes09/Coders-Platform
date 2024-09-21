@@ -184,25 +184,41 @@ public class RepositoryController {
     @DeleteMapping("/{repoId}")
     public ResponseEntity<?> deleteRepository(@PathVariable String repoId, @RequestParam String token) {
         try {
-            ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
-
+            
+            // Find the repository by ID
             Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
-            if (repositoryOptional.isPresent()) {
-                Repository repository = repositoryOptional.get();
-                if (!isAuthorized(token, repository.getUserId())) {
-                    return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
-                }
-                String email = getEmailFromToken(token);
-                repositoryService.deleteRepositoryById(repoId, email);
-                return ResponseEntity.ok("Deleted repository with ID: " + repoId);
-            } else {
+            if (!repositoryOptional.isPresent()) {
                 return ResponseEntity.status(404).body("{\"message\": \"Repository not found\"}");
             }
+            
+            Repository repository = repositoryOptional.get();
+            String repositoryOwnerEmail = repository.getEmail(); // Assuming the repository has a `getUserEmail()` method
+    
+            // If token is "admin", delete the repository using the owner's email
+            if ("admin".equals(token)) {
+                repositoryService.deleteRepositoryById(repoId, repositoryOwnerEmail);
+                return ResponseEntity.ok("Admin deleted repository with ID: " + repoId);
+            }
+    
+            // Validate token for normal users
+            ResponseEntity<?> validationResponse = validateToken(token);
+            if (validationResponse != null) return validationResponse;
+    
+            // Check authorization for non-admin users
+            if (!isAuthorized(token, repository.getUserId())) {
+                return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
+            }
+    
+            // Proceed with deletion for authorized users
+            String email = getEmailFromToken(token);
+            repositoryService.deleteRepositoryById(repoId, email);
+            return ResponseEntity.ok("Deleted repository with ID: " + repoId);
+    
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error deleting repository: " + e.getMessage());
         }
     }
+    
 
     @GetMapping("/public")
     public ResponseEntity<List<Repository>> getAllPublicRepositories() {

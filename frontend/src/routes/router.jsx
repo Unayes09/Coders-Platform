@@ -27,6 +27,8 @@ import CreateJobPage from "../pages/Jobs/CreateJobPage";
 import Chat from "../pages/Chat/Chat";
 import UserConfirmation from "../pages/SignUp/UserConfirmation";
 import ProfilePage from "../pages/Profile/ProfilePage";
+import AdminLoginPage from "../pages/Admin/AdminLoginPage";
+import AdminPage from "../pages/Admin/AdminPage";
 
 const router = createBrowserRouter([
   {
@@ -121,6 +123,10 @@ const router = createBrowserRouter([
         path: "profile/:userId",
         element: <ProfilePage />,
       },
+      {
+        path: "admin",
+        element: <AdminPage />,
+      },
     ],
   },
   {
@@ -142,6 +148,10 @@ const router = createBrowserRouter([
       {
         path: "confirm",
         element: <UserConfirmation />,
+      },
+      {
+        path: "admin",
+        element: <AdminLoginPage />,
       },
     ],
   },
