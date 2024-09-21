@@ -86,8 +86,10 @@ public class MongoBotService {
     }
 
     public AiChat getAiChatById(String chatId) {
+        //System.out.println(chatId);
         MongoCollection<Document> aiChatCollection = getAiChatCollection();
         Document doc = aiChatCollection.find(eq("_id", new ObjectId(chatId))).first();
+        //System.out.println("aise");
         return convertDocumentToAiChat(doc);
     }
 

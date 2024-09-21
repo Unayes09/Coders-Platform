@@ -122,13 +122,14 @@ public class BotController {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
             if (validationResponse != null) return validationResponse;
-
             AiChat existingAiChat = mongoBotService.getAiChatById(chatId);
+            //System.out.println(existingAiChat);
             if (existingAiChat == null || !isAuthorized(token, existingAiChat.getOwnerEmail())) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
             }
-
+            //System.out.println(existingAiChat);
             AiChat updatedAiChat = mongoBotService.updateAiChat(chatId, aiChat.getChatName(), aiChat.isFavourite());
+            //System.out.println(updatedAiChat);
             return ResponseEntity.ok(updatedAiChat);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");

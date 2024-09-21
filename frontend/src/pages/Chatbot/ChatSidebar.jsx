@@ -74,9 +74,24 @@ const ChatSidebar = ({
     setChatToBeRenamed(chatId);
   };
 
-  const handleAddToFavoriteChat = (chatId) => {
-    console.log(chatId);
-    alert(`favorite ${chatId}`);
+  const handleAddToFavoriteChat = (chat) => {
+    //console.log(chatId)
+    axiosInstance
+      .put(`/api/bot/chats/${chat.id}?token=${user?.token}`, {
+        chatName: chat.chatName,
+        ownerEmail: user?.email,
+        favourite: chat.favourite?false:true,
+      })
+      .then((res) => {
+        console.log(res);
+        setRefetch(!refetch);
+        toast.success("Chat added to favourite");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error!");
+      });
+    
   };
 
   const handleDeleteChat = (chatId) => {
@@ -189,89 +204,84 @@ const ChatSidebar = ({
       </div>
 
       <div className="overflow-y-auto chatbot-sidebar-list-holder">
-        <ul className="flex flex-col gap-2">
-          {chatList.map((chat) => {
-            return (
-              <li
-                onClick={() => {
-                  if (selectedChat !== chat.id) {
-                    setConversationLoading(true);
-                    setConversation([]);
-                    setSelectedChat(chat.id);
-                  }
-                }}
-                key={chat.id}
-                className="py-2 px-4 bg-[#181a20] hover:bg-[#282c34] rounded-lg cursor-pointer whitespace-nowrap text-ellipsis overflow-hidden relative group"
-              >
-                {chat.chatName}
-                <Dropdown className="bg-[#27272A] text-white hover:text-white">
-                  <DropdownTrigger>
-                    <div className="hidden rounded-md absolute top-1/2 -translate-y-1/2 right-[10px] h-[20px] w-[30px] bg-gray-700 group-hover:flex justify-center items-center">
-                      <SlOptions />
-                    </div>
-                  </DropdownTrigger>
-                  <DropdownMenu
-                    variant="flat"
-                    aria-label="Dropdown menu with description"
+      <ul className="flex flex-col gap-2">
+        {chatList.map((chat) => {
+          return (
+            <li
+              onClick={() => {
+                if (selectedChat !== chat.id) {
+                  setConversationLoading(true);
+                  setConversation([]);
+                  setSelectedChat(chat.id);
+                }
+              }}
+              key={chat.id}
+              className="py-2 px-4 bg-[#181a20] hover:bg-[#282c34] rounded-lg cursor-pointer whitespace-nowrap text-ellipsis overflow-hidden relative group flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <span>{chat.chatName}</span>
+                {chat.favourite && <FavouriteIcon className="text-yellow-500" />}
+              </div>
+              <Dropdown className="bg-[#27272A] text-white hover:text-white">
+                <DropdownTrigger>
+                  <div className="hidden rounded-md absolute top-1/2 -translate-y-1/2 right-[10px] h-[20px] w-[30px] bg-gray-700 group-hover:flex justify-center items-center">
+                    <SlOptions />
+                  </div>
+                </DropdownTrigger>
+                <DropdownMenu
+                  variant="flat"
+                  aria-label="Dropdown menu with description"
+                >
+                  <DropdownItem
+                    color="primary"
+                    key="edit"
+                    showDivider
+                    description="Rename this chat"
+                    startContent={<EditDocumentIcon className={iconClasses} />}
+                    onClick={() => handleRenameChat(chat.id)}
                   >
-                    <DropdownItem
-                      color="primary"
-                      key="edit"
-                      showDivider
-                      description="Rename this chat"
-                      startContent={
-                        <EditDocumentIcon className={iconClasses} />
-                      }
-                      onClick={() => handleRenameChat(chat.id)}
-                    >
-                      Rename
-                    </DropdownItem>
+                    Rename
+                  </DropdownItem>
+                  <DropdownItem
+                    key="favourite"
+                    color={!chat.favourite ? "primary" : "danger"}
+                    description={
+                      chat.favourite
+                        ? "Remove this chat from favourite"
+                        : "Add this chat to favourite"
+                    }
+                    startContent={
+                      <FavouriteIcon
+                        className={
+                          chat.favourite ? iconClasses + "text-danger" : iconClasses
+                        }
+                      />
+                    }
+                    onClick={() => handleAddToFavoriteChat(chat)}
+                  >
+                    {chat.favourite
+                      ? "Remove from favorite"
+                      : "Add to favorite"}
+                  </DropdownItem>
+                  <DropdownItem
+                    key="delete"
+                    className="text-danger"
+                    color="danger"
+                    description="Delete this chat"
+                    startContent={
+                      <DeleteDocumentIcon className={iconClasses + "text-danger"} />
+                    }
+                    onClick={() => handleDeleteChat(chat.id)}
+                  >
+                    Delete
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </li>
+          );
+        })}
+      </ul>
 
-                    {/* Add to favourite button */}
-                    <DropdownItem
-                      key="favourite"
-                      color={!chat.favourite ? "primary" : "danger"}
-                      description={
-                        chat.favourite
-                          ? "Remove this chat from favourite"
-                          : "Add this chat to favourite"
-                      }
-                      startContent={
-                        <FavouriteIcon
-                          className={
-                            chat.favourite
-                              ? iconClasses + "text-danger"
-                              : iconClasses
-                          }
-                        />
-                      }
-                      onClick={() => handleAddToFavoriteChat(chat.id)}
-                    >
-                      {chat.favourite
-                        ? "Remove from favorite"
-                        : "Add to favorite"}
-                    </DropdownItem>
-
-                    <DropdownItem
-                      key="delete"
-                      className="text-danger"
-                      color="danger"
-                      description="Delete this chat"
-                      startContent={
-                        <DeleteDocumentIcon
-                          className={iconClasses + "text-danger"}
-                        />
-                      }
-                      onClick={() => handleDeleteChat(chat.id)}
-                    >
-                      Delete
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </li>
-            );
-          })}
-        </ul>
       </div>
 
       {/* Delete modal */}
