@@ -3,10 +3,8 @@ package com.javafest.DiffDeptStormers.model;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Document(collection = "Events")
 public class Event {

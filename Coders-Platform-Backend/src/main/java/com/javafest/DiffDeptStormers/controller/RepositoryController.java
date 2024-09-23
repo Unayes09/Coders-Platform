@@ -73,7 +73,7 @@ public class RepositoryController {
     public ResponseEntity<?> uploadFiles(@PathVariable String repoId, @RequestBody List<File> files, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null){return validationResponse;}
 
             String email = getEmailFromToken(token);
             Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
@@ -104,7 +104,7 @@ public class RepositoryController {
             @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             String email = getEmailFromToken(token);
             Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
@@ -133,7 +133,7 @@ public class RepositoryController {
     public ResponseEntity<?> deleteFile(@PathVariable String fileId, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             String email = getEmailFromToken(token);
             Optional<File> fileOptional = repositoryService.findFileById(fileId);
@@ -162,7 +162,7 @@ public class RepositoryController {
     public ResponseEntity<?> editRepository(@PathVariable String repoId, @RequestBody Repository updatedRepository, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             Optional<Repository> repositoryOptional = repositoryService.findRepositoryById(repoId);
             if (repositoryOptional.isPresent()) {
@@ -202,7 +202,7 @@ public class RepositoryController {
     
             // Validate token for normal users
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
     
             // Check authorization for non-admin users
             if (!isAuthorized(token, repository.getUserId())) {
@@ -279,7 +279,7 @@ public class RepositoryController {
     public ResponseEntity<?> getAllRepositoriesOfUser(@PathVariable String userId, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, userId)) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");

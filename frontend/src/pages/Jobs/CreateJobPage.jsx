@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from "../../utils/axiosInstance";
 import { UserContext } from "../../providers/UserProvider";
 import userAvatar from "../../assets/images/avatar.png";
 
 const CreateJobPage = () => {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -67,7 +69,7 @@ const CreateJobPage = () => {
         <input 
           type="text" 
           placeholder="Search users by skill..." 
-          className="p-2 border rounded-md w-full"
+          className="p-2 border rounded-md w-3/4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -96,7 +98,7 @@ const CreateJobPage = () => {
             {/* Buttons for Send Message and View Profile */}
             <div className="space-x-2">
               <button 
-                onClick={() => navigate(`/message/${user.id}`)}
+                onClick={() => navigate(`/chat`)}
                 className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-blue-600"
               >
                 Send Message

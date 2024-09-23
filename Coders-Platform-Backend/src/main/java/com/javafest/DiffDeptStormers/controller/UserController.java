@@ -1,29 +1,16 @@
 package com.javafest.DiffDeptStormers.controller;
 
-import com.javafest.DiffDeptStormers.model.Questions;
 import com.javafest.DiffDeptStormers.model.User;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
 
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
-import java.io.OutputStream;
-
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

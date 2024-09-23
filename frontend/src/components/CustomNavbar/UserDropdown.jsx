@@ -33,7 +33,9 @@ const UserDropdown = ({ logoutHandler, refreshUser }) => {
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
           <DropdownItem color="primary" key="profile">
-            Profile
+            <Link to={`/profile/${user?.id}`}>
+              <div>Profile</div>
+            </Link>
           </DropdownItem>
           <DropdownItem color="primary" key="resume">
             <Link to="/edit_resume">
@@ -75,24 +77,7 @@ const UserDropdown = ({ logoutHandler, refreshUser }) => {
               <div>Connect with Coders</div>
             </Link>
           </DropdownItem>
-          {/* <DropdownItem color="primary" key="my_settings">
-            My Settings
-          </DropdownItem>
-          <DropdownItem color="primary" key="team_settings">
-            Team Settings
-          </DropdownItem>
-          <DropdownItem color="primary" key="analytics">
-            Analytics
-          </DropdownItem>
-          <DropdownItem color="primary" key="system">
-            System
-          </DropdownItem>
-          <DropdownItem color="primary" key="configurations">
-            Configurations
-          </DropdownItem>
-          <DropdownItem color="primary" key="help_and_feedback">
-            Help & Feedback
-          </DropdownItem> */}
+          
           <DropdownItem
             onClick={() => {
               logoutHandler();
