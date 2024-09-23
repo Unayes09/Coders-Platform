@@ -12,7 +12,7 @@ public class Feedback {
     private String email;
     private String description;
 
-    // Constructors, Getters, and Setters
+    //Getters, and Setters
     public Feedback() {}
 
     public Feedback(String name, String email, String description) {

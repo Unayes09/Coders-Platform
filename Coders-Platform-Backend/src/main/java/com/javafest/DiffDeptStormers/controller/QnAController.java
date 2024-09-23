@@ -50,7 +50,7 @@ public class QnAController {
     public ResponseEntity<?> createQuestion(@RequestBody Questions question, @RequestParam String token) {
     	try {
     		ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, question.getEmail())) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
@@ -66,7 +66,7 @@ public class QnAController {
     public ResponseEntity<?> deleteQuestion(@PathVariable String id, @RequestParam String email, @RequestParam String token) {
     	try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, email)) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
@@ -118,7 +118,7 @@ public class QnAController {
     public ResponseEntity<?> createAnswer(@RequestBody Answers answer, @RequestParam String token) {
     	try {
     		ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, answer.getEmail())) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");

@@ -114,7 +114,8 @@ const Chatbot = () => {
             
             {/* Add your pinned message content here */}
             {pinConversation.map((message) => (
-              <h1 key={message.id}>{message.message}</h1>
+              //<h1 key={message.id}>{message.message}</h1>
+              <FeedbackContainer text={message.message}/>
             ))}
 
             {/* Close button */}

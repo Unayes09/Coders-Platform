@@ -72,6 +72,7 @@ const SkillTest = () => {
           `/api/skill/certificate/${user.email}`
         );
         setPassedTopics(response.data); // Assuming response.data is an array of passed topics
+        console.log(passedTopics)
       } catch (error) {
         console.error("Error fetching passed topics:", error);
       }

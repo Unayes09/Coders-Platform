@@ -3,7 +3,6 @@ package com.javafest.DiffDeptStormers.service;
 import com.javafest.DiffDeptStormers.model.Answers;
 import com.javafest.DiffDeptStormers.model.Questions;
 import com.javafest.DiffDeptStormers.model.Quotes;
-import com.javafest.DiffDeptStormers.model.Repository;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;

@@ -1,8 +1,6 @@
 package com.javafest.DiffDeptStormers.service;
 
 import static com.mongodb.client.model.Updates.set;
-
-import com.javafest.DiffDeptStormers.model.Questions;
 import com.javafest.DiffDeptStormers.model.User;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;

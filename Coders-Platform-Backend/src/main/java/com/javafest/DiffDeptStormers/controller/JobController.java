@@ -46,7 +46,7 @@ public class JobController {
     public ResponseEntity<?> createJob(@RequestBody Job job, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, job.getEmail())) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
@@ -90,7 +90,7 @@ public class JobController {
     public ResponseEntity<?> deleteJob(@PathVariable String id, @RequestParam String token, @RequestParam String email) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, email)) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
