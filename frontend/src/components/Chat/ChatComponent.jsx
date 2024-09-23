@@ -10,7 +10,7 @@ const ChatComponent = ({ username }) => {
         <Link to="/" className="flex justify-center items-center gap-2">
           <Logo />
           <p className="hidden sm:block font-bold text-inherit">
-            Coders{"'"} Platform
+            Coders Platform
           </p>
         </Link>
       </div>
