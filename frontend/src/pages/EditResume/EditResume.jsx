@@ -3,6 +3,8 @@ import { UserContext } from "../../providers/UserProvider";
 import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
 import { PiCertificateDuotone } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import axiosInstance from "../../utils/axiosInstance";
 import toast from "react-hot-toast";
 
@@ -14,6 +16,7 @@ const EditResume = () => {
   const [projectsInfo, setProjectsInfo] = useState([]);
   const [skillsInfo, setSkillsInfo] = useState([]);
   const [certificates, setCertificates] = useState([]);
+  const [experience, setExperience] = useState([]);
 
   const [personalInfoLoading, setPersonalInfoLoading] = useState(false);
   const [projectsInfoLoading, setProjectsInfoLoading] = useState(false);
@@ -51,15 +54,20 @@ const EditResume = () => {
       }
 
       const certificates = res.data[3];
-      if (skills) {
+      if (certificates) {
         setCertificates(certificates);
+      }
+
+      const experience = res.data[4];
+      if (experience) {
+        setExperience(experience);
       }
     });
   }, [user, refetch]);
 
   useEffect(() => {
-    console.log(projectsInfo);
-  }, [projectsInfo]);
+    console.log(experience);
+  }, [experience]);
 
   if (isUserLoading) {
     return (
@@ -640,25 +648,74 @@ const EditResume = () => {
 
         <div className="border-t border-[#30363db3] my-8"></div>
 
-        {/* Certifications */}
-        <h1 className="text-gray-400 text-center text-xl mb-4">
+        {/* Certification */}
+        <h1 className="text-gray-400 text-center text-xl mb-2">
           Certifications
         </h1>
+        <div className="my-4 flex justify-end">
+          <Button color="success">
+            <span>Add New Certification</span>
+          </Button>
+        </div>
 
         {certificates.map((c) => {
           return (
-            <div className="flex items-center gap-3" key={c.id}>
-              <PiCertificateDuotone className="text-amber-500 text-2xl" />
-              <Link to={c.credential}>
-                <h3 className="font-bold text-xl cursor-pointer text-lime-500">
-                  <span>{c.title}</span> By {c.org}
-                </h3>
-              </Link>
+            <div className="flex items-center justify-between gap-3" key={c.id}>
+              <div className="flex items-center gap-3">
+                <PiCertificateDuotone className="text-amber-500 text-2xl" />
+                <Link to={c.credential}>
+                  <h3 className="cursor-pointer">
+                    <span>{c.title}</span> By {c.org}
+                  </h3>
+                </Link>
+              </div>
+              <div className="flex gap-2 items-center">
+                <div className="bg-secondary p-2 rounded-lg cursor-pointer">
+                  <FaEdit />
+                </div>
+                <div className="bg-danger p-2 rounded-lg cursor-pointer">
+                  <MdDelete />
+                </div>
+              </div>
             </div>
           );
         })}
 
-        <div className="border-t border-[#30363db3] my-8"></div>
+        <div className="border-t border-[#30363db3] my-8 mt-16"></div>
+
+        {/* Experience */}
+        <h1 className="text-gray-400 text-center text-xl mb-2">Experiences</h1>
+        <div className="my-4 flex justify-end">
+          <Button color="success">
+            <span>Add New Experience</span>
+          </Button>
+        </div>
+
+        {experience.map((c, idx) => {
+          return (
+            <div className="flex items-center justify-between gap-6" key={c.id}>
+              <div>
+                <h3 className="cursor-pointe">
+                  <span>
+                    {idx + 1}. {c.title}
+                  </span>{" "}
+                  at {c.org}
+                </h3>
+                <h4 className="text-gray-500 ms-4">{c.startEndDate}</h4>
+              </div>
+              <div className="flex gap-2 items-center">
+                <div className="bg-secondary p-2 rounded-lg cursor-pointer">
+                  <FaEdit />
+                </div>
+                <div className="bg-danger p-2 rounded-lg cursor-pointer">
+                  <MdDelete />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="my-8"></div>
       </div>
     </div>
   );

@@ -9,22 +9,21 @@ import {
   Button,
 } from "@nextui-org/react";
 import Logo from "../Logo/Logo";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import navLinks from "./NavLinks";
 import UserDropdown from "./UserDropdown";
 import { logoutUser } from "../../utils/logoutUser";
 import { UserContext } from "../../providers/UserProvider";
+import moment from "moment";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase/firebase.config";
 
 const CustomNavbar = () => {
   const { user, setUser, refreshUser } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const menuItems = navLinks;
-
-  // TODO: Add icons to the nav links
-  // TODO: Give hover and active nav link effect
-  // TODO: Active nav link styles
 
   const logoutHandler = () => {
     logoutUser();
@@ -38,6 +37,45 @@ const CustomNavbar = () => {
       return "";
     }
   };
+
+  const activityRef = collection(db, "dailyActivity");
+
+  // Mark current day as active
+  useEffect(() => {
+    const today = moment().format("YYYY-MM-DD");
+
+    if (user?.id) {
+      const activityQuery = query(
+        activityRef,
+        where("userId", "==", user.id),
+        where("date", "==", today)
+      );
+
+      // Check if the entry exists before adding
+      getDocs(activityQuery)
+        .then((querySnapshot) => {
+          if (querySnapshot.empty) {
+            // No existing entry, proceed to add
+            addDoc(activityRef, {
+              date: today,
+              userId: user.id,
+            })
+              .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+              })
+              .catch((error) => {
+                console.error("Error adding document: ", error);
+              });
+          } else {
+            // Entry already exists, handle it (optional)
+            console.log("Entry already exists for this user and date.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting documents: ", error);
+        });
+    }
+  }, [user]);
 
   return (
     <Navbar
@@ -55,7 +93,7 @@ const CustomNavbar = () => {
           <Link to="/" className="flex justify-center items-center gap-2">
             <Logo />
             <p className="hidden sm:block font-bold text-inherit">
-              Coders{"'"} Platform
+              Coders Platform
             </p>
           </Link>
         </NavbarBrand>

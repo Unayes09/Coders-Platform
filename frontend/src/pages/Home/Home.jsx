@@ -49,6 +49,7 @@ const Home = () => {
       <HeroSection />
       <CustomDivider />
       <FeaturesSection />
+      <div className="h-[50px]"></div>
       <CustomDivider />
       <TestimonialsSection />
     </>
