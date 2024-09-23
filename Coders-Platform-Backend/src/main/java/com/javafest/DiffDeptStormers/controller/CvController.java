@@ -49,7 +49,7 @@ public class CvController {
     public ResponseEntity<?> createPersonal(@RequestBody CVPersonal personal, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null){return validationResponse;}
 
             if (!isAuthorized(token, personal.getEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -66,7 +66,7 @@ public class CvController {
     public ResponseEntity<?> createProject(@RequestBody ProjectSkill project, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, project.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -83,7 +83,7 @@ public class CvController {
     public ResponseEntity<?> createTechnology(@RequestBody TechnologySkill techSkill, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, techSkill.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -100,7 +100,7 @@ public class CvController {
     public ResponseEntity<?> createAchievement(@RequestBody AchievementSkill achievement, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, achievement.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -117,7 +117,7 @@ public class CvController {
     public ResponseEntity<?> createExperience(@RequestBody ExperienceSkill experience, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, experience.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -136,7 +136,7 @@ public class CvController {
     public ResponseEntity<?> updatePersonal(@RequestParam String email, @RequestBody CVPersonal personal, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, personal.getEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -153,7 +153,7 @@ public class CvController {
     public ResponseEntity<?> updateProject(@RequestParam String Id, @RequestBody ProjectSkill project, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, project.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -170,7 +170,7 @@ public class CvController {
     public ResponseEntity<?> updateTechnology(@RequestParam String Id, @RequestBody TechnologySkill techSkill, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, techSkill.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -187,7 +187,7 @@ public class CvController {
     public ResponseEntity<?> updateAchievement(@RequestParam String Id, @RequestBody AchievementSkill achievement, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, achievement.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -204,7 +204,7 @@ public class CvController {
     public ResponseEntity<?> updateExperience(@RequestParam String Id, @RequestBody ExperienceSkill experience, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, experience.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -228,7 +228,7 @@ public class CvController {
             }
 
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, project.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -250,7 +250,7 @@ public class CvController {
             }
 
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, techSkill.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -272,7 +272,7 @@ public class CvController {
             }
 
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, achievement.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");
@@ -294,7 +294,7 @@ public class CvController {
             }
 
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, experience.getUserEmail())) {
                 return ResponseEntity.status(403).body("{\"message\": \"Unauthorized\"}");

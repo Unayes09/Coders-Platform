@@ -48,7 +48,7 @@ public class BotController {
     public ResponseEntity<?> createAiChat(@RequestBody AiChat aiChat, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, aiChat.getOwnerEmail())) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
@@ -66,7 +66,7 @@ public class BotController {
     public ResponseEntity<?> deleteAiChat(@PathVariable String chatId, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             AiChat aiChat = mongoBotService.getAiChatById(chatId);
             if (aiChat == null || !isAuthorized(token, aiChat.getOwnerEmail())) {
@@ -85,7 +85,7 @@ public class BotController {
     public ResponseEntity<?> getAllAiChats(@RequestParam String ownerEmail, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, ownerEmail)) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
@@ -103,7 +103,7 @@ public class BotController {
     public ResponseEntity<?> getAllFavouriteAiChats(@RequestParam String ownerEmail, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             if (!isAuthorized(token, ownerEmail)) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
@@ -121,14 +121,15 @@ public class BotController {
     public ResponseEntity<?> updateAiChat(@PathVariable String chatId, @RequestBody AiChat aiChat, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
-
+            if (validationResponse != null) {return validationResponse;}
             AiChat existingAiChat = mongoBotService.getAiChatById(chatId);
+            //System.out.println(existingAiChat);
             if (existingAiChat == null || !isAuthorized(token, existingAiChat.getOwnerEmail())) {
                 return ResponseEntity.status(401).body("{\"message\": \"Unauthorized\"}");
             }
-
+            //System.out.println(existingAiChat);
             AiChat updatedAiChat = mongoBotService.updateAiChat(chatId, aiChat.getChatName(), aiChat.isFavourite());
+            //System.out.println(updatedAiChat);
             return ResponseEntity.ok(updatedAiChat);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
@@ -140,7 +141,7 @@ public class BotController {
     public ResponseEntity<?> createBotResponse(@RequestBody BotResponse botResponse, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             AiChat aiChat = mongoBotService.getAiChatById(botResponse.getChatId());
             if (aiChat == null || !isAuthorized(token, aiChat.getOwnerEmail())) {
@@ -159,7 +160,7 @@ public class BotController {
     public ResponseEntity<?> getAllBotResponses(@RequestParam String chatId, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             AiChat aiChat = mongoBotService.getAiChatById(chatId);
             if (aiChat == null || !isAuthorized(token, aiChat.getOwnerEmail())) {
@@ -178,7 +179,7 @@ public class BotController {
     public ResponseEntity<?> getAllPinnedBotResponses(@RequestParam String chatId, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             AiChat aiChat = mongoBotService.getAiChatById(chatId);
             if (aiChat == null || !isAuthorized(token, aiChat.getOwnerEmail())) {
@@ -197,7 +198,7 @@ public class BotController {
     public ResponseEntity<?> deleteBotResponse(@PathVariable String messageId, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null){return validationResponse;}
 
             BotResponse botResponse = mongoBotService.getBotResponseById(messageId);
             if (botResponse == null) {
@@ -221,7 +222,7 @@ public class BotController {
     public ResponseEntity<?> pinOrUnpinBotResponse(@PathVariable String messageId, @RequestParam boolean isPinned, @RequestParam String token) {
         try {
             ResponseEntity<?> validationResponse = validateToken(token);
-            if (validationResponse != null) return validationResponse;
+            if (validationResponse != null) {return validationResponse;}
 
             BotResponse botResponse = mongoBotService.getBotResponseById(messageId);
             if (botResponse == null) {

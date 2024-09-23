@@ -7,10 +7,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Document(collection = "Users")
 public class User {
@@ -43,8 +41,6 @@ public class User {
 
     private List<String> skills;
 
-    private List<Repository> repos; // New attribute
-
     @CreatedDate
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date createdAt;
@@ -54,33 +50,6 @@ public class User {
     private Date updatedAt;
 
     private String confirmationToken;
-    
-    public User() {
-        this.repos = new ArrayList<>(); // Initialize the repos list in the constructor
-    }
-
-    @Override
-    public String toString() {
-        return "User {" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", image='" + image + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", role=" + role +
-                ", premiumPackBuyDate=" + premiumPackBuyDate +
-                ", interests=" + interests +
-                ", skills=" + skills +
-                ", repos=" + repos + // Add this line
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", confirmationToken='" + confirmationToken + '\'' +
-                '}';
-    }
-    
     
     
     // Getters and setters...
@@ -181,14 +150,6 @@ public class User {
         this.skills = skills;
     }
 
-    public List<Repository> getRepos() {
-        return repos;
-    }
-
-    public void setRepos(List<Repository> repos) {
-        this.repos = repos;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -211,34 +172,6 @@ public class User {
 
     public void setConfirmationToken(String confirmationToken) {
         this.confirmationToken = confirmationToken;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(fullName, user.fullName) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(image, user.image) &&
-                Objects.equals(address, user.address) &&
-                Objects.equals(phone, user.phone) &&
-                role == user.role &&
-                Objects.equals(premiumPackBuyDate, user.premiumPackBuyDate) &&
-                Objects.equals(interests, user.interests) &&
-                Objects.equals(skills, user.skills) &&
-                Objects.equals(repos, user.repos) &&
-                Objects.equals(createdAt, user.createdAt) &&
-                Objects.equals(updatedAt, user.updatedAt) &&
-                Objects.equals(confirmationToken, user.confirmationToken);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, fullName, email, password, image, address, phone, role, premiumPackBuyDate, interests, skills, repos, createdAt, updatedAt, confirmationToken);
     }
 
     public enum Role {

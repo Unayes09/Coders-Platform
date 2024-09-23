@@ -22,7 +22,7 @@ const SchedulePage = () => {
   useEffect(() => {
     // Load schedule data from localStorage on page load
     const storedSchedule = localStorage.getItem('schedule');
-    //console.log(storedSchedule)
+    console.log(storedSchedule)
     if (storedSchedule) {
       try {
 
@@ -57,7 +57,7 @@ const SchedulePage = () => {
         }
         
         const parsedSchedule = convertKeysToUnquoted(JSON.parse(storedSchedule));
-        //console.log(parsedSchedule)
+        console.log(parsedSchedule)
         //console.log(parsedSchedule["schedule"])
         if (parsedSchedule && Array.isArray(parsedSchedule.schedule)) {
           setSchedule(parsedSchedule.schedule);

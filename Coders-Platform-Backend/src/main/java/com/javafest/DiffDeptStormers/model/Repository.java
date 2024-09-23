@@ -75,14 +75,4 @@ public class Repository {
         this.isPublic = aPublic;
     }
 
-    @Override
-    public String toString() {
-        return "Repository{" +
-                "id='" + id + '\'' +
-                ", repoName='" + repoName + '\'' +
-                ", repoDescription='" + repoDescription + '\'' +
-                ", repoTopicTags=" + repoTopicTags +
-                ", isPublic=" + isPublic +
-                '}';
-    }
 }

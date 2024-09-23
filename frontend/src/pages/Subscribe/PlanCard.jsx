@@ -54,7 +54,7 @@ const PlanCard = ({ plan }) => {
       </div>
       {plan === "premium" && (
         <p className="mt-5 -mb-3 text-neutral-300">
-          <span className="text-orange-300 font-bold">1000 BDT</span> for four
+          <span className="text-orange-300 font-bold">1000 BDT</span> for three
           months
         </p>
       )}

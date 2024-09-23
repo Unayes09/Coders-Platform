@@ -4,24 +4,13 @@ import com.javafest.DiffDeptStormers.model.User;
 import com.javafest.DiffDeptStormers.service.MongoUserService;
 import com.javafest.DiffDeptStormers.util.JwtUtil;
 
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
-import java.io.OutputStream;
-
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +27,18 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllQuestions() {
+    	try {
+            
+            List<User> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("{\"message\": \"Internal Server Error\"}");
+        }
+        
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         if (userService.existsByUsername(user.getUsername())) {
@@ -49,53 +50,6 @@ public class UserController {
         }
 
         User savedUser = userService.saveUser(user);
-        System.out.println(user);
-        HttpURLConnection con = null;
-        try {
-            // Create POST request
-            URL url = new URL("https://api.chatengine.io/users");
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            // Set headers
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Accept", "application/json");
-            con.setRequestProperty("Private-Key", "5d633895-77af-4e14-8888-e3611aba8cea");
-            // Add request body
-            con.setDoOutput(true);
-            Map<String, String> body = new HashMap<String, String>();
-            body.put("username", user.getUsername());
-            body.put("secret", "secret");
-            body.put("email", user.getEmail());
-            body.put("first_name", user.getFullName());
-            body.put("last_name", "*");
-            String jsonInputString = new JSONObject(body).toString();
-            try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-            // Generate response String
-            StringBuilder responseStr = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    responseStr.append(responseLine.trim());
-                }
-            }
-            // Jsonify + return response
-            Map<String, Object> response = new Gson().fromJson(
-                    responseStr.toString(), new TypeToken<HashMap<String, Object>>() {
-                    }.getType());
-            //return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        } finally {
-            if (con != null) {
-                con.disconnect();
-            }
-        }
-
         return ResponseEntity.ok(savedUser);
     }
 
@@ -103,42 +57,8 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
         //System.out.println(loginRequest);
         User user = userService.findByEmail(loginRequest.getEmail());
-        if (user != null && userService.checkPassword(loginRequest.getPassword(), user.getPassword())) {
+        if (user != null && userService.checkPassword(loginRequest.getPassword(), user.getPassword()) && userService.isUserConfirmed(loginRequest.getEmail())) {
             String token = jwtUtil.generateToken(user.getEmail());
-            HttpURLConnection con = null;
-            try {
-                // Create GET request
-                URL url = new URL("https://api.chatengine.io/users/me");
-                con = (HttpURLConnection) url.openConnection();
-                con.setRequestMethod("GET");
-                // Set headers
-                con.setRequestProperty("Content-Type", "application/json");
-                con.setRequestProperty("Accept", "application/json");
-                con.setRequestProperty("Project-ID", "0e16047b-9510-4874-89dd-1cbce8ada1d7");
-                con.setRequestProperty("User-Name", user.getUsername());
-                con.setRequestProperty("User-Secret", "secret");
-                // Generate response String
-                StringBuilder responseStr = new StringBuilder();
-                try (BufferedReader br = new BufferedReader(
-                        new InputStreamReader(con.getInputStream(), "utf-8"))) {
-                    String responseLine = null;
-                    while ((responseLine = br.readLine()) != null) {
-                        responseStr.append(responseLine.trim());
-                    }
-                }
-                // Jsonify + return response
-                Map<String, Object> response = new Gson().fromJson(
-                        responseStr.toString(), new TypeToken<HashMap<String, Object>>() {
-                        }.getType());
-                //return new ResponseEntity<>(response, HttpStatus.OK);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            } finally {
-                if (con != null) {
-                    con.disconnect();
-                }
-            }
             return ResponseEntity.ok()
             		.body("{\"message\": \"Login successful\", \"token\": \"" + token + "\"}");
         } else {

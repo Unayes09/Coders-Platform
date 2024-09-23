@@ -152,14 +152,7 @@ const DepotFile = () => {
           </h1>
 
           <div className="border-1 rounded-md border-[#30363db3] mt-5 p-3 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img
-                className="rounded-full h-[40px] w-[40px]"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoMnN60nm51kqp9I8CcoAzxAINFwjZs11ikw&s"
-                alt=""
-              />
-              <h1>Donald Trump</h1>
-            </div>
+            
             {/* if the owner is viewing then show the button */}
             {isEditable && (
               <Button

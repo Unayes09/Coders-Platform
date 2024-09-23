@@ -17,17 +17,8 @@ public class File {
     private Date timestamp;
     private String language; // New field for language
 
-    // Constructors, getters, and setters
-    public File() {
-    }
-
-    public File(String fileName, String fileContent, String language) {
-        this.fileName = fileName;
-        this.fileContent = fileContent;
-        this.timestamp = new Date(); // Set the timestamp to the current date and time
-        this.language = language;
-    }
-
+    //getters, and setters
+    
     public String getId() {
         return id;
     }
@@ -84,16 +75,4 @@ public class File {
         this.language = language;
     }
 
-    @Override
-    public String toString() {
-        return "File{" +
-                "id='" + id + '\'' +
-                ", repoId='" + repoId + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", fileContent='" + fileContent + '\'' +
-                ", email='" + email + '\'' +
-                ", timestamp=" + timestamp +
-                ", language='" + language + '\'' +
-                '}';
-    }
 }
