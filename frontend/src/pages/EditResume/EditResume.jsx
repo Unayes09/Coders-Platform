@@ -167,6 +167,19 @@ const EditResume = () => {
 
   return (
     <div className="mx-6 mt-2 pt-2 pb-6">
+      <div className="flex items-center justify-end">
+        <Button color="warning" onClick={() => {
+          const textToCopy = `http://localhost:5173/resume?email=${user.email}`;
+
+          navigator.clipboard.writeText(textToCopy)
+          .then(() => {
+            toast.success('Resume link copied to clipboard!');
+          })
+          .catch(err => {
+            toast.error('Error! Please try again.');
+          });
+        }}>Copy Resume Link</Button>
+      </div>
       <h1 className="bg-[#30363d54] mt-8 text-3xl text-center border border-[#30363db3] rounded-t-lg p-4 text-primary">
         Resume
       </h1>
