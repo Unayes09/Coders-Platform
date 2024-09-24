@@ -7,6 +7,7 @@ import TestimonialsSection from "./TestimonialsSection";
 
 import "./Home.css";
 import toast from "react-hot-toast";
+import FeedbackForm from "../../components/Feedback/FeedbackForm";
 
 const Home = () => {
   const showQuoteToast = (quote) => {
@@ -50,6 +51,7 @@ const Home = () => {
       <CustomDivider />
       <FeaturesSection />
       <div className="h-[50px]"></div>
+      <FeedbackForm />
       <CustomDivider />
       <TestimonialsSection />
     </>
