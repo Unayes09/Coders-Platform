@@ -15,6 +15,7 @@ import QnA from "../pages/QNA/QnA";
 import SingleQuestion from "../pages/QNA/SingleQuestion";
 import AskQuestion from "../pages/QNA/AskQuestion";
 import EditResume from "../pages/EditResume/EditResume";
+import Resume from "../pages/EditResume/Resume";
 import News from "../pages/News/News";
 import AllSkill from "../pages/SkillTest/AllSkill";
 import TestPage from "../pages/SkillTest/TestPage";
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "edit_resume",
         element: <EditResume />,
+      },
+      {
+        path: "resume",
+        element: <Resume />,
       },
       {
         path: "news",

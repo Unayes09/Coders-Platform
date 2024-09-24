@@ -26,9 +26,9 @@ const QuestionCard = ({ qData }) => {
             }}
           />
         </PopoverTrigger>
-        <PopoverContent className="p-1">
+        {/* <PopoverContent className="p-1">
           <UserTwitterCard />
-        </PopoverContent>
+        </PopoverContent> */}
       </Popover>
       <div className="sm:col-span-2 md:col-span-3">
         <Link
