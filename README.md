@@ -6,10 +6,11 @@
 
 1. Introduction
 2. Video Explanation
-3. Team Members
-4. Features
-5. Tech Stack
-6. Conclusion
+3. Live Link
+4. Team Members
+5. Features
+6. Tech Stack
+7. Conclusion
 
 ## Introduction ℹ️
 
@@ -18,6 +19,10 @@
 ## Video Explanation 📽️
 
 [![Video Link: https://youtu.be/lD9JU9daxBo](https://i.ibb.co.com/5rs5QKW/thumbnail.png)](https://youtu.be/lD9JU9daxBo)
+
+## Live Link
+
+[Coder's Platform](https://monumental-pithivier-c9e07a.netlify.app/)
 
 ## Team Members 👥
 
